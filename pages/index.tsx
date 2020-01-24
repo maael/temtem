@@ -26,7 +26,12 @@ export default function Home() {
       <div>Temtem App</div>
       <TemtemWeaknessTable
         weaknessData={weaknessTable}
-        renderHeading={t => <p>t</p>}
+        renderHeading={t => (
+          <img
+            width={50}
+            src={`https://temtem-api.mael.tech/images/icons/types/${t}.png`}
+          />
+        )}
       />
       <TemtemCalculator weaknessData={weaknessTable} types={types} />
     </div>
