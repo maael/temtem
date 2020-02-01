@@ -18,7 +18,7 @@ export default async function(req, res) {
         code,
         redirect_uri: "https://temtem.mael.tech/api/oauth/redirect/reddit"
       });
-      const Authorization = new Buffer(
+      const Authorization = Buffer.from(
         `${process.env.REDDIT_OAUTH_ID}:${process.env.REDDIT_OAUTH_SECRET}`
       ).toString("base64");
       const gotRes = await got(tokenUri, {
