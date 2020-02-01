@@ -9,5 +9,6 @@ export default function(_req, res) {
     duration: "temporary",
     scope: "identity"
   })}`;
-  res.redirect(redirectUri);
+  res.writeHead(301, { Location: redirectUri });
+  res.end();
 }
