@@ -43,7 +43,9 @@ export default function TemtemApp({ Component, pageProps }) {
       </div>
       <HeaderBar>
         <React.Fragment>
-          <NavItem url="/">Home</NavItem>
+          <NavItem url="/" exact>
+            Home
+          </NavItem>
           <NavItem url="/exchange">Temtem Exchange</NavItem>
           <NavItem url="/tempedia">Personal Tempedia</NavItem>
           <NavItem url="/quest-tracker">Quest Tracker</NavItem>
