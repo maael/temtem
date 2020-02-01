@@ -1,6 +1,7 @@
 import { stringify } from "querystring";
 
 export default function(_req, res) {
+  console.info("REDDIT_OAUTH_ID", process.env.REDDIT_OAUTH_ID);
   const redirectUri = `https://www.reddit.com/api/v1/authorize?${stringify({
     client_id: process.env.REDDIT_OAUTH_ID,
     response_type: "code",
