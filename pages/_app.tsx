@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { useEffect, useState } from "react";
+import Head from "next/head";
 import Link from "next/link";
 import { Global, jsx } from "@emotion/core";
 import { colors, fonts } from "@maael/temtem-theme";
@@ -11,6 +12,13 @@ export default function TemtemApp({ Component, pageProps }) {
   });
   return (
     <div>
+      <Head>
+        <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+        <meta http-equiv="content-language" content="en-gb" />
+        <meta name="theme-color" content={colors.uiBgGradientStart} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Temtem Tools</title>
+      </Head>
       <Global
         styles={{
           body: {
