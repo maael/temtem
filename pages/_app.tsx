@@ -1,20 +1,17 @@
 /** @jsx jsx */
-import { useEffect, useState } from "react";
+import React from "react";
 import Head from "next/head";
-import Link from "next/link";
 import { Global, jsx } from "@emotion/core";
 import { colors, fonts } from "@maael/temtem-theme";
+import NavItem from "../components/NavItem";
+import HeaderBar from "../components/HeaderBar";
 
 export default function TemtemApp({ Component, pageProps }) {
-  const [pathname, setPathname] = useState("");
-  useEffect(() => {
-    setPathname(window.location.pathname);
-  });
   return (
     <div>
       <Head>
         <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-        <meta http-equiv="content-language" content="en-gb" />
+        <meta httpEquiv="content-language" content="en-gb" />
         <meta name="theme-color" content={colors.uiBgGradientStart} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Temtem Tools</title>
@@ -44,63 +41,16 @@ export default function TemtemApp({ Component, pageProps }) {
         <div css={{ padding: "0px 5px" }}>Temtem Tools</div>
         <div css={{ flex: 1, height: 1, backgroundColor: colors.uiBlue }}></div>
       </div>
-      <div
-        css={{
-          backgroundColor: colors.uiOutline,
-          padding: "10px 5px",
-          fontSize: 20,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        <NavItem url="/" pathname={pathname}>
-          Home
-        </NavItem>
-        <NavItem url="/exchange" pathname={pathname}>
-          Temtem Exchange
-        </NavItem>
-        <NavItem url="/tempedia" pathname={pathname}>
-          Personal Tempedia
-        </NavItem>
-        <NavItem url="/quest-tracker" pathname={pathname}>
-          Quest Tracker
-        </NavItem>
-        <NavItem url="/battle-tools" pathname={pathname}>
-          Battle Tools
-        </NavItem>
-      </div>
+      <HeaderBar>
+        <React.Fragment>
+          <NavItem url="/">Home</NavItem>
+          <NavItem url="/exchange">Temtem Exchange</NavItem>
+          <NavItem url="/tempedia">Personal Tempedia</NavItem>
+          <NavItem url="/quest-tracker">Quest Tracker</NavItem>
+          <NavItem url="/battle-tools">Battle Tools</NavItem>
+        </React.Fragment>
+      </HeaderBar>
       <Component {...pageProps} />
     </div>
-  );
-}
-
-function NavItem({
-  url,
-  pathname,
-  children
-}: {
-  url: string;
-  pathname: string;
-  children: string;
-}) {
-  return (
-    <Link href={url}>
-      <a
-        css={{
-          borderBottom: `2px solid ${
-            pathname === url ? colors.uiBlue : colors.uiBlueFaded
-          }`,
-          margin: "0 10px",
-          padding: "0px 2px",
-          cursor: "pointer",
-          "&:hover": {
-            borderColor: colors.uiBlue
-          }
-        }}
-      >
-        {children}
-      </a>
-    </Link>
   );
 }
