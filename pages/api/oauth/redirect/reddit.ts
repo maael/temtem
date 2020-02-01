@@ -13,8 +13,11 @@ export default async function(req, res) {
   if (!error) {
     if (state === "testing") {
       const { access_token } = await getAccessToken(code);
+      console.info("got access token");
       if (access_token) {
+        console.info("getting identity");
         const identity = await getIdentity(access_token);
+        console.info("got identity", identity);
         res.json(identity);
       } else {
         console.info("[response error]", "missing access_token");
@@ -51,7 +54,7 @@ async function getAccessToken(code: string) {
 }
 
 async function getIdentity(accessToken: string) {
-  const res = await got("https://oauth.reddt.com/api/v1/me", {
+  const res = await got("https://oauth.reddit.com/api/v1/me", {
     headers: {
       Authorization: `bearer ${accessToken}`
     }
