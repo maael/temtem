@@ -1,4 +1,10 @@
 {
   "name": "temtem",
-  "version": 2
+  "version": 2,
+  "build": {
+    "env": {
+      "REDDIT_OAUTH_ID": "@temtem-reddit-oauth-id",
+      "REDDIT_OAUTH_SECRET": "@temtem-reddit-oauth-secret"
+    }
+  }
 }
