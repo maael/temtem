@@ -6,12 +6,6 @@ import { JWT } from "../../../../types";
 import { createUser, getUser } from "../../../../util/db";
 import { JWT_VERSION } from "../../../../util/constants";
 
-type Error =
-  | "access_denied"
-  | "unsupported_response_type"
-  | "invalid_scope"
-  | "invalid_request";
-
 async function getOrCreateUser(identity: any) {
   const result = await getUser(identity.name);
   if (result) {
@@ -76,17 +70,27 @@ export default cookies(async function(req, res) {
           res.writeHead(301, { Location: "/" });
           res.end();
         } else {
-          console.error("[response error]", "missing access_token");
+          res.writeHead(302, { Location: "/?error=missing_access_token" });
+          res.end();
         }
       } else {
-        console.error("[state error]", "state mismatch", state, "testing");
+        res.writeHead(302, { Location: "/?error=state_mismatch" });
+        res.end();
       }
     } else {
-      console.error("[error]", error);
+      if (error === "access_denied") {
+        res.writeHead(302, { Location: "/" });
+        res.end();
+      } else {
+        res.writeHead(302, { Location: `/?error=${error}` });
+        res.end();
+      }
     }
   } catch (err) {
-    console.info(">>>>> error", err);
-    res.json({ err });
+    res.writeHead(302, {
+      Location: `/?error=${encodeURIComponent(err.message)}`
+    });
+    res.end();
   }
 });
 
