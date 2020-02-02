@@ -1,5 +1,10 @@
 import { GraphQLClient } from "graphql-request";
-import { User, UserInput, UserPartialInput } from "../../types/db";
+import {
+  User,
+  UserInput,
+  UserPartialInput,
+  TempediaEntry
+} from "../../types/db";
 
 function getIsoString() {
   return new Date().toISOString();
@@ -78,3 +83,41 @@ export async function updateUser(variables: UserPartialInput) {
 }
 
 export function getUsers() {}
+
+export async function getTempediaEntries(
+  user: string
+): Promise<{ data: TempediaEntry[] }> {
+  const query = `
+    query UserTempediaEntries ($user:ID!){
+      userTempediaEntries(userId:$user) {
+        data {
+          _id
+          temtemName
+        }
+      }
+    }
+  `;
+  return (await client.request(query, { user })).userTempediaEntries;
+}
+
+export async function createTempediaEntry(
+  userId: string,
+  temtemName: string
+): Promise<TempediaEntry> {
+  const query = `
+    mutation CreateUserTempediaEntry ($data:TempediaEntryInput!){
+      createTempediaEntry(data:$data) {
+        _id
+        temtemName
+      }
+    }
+  `;
+  const data = {
+    userId,
+    temtemName,
+    isActive: true,
+    createdAt: getIsoString(),
+    updatedAt: getIsoString()
+  };
+  return (await client.request(query, { data })).createTempediaEntry;
+}

@@ -1,7 +1,7 @@
 import got from "got";
 import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
-import jwt from "../../../../util/jwt";
+import * as jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
 import { createUser, getUser } from "../../../../util/db";
 import { JWT_VERSION } from "../../../../util/constants";
@@ -43,7 +43,7 @@ export default cookies(async function(req, res) {
   try {
     if (!error) {
       if (state === "testing") {
-        const { access_token } = await getAccessToken(code);
+        const { access_token } = await getAccessToken(code as string);
         if (access_token) {
           const identity = await getIdentity(access_token);
           const {
@@ -61,8 +61,8 @@ export default cookies(async function(req, res) {
             redditDarkmode,
             version: JWT_VERSION
           };
-          const jwtToken = await jwt(toEncode);
-          res.cookie("temtem-jwt", jwtToken, {
+          const jwtToken = await jwt.sign(toEncode);
+          res.cookie("temtem-jwt", jwtToken as string, {
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90),
             sameSite: "Lax",
             path: "/"

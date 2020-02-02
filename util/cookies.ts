@@ -1,6 +1,16 @@
-import { serialize } from "cookie";
-import { NextApiResponse } from "next";
+import { serialize, parse } from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
+import * as jwt from "../util/jwt";
+import { JWT_VERSION } from "../util/constants";
+import { JWT } from "../types/index";
 
+type NextApiResponseWithCookie = NextApiResponse & {
+  cookie: (name: string, value: string, options: any) => void;
+};
+
+type NextApiRequestWithJWT = NextApiRequest & {
+  getJWT: () => Promise<JWT | undefined>;
+};
 /**
  * This sets `cookie` on `res` object
  */
@@ -24,9 +34,20 @@ const cookie = (
 /**
  * Adds `cookie` function on `res.cookie` to set cookies for response
  */
-const cookies = handler => async (req, res) => {
+const cookies = (
+  handler: (
+    req: NextApiRequestWithJWT,
+    res: NextApiResponseWithCookie
+  ) => void | Promise<void>
+) => async (req: NextApiRequestWithJWT, res: NextApiResponseWithCookie) => {
   res.cookie = (name, value, options) => cookie(res, name, value, options);
-
+  req.getJWT = async () => {
+    const items = parse(req.headers.cookie || "");
+    if (!items["temtem-jwt"]) return;
+    const decoded = await jwt.verify(items["temtem-jwt"]);
+    if (decoded && decoded.version !== JWT_VERSION) return;
+    return decoded;
+  };
   return await handler(req, res);
 };
 
