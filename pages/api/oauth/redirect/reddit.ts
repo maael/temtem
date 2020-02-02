@@ -24,7 +24,7 @@ export default cookies(async function(req, res) {
           name,
           pref_nightmode: nightmode
         } = await getIdentity(access_token);
-        const jwtToken = jwt({
+        const jwtToken = await jwt({
           id,
           icon,
           name,
