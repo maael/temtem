@@ -26,10 +26,10 @@ const cookie = (
 /**
  * Adds `cookie` function on `res.cookie` to set cookies for response
  */
-const cookies = handler => (req, res) => {
+const cookies = handler => async (req, res) => {
   res.cookie = (name, value, options) => cookie(res, name, value, options);
 
-  return handler(req, res);
+  return await handler(req, res);
 };
 
 export default cookies;
