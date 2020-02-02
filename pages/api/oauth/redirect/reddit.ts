@@ -1,5 +1,7 @@
 import got from "got";
 import { stringify } from "querystring";
+import cookies from "../../../../util/cookies";
+import jwt from "../../../../util/jwt";
 
 type Error =
   | "access_denied"
@@ -7,7 +9,7 @@ type Error =
   | "invalid_scope"
   | "invalid_request";
 
-export default async function(req, res) {
+export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
   console.info("api/oauth/redirect/reddit", error, code, state);
   if (!error) {
@@ -16,9 +18,21 @@ export default async function(req, res) {
       console.info("got access token");
       if (access_token) {
         console.info("getting identity");
-        const identity = await getIdentity(access_token);
-        console.info("got identity", identity);
-        res.json(identity);
+        const {
+          id,
+          icon_img: icon,
+          name,
+          pref_nightmode: nightmode
+        } = await getIdentity(access_token);
+        const jwtToken = jwt({
+          id,
+          icon,
+          name,
+          nightmode
+        });
+        res.cookie("temtem-jwt", jwtToken);
+        res.writeHead(301, { Location: "/" });
+        res.end();
       } else {
         console.info("[response error]", "missing access_token");
       }
@@ -28,7 +42,7 @@ export default async function(req, res) {
   } else {
     console.info("[error]", error);
   }
-}
+});
 
 async function getAccessToken(code: string) {
   const tokenUri = `https://www.reddit.com/api/v1/access_token`;

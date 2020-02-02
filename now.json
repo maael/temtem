@@ -4,7 +4,8 @@
   "build": {
     "env": {
       "REDDIT_OAUTH_ID": "@temtem-reddit-oauth-id",
-      "REDDIT_OAUTH_SECRET": "@temtem-reddit-oauth-secret"
+      "REDDIT_OAUTH_SECRET": "@temtem-reddit-oauth-secret",
+      "JWT_SECRET": "@temtem-jwt-secret"
     }
   }
 }

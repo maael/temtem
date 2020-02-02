@@ -29,6 +29,8 @@
     "@maael/temtem-text-component": "^1.3.0",
     "@maael/temtem-theme": "^1.7.0",
     "@maael/temtem-weakness-table-component": "^1.0.0",
+    "cookie": "^0.4.0",
+    "jsonwebtoken": "^8.5.1",
     "next": "^9.2.0",
     "react": "^16.12.0",
     "react-dom": "^16.11.0"
