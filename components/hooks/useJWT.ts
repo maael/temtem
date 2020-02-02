@@ -15,5 +15,5 @@ export default function useJWT() {
 }
 
 function isValidJWT(inp: any): inp is JWT {
-  return true;
+  return typeof inp === "object";
 }

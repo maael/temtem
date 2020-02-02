@@ -1,6 +1,5 @@
 export default function(_req, res) {
-  res.cookie("temtem-jwt", "", {
-    expires: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90),
+  res.cookie("temtem-jwt", "logged-out", {
     sameSite: "Lax",
     path: "/"
   });
