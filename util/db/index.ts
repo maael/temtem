@@ -34,14 +34,31 @@ export async function createUser(
     }
   }`;
 
-  const completeVariables: UserInput = {
+  const user: UserInput = {
     ...variables,
     isActive: true,
     createdAt: getIsoString(),
     updatedAt: getIsoString()
   };
 
-  return client.request<User>(query, completeVariables);
+  return client.request<User>(query, { user });
+}
+
+export async function getUser(redditName: string) {
+  const query = `{
+    userByRedditName(redditName:$redditName){
+      deletedAt
+      updatedAt
+      _id
+      redditName
+      redditDarkmode
+      redditId
+      createdAt
+      isActive
+      redditIcon
+    }
+  }`;
+  return client.request<User>(query, { redditName });
 }
 
 export async function updateUser(variables: UserPartialInput) {

@@ -210,19 +210,13 @@ input TrackedQuestPartialInput {
 
 type Query {
   users: [User!]! @index(name: "all_users")
-  userByRedditName(redditName: String!): [User!]!
-    @index(name: "users_by_reddit_name")
-  userPreferences(userId: ID!): [UserPreference!]!
-    @index(name: "user_preferences_by_user_id")
+  userByRedditName(redditName: String!): User @index(name: "users_by_reddit_name")
+  userPreferences(userId: ID!): [UserPreference!]! @index(name: "user_preferences_by_user_id")
   exchangeListings: [ExchangeListing!]! @index(name: "all_exchange_listings")
-  userExchangeListings(userId: ID): [ExchangeListing!]!
-    @index(name: "exchange_listings_by_user_id")
-  userExchangeSaved(userId: ID!): [ExchangeSaved!]!
-    @index(name: "exchange_saved_by_user_id")
-  userTempediaEntries(userId: ID!): [TempediaEntry!]!
-    @index(name: "tempedia_entries_by_user_id")
-  userTrackedQuests(userId: ID!): [TrackedQuest!]!
-    @index(name: "tracked_quests_by_user_id")
+  userExchangeListings(userId: ID): [ExchangeListing!]! @index(name: "exchange_listings_by_user_id")
+  userExchangeSaved(userId: ID!): [ExchangeSaved!]! @index(name: "exchange_saved_by_user_id")
+  userTempediaEntries(userId: ID!): [TempediaEntry!]! @index(name: "tempedia_entries_by_user_id")
+  userTrackedQuests(userId: ID!): [TrackedQuest!]! @index(name: "tracked_quests_by_user_id")
 }
 
 # type Mutation {

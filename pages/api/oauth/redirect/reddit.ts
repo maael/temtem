@@ -3,7 +3,7 @@ import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
-import { createUser } from "../../../../util/db";
+import { createUser, getUser } from "../../../../util/db";
 import { JWT_VERSION } from "../../../../util/constants";
 
 type Error =
@@ -11,6 +11,38 @@ type Error =
   | "unsupported_response_type"
   | "invalid_scope"
   | "invalid_request";
+
+async function getOrCreateUser(identity: any) {
+  const result = await getUser(identity.name);
+  if (result) {
+    return {
+      _id: result._id,
+      redditName: result.redditName,
+      redditId: result.redditId,
+      redditDarkmode: result.redditDarkmode,
+      redditIcon: result.redditIcon
+    };
+  }
+  const {
+    _id,
+    redditName,
+    redditId,
+    redditDarkmode,
+    redditIcon
+  } = await createUser({
+    redditDarkmode: identity.pref_nightmode,
+    redditIcon: identity.icon_img,
+    redditName: identity.name,
+    redditId: identity.id
+  });
+  return {
+    _id,
+    redditName,
+    redditId,
+    redditDarkmode,
+    redditIcon
+  };
+}
 
 export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
@@ -25,12 +57,7 @@ export default cookies(async function(req, res) {
           redditId,
           redditDarkmode,
           redditIcon
-        } = await createUser({
-          redditDarkmode: identity.pref_nightmode,
-          redditIcon: identity.icon_img,
-          redditName: identity.name,
-          redditId: identity.id
-        });
+        } = await getOrCreateUser(identity);
         const toEncode: JWT = {
           _id,
           redditId,
