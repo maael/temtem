@@ -22,7 +22,7 @@ export async function createUser(
   variables: Omit<UserInput, "isActive" | "createdAt" | "updatedAt">
 ) {
   const query = `
-    query CreateUser ($user:UserInput!) {
+    mutation CreateUser ($user:UserInput!) {
       createUser(data:$user){
         deletedAt
         updatedAt
