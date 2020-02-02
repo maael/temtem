@@ -24,8 +24,8 @@ export default function Tempedia() {
     (async () => {
       const res = await fetch("/api/db/tempedia");
       if (res.ok) {
-        const data = await res.json();
-        setTamed(t => t.concat(data));
+        const { data = [] } = await res.json();
+        setTamed(t => t.concat(data.map(({ temtemName }) => temtemName)));
       }
     })().catch(console.error);
   }, []);
@@ -34,6 +34,9 @@ export default function Tempedia() {
     try {
       const res = await fetch("/api/db/tempedia", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ temtemName: name })
       });
       if (res.ok) {

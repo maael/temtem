@@ -123,6 +123,6 @@ export async function createTempediaEntry(
     return (await client.request(query, { data })).createTempediaEntry;
   } catch (e) {
     console.error(e);
-    return undefined as any;
+    return { error: e.message } as any;
   }
 }
