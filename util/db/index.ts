@@ -12,7 +12,6 @@ function getIsoString() {
 
 export function getClient() {
   const endpoint = "https://graphql.fauna.com/graphql";
-  console.info("prepared client with secret", process.env.TEMTEM_FAUNA_SECRET);
   const client = new GraphQLClient(endpoint, {
     headers: {
       authorization: `Bearer ${process.env.TEMTEM_FAUNA_SECRET}`

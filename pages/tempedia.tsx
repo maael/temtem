@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { useEffect, useState } from "react";
 import { jsx } from "@emotion/core";
-import { TemtemLabelChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
+import useJWT from "../components/hooks/useJWT";
 
 export default function Tempedia() {
+  const jwt = useJWT();
   const [temtem, setTemtem] = useState([]);
   const [taming, setTaming] = useState<string[]>([]);
   const [tamed, setTamed] = useState<string[]>([]);
@@ -77,25 +78,27 @@ export default function Tempedia() {
             >
               {`#${num} ${name}`}
             </TemtemText>
-            {tamed.includes(name) ? (
-              <TemtemText
-                containerStyle={{ marginTop: 7 }}
-                style={{ fontSize: 20 }}
-                borderWidth={10}
-              >
-                Tamed
-              </TemtemText>
-            ) : (
-              <TemtemButton
-                size="small"
-                type={types[0]}
-                theme="technique"
-                disabled={taming.includes(name)}
-                onClick={() => onClick(name)}
-              >
-                {taming.includes(name) ? "Taming" : "Tamed?"}
-              </TemtemButton>
-            )}
+            {jwt ? (
+              tamed.includes(name) ? (
+                <TemtemText
+                  containerStyle={{ marginTop: 7 }}
+                  style={{ fontSize: 20 }}
+                  borderWidth={10}
+                >
+                  Tamed
+                </TemtemText>
+              ) : (
+                <TemtemButton
+                  size="small"
+                  type={types[0]}
+                  theme="technique"
+                  disabled={taming.includes(name)}
+                  onClick={() => onClick(name)}
+                >
+                  {taming.includes(name) ? "Taming" : "Tamed?"}
+                </TemtemButton>
+              )
+            ) : null}
           </div>
         </div>
       ))}
