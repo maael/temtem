@@ -79,7 +79,9 @@ export default function Tempedia() {
       </div>
       {temtem
         .filter(({ name }) =>
-          search.trim() ? name.includes(search.trim()) : true
+          search.trim()
+            ? name.toLowerCase().includes(search.trim().toLowerCase())
+            : true
         )
         .map(({ number: num, name, types }) => (
           <div
