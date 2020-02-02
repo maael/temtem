@@ -1,13 +1,15 @@
 import { GraphQLClient } from "graphql-request";
 import { User, UserInput, UserPartialInput } from "../../types/db";
 
-let env = { ...process.env };
-
-if (process.env.NODE_ENV !== "production") {
-  const loaded = require("dotenv-extended").load({
-    path: `${process.env.ROOT}/.env`
-  });
-  env = { ...loaded, ...process.env };
+function getEnvVar(name: string) {
+  if (process.env.NODE_ENV !== "production") {
+    const loaded = require("dotenv-extended").load({
+      path: `${process.env.ROOT}/.env`
+    });
+    return loaded[name];
+  } else {
+    return process.env[name];
+  }
 }
 
 function getIsoString() {
@@ -16,9 +18,10 @@ function getIsoString() {
 
 export function getClient() {
   const endpoint = "https://graphql.fauna.com/graphql";
+  console.info("prepared client with secret", getEnvVar("TEMTEM_FAUNA_SECRET"));
   const client = new GraphQLClient(endpoint, {
     headers: {
-      authorization: `Bearer ${env.TEMTEM_FAUNA_SECRET}`
+      authorization: `Bearer ${getEnvVar("TEMTEM_FAUNA_SECRET")}`
     }
   });
   return client;
