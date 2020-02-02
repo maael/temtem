@@ -23,9 +23,11 @@ export default function AuthBlock() {
           borderRadius: "50%",
           margin: "0px 5px"
         }}
-        src={jwt.icon}
+        src={jwt.redditIcon}
       />
-      <TemtemText containerStyle={{ marginRight: 5 }}>{jwt.name}</TemtemText>
+      <TemtemText containerStyle={{ marginRight: 5 }}>
+        {jwt.redditName}
+      </TemtemText>
       <a href="/api/logout">
         <TemtemButton type={"Neutral" as any} bgColor={colors.uiBlueFaded}>
           Logout

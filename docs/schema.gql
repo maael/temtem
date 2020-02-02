@@ -1,0 +1,241 @@
+enum TemtemGender {
+  MALE
+  FEMALE
+}
+
+type User @collection(name: "users") {
+  redditId: String!
+  redditName: String! @unique(index: "unique_reddit_name")
+  redditIcon: String!
+  redditDarkmode: Boolean!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+input UserInput {
+  redditId: String!
+  redditName: String!
+  redditIcon: String!
+  redditDarkmode: Boolean!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input UserPartialInput {
+  isActive: Boolean
+}
+
+type UserPreference @collection(name: "user_preferences") {
+  userId: ID!
+  key: String!
+  value: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input UserPreferenceInput {
+  userId: ID!
+  key: String!
+  value: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input UserPreferencePartialInput {
+  userId: ID!
+  key: String!
+  value: String
+}
+
+type ExchangeListing @collection(name: "exchange_listings") {
+  userId: ID!
+  temtem: ListingTemtem!
+  request: ListingRequest!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type ListingTemtem @embedded {
+  name: String!
+  gender: TemtemGender!
+  fertility: Int!
+  trait: String!
+  bredTechniques: [String!]!
+  svs: ListingTemtemSvs!
+}
+
+type ListingTemtemSvs @embedded {
+  hp: Int!
+  sta: Int!
+  spd: Int!
+  atk: Int!
+  def: Int!
+  spatk: Int!
+  spdef: Int!
+}
+
+type ListingRequest @embedded {
+  cost: Int
+  details: String
+}
+
+input ExchangeListingInput {
+  userId: ID!
+  temtem: ListingTemtemInput!
+  request: ListingRequestInput!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input ListingTemtemInput @embedded {
+  name: String!
+  gender: TemtemGender!
+  fertility: Int!
+  trait: String!
+  bredTechniques: [String!]!
+  svs: ListeningTemtemSvsInput!
+}
+
+input ListeningTemtemSvsInput @embedded {
+  hp: Int!
+  sta: Int!
+  spd: Int!
+  atk: Int!
+  def: Int!
+  spatk: Int!
+  spdef: Int!
+}
+
+input ListingRequestInput @embedded {
+  cost: Int
+  details: String
+}
+
+input ExchangeListingPartialInput {
+  userId: ID!
+  temtem: ListingTemtemPartialInput
+  request: ListingRequestPartialInput
+  isActive: Boolean
+}
+
+input ListingTemtemPartialInput @embedded {
+  name: String
+  gender: TemtemGender
+  fertility: Int
+  trait: String
+  bredTechniques: [String!]
+  svs: ListeningTemtemSvsPartialInput
+}
+
+input ListeningTemtemSvsPartialInput @embedded {
+  hp: Int!
+  sta: Int!
+  spd: Int!
+  atk: Int!
+  def: Int!
+  spatk: Int!
+  spdef: Int!
+}
+
+input ListingRequestPartialInput @embedded {
+  cost: Int
+  details: String
+}
+
+type ExchangeSaved @collection(name: "exchange_saved") {
+  userId: ID!
+  exchangeListId: ID!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+input ExchangeSavedInput {
+  userId: ID!
+  exchangeListId: ID!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input ExchangeSavedPartialInput {
+  isActive: Boolean
+}
+
+type TempediaEntry @collection(name: "tempedia_entries") {
+  userId: ID!
+  temtemName: String!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+input TempediaEntryInput {
+  userId: ID!
+  temtemName: String!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input TempediaEntryPartialInput {
+  isActive: Boolean
+}
+
+type TrackedQuest @collection(name: "tracked_quests") {
+  userId: ID!
+  questName: String!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+input TrackedQuestInput {
+  userId: ID!
+  questName: String!
+}
+
+input TrackedQuestPartialInput {
+  isActive: Boolean
+}
+
+type Query {
+  users: [User!]! @index(name: "all_users")
+  userByRedditName(redditName: String!): [User!]!
+    @index(name: "users_by_reddit_name")
+  userPreferences(userId: ID!): [UserPreference!]!
+    @index(name: "user_preferences_by_user_id")
+  exchangeListings: [ExchangeListing!]! @index(name: "all_exchange_listings")
+  userExchangeListings(userId: ID): [ExchangeListing!]!
+    @index(name: "exchange_listings_by_user_id")
+  userExchangeSaved(userId: ID!): [ExchangeSaved!]!
+    @index(name: "exchange_saved_by_user_id")
+  userTempediaEntries(userId: ID!): [TempediaEntry!]!
+    @index(name: "tempedia_entries_by_user_id")
+  userTrackedQuests(userId: ID!): [TrackedQuest!]!
+    @index(name: "tracked_quests_by_user_id")
+}
+
+# type Mutation {
+#   createUser(user: UserInput!): User @resolver(name: "create_user")
+#   updateUser(id: ID!, user: UserPartialInput!): User @resolver(name: "update_user")
+#   createUserPreference(preference: UserPreferenceInput!): UserPreference @resolver(name: "create_user_preference")
+#   updateUserPreference(id: ID!, preference: UserPreferencePartialInput!): UserPreference @resolver(name: "update_user_preference")
+#   createExchangeListing(listing: ExchangeListingInput!): ExchangeListing @resolver(name: "create_exchange_listing")
+#   updateExchangeListing(id: ID!, listing: ExchangeListingPartialInput!): ExchangeListing @resolver(name: "update_exchange_listing")
+#   createExchangeSaved(saved: ExchangeSavedInput!): ExchangeSaved @resolver(name: "create_exchange_saved")
+#   updateExchangeSaved(id: ID!, saved: ExchangeSavedPartialInput!): ExchangeSaved @resolver(name: "update_exchange_saved")
+#   createTempediaEntry(entry: TempediaEntryInput!): TempediaEntry @resolver(name: "create_tempedia_entry")
+#   updateTempediaEntry(id: ID!, entry: TempediaEntryPartialInput!): TempediaEntry @resolver(name: "update_tempedia_entry")
+#   createTrackedQuest(quest: TrackedQuestInput!): TrackedQuest @resolver(name: "create_tracked_quest")
+#   updateTrackedQuest(id: ID!, quest: TrackedQuestPartialInput!): TrackedQuest @resolver(name: "update_tracked_quest")
+# }

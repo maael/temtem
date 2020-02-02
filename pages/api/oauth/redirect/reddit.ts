@@ -3,6 +3,8 @@ import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
+import { createUser } from "../../../../util/db";
+import { JWT_VERSION } from "../../../../util/constants";
 
 type Error =
   | "access_denied"
@@ -16,17 +18,26 @@ export default cookies(async function(req, res) {
     if (state === "testing") {
       const { access_token } = await getAccessToken(code);
       if (access_token) {
+        const identity = await getIdentity(access_token);
         const {
-          id,
-          icon_img: icon,
-          name,
-          pref_nightmode: nightmode
-        } = await getIdentity(access_token);
+          _id,
+          redditName,
+          redditId,
+          redditDarkmode,
+          redditIcon
+        } = await createUser({
+          redditDarkmode: identity.pref_nightmode,
+          redditIcon: identity.icon_img,
+          redditName: identity.name,
+          redditId: identity.id
+        });
         const toEncode: JWT = {
-          id,
-          icon,
-          name,
-          nightmode
+          _id,
+          redditId,
+          redditName,
+          redditIcon,
+          redditDarkmode,
+          version: JWT_VERSION
         };
         const jwtToken = await jwt(toEncode);
         res.cookie("temtem-jwt", jwtToken, {

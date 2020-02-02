@@ -5,7 +5,8 @@
     "env": {
       "REDDIT_OAUTH_ID": "@temtem-reddit-oauth-id",
       "REDDIT_OAUTH_SECRET": "@temtem-reddit-oauth-secret",
-      "JWT_SECRET": "@temtem-jwt-secret"
+      "JWT_SECRET": "@temtem-jwt-secret",
+      "TEMTEM_FAUNA_SECRET": "@temtem-fauna-secret"
     }
   }
 }
