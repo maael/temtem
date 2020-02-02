@@ -9,7 +9,7 @@ import AuthBlock from "../components/primitives/AuthBlock";
 
 export default function TemtemApp({ Component, pageProps }) {
   return (
-    <div>
+    <div css={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Head>
         <link rel="shortcut icon" type="image/png" href="/favicon.png" />
         <meta httpEquiv="content-language" content="en-gb" />
@@ -19,12 +19,16 @@ export default function TemtemApp({ Component, pageProps }) {
       </Head>
       <Global
         styles={{
+          html: {
+            minHeight: "100vh"
+          },
           body: {
             backgroundColor: colors.uiBgGradientStart,
             color: "#FFFFFF",
             ...fonts.default,
             padding: 0,
-            margin: 0
+            margin: 0,
+            minHeight: "100vh"
           }
         }}
       />
@@ -54,7 +58,32 @@ export default function TemtemApp({ Component, pageProps }) {
           <AuthBlock />
         </React.Fragment>
       </HeaderBar>
-      <Component {...pageProps} />
+      <div css={{ flex: 1 }}>
+        <Component {...pageProps} />
+      </div>
+      <div
+        css={{
+          backgroundColor: colors.uiMid,
+          padding: 5,
+          textAlign: "center",
+          marginTop: 10,
+          fontSize: 14
+        }}
+      >
+        Made by{" "}
+        <a
+          css={{ color: colors.uiBlueFaded, textDecoration: "none" }}
+          href="https://reddit.com/user/maael"
+        >
+          u/maael
+        </a>
+        <div css={{ fontSize: 10 }}>
+          Temtem Tools is not endorsed by Crema and does not reflect the views
+          or opinions of Crema or anyone officially involved in producing or
+          managing Temtem. Temtem and Crema are trademarks or registered
+          trademarks of Crema.
+        </div>
+      </div>
     </div>
   );
 }
