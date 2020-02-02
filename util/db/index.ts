@@ -119,5 +119,10 @@ export async function createTempediaEntry(
     createdAt: getIsoString(),
     updatedAt: getIsoString()
   };
-  return (await client.request(query, { data })).createTempediaEntry;
+  try {
+    return (await client.request(query, { data })).createTempediaEntry;
+  } catch (e) {
+    console.error(e);
+    return undefined as any;
+  }
 }
