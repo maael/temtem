@@ -2,21 +2,12 @@
 import React from "react";
 import { jsx } from "@emotion/core";
 import TemtemStatsTable from "@maael/temtem-stats-table-component";
-import HeaderBar from "../../components/primitives/HeaderBar";
-import NavItem from "../../components/primitives/NavItem";
+import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 
 export default function Trades() {
   return (
     <React.Fragment>
-      <HeaderBar>
-        <React.Fragment>
-          <NavItem url="/exchange" exact>
-            Home
-          </NavItem>
-          <NavItem url="/exchange/ads">My Ads</NavItem>
-          <NavItem url="/exchange/saved">Saved</NavItem>
-        </React.Fragment>
-      </HeaderBar>
+      <ExchangeHeaderBar />
       <div css={{ maxWidth: 1000, margin: "0 auto" }}>
         <TemtemStatsTable
           temtem={{ name: "Ganki", stats: {}, types: ["Wind", "Electric"] }}

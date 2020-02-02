@@ -1,17 +1,16 @@
 import React from "react";
-import HeaderBar from "../../components/primitives/HeaderBar";
-import NavItem from "../../components/primitives/NavItem";
+import TemtemText from "@maael/temtem-text-component";
+import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 
-export default function ExchangeAds() {
+export default function ExchangeSaved() {
   return (
-    <HeaderBar>
-      <React.Fragment>
-        <NavItem url="/exchange" exact>
-          Home
-        </NavItem>
-        <NavItem url="/exchange/ads">My Ads</NavItem>
-        <NavItem url="/exchange/saved">Saved</NavItem>
-      </React.Fragment>
-    </HeaderBar>
+    <React.Fragment>
+      <ExchangeHeaderBar />
+      <div css={{ textAlign: "center", marginTop: 10 }}>
+        <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
+          You have no saved listings.
+        </TemtemText>
+      </div>
+    </React.Fragment>
   );
 }
