@@ -1,6 +1,6 @@
 import React from "react";
-import HeaderBar from "../../components/HeaderBar";
-import NavItem from "../../components/NavItem";
+import HeaderBar from "../../components/primitives/HeaderBar";
+import NavItem from "../../components/primitives/NavItem";
 
 export default function ExchangeAds() {
   return (

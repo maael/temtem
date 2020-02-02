@@ -3,8 +3,9 @@ import React from "react";
 import Head from "next/head";
 import { Global, jsx } from "@emotion/core";
 import { colors, fonts } from "@maael/temtem-theme";
-import NavItem from "../components/NavItem";
-import HeaderBar from "../components/HeaderBar";
+import NavItem from "../components/primitives/NavItem";
+import HeaderBar from "../components/primitives/HeaderBar";
+import AuthBlock from "../components/primitives/AuthBlock";
 
 export default function TemtemApp({ Component, pageProps }) {
   return (
@@ -50,6 +51,7 @@ export default function TemtemApp({ Component, pageProps }) {
           <NavItem url="/tempedia">Personal Tempedia</NavItem>
           <NavItem url="/quest-tracker">Quest Tracker</NavItem>
           <NavItem url="/battle-tools">Battle Tools</NavItem>
+          <AuthBlock />
         </React.Fragment>
       </HeaderBar>
       <Component {...pageProps} />

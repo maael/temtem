@@ -2,8 +2,8 @@
 import React from "react";
 import { jsx } from "@emotion/core";
 import TemtemStatsTable from "@maael/temtem-stats-table-component";
-import HeaderBar from "../../components/HeaderBar";
-import NavItem from "../../components/NavItem";
+import HeaderBar from "../../components/primitives/HeaderBar";
+import NavItem from "../../components/primitives/NavItem";
 
 export default function Trades() {
   return (
