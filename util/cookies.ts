@@ -48,7 +48,12 @@ const cookies = (
     if (decoded && decoded.version !== JWT_VERSION) return;
     return decoded;
   };
-  return await handler(req, res);
+  try {
+    return await handler(req, res);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };
 
 export default cookies;
