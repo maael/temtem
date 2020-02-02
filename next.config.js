@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv-extended").load();
+}
+
 module.exports = {
   env: {
     REDDIT_OAUTH_ID: process.env.REDDIT_OAUTH_ID,
