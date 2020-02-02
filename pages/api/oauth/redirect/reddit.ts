@@ -2,6 +2,7 @@ import got from "got";
 import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import jwt from "../../../../util/jwt";
+import { JWT } from "../../../../types";
 
 type Error =
   | "access_denied"
@@ -24,12 +25,13 @@ export default cookies(async function(req, res) {
           name,
           pref_nightmode: nightmode
         } = await getIdentity(access_token);
-        const jwtToken = await jwt({
+        const toEncode: JWT = {
           id,
           icon,
           name,
           nightmode
-        });
+        };
+        const jwtToken = await jwt(toEncode);
         console.info("got jwt", jwtToken);
         res.cookie("temtem-jwt", jwtToken);
         res.writeHead(301, { Location: "/" });
