@@ -20,7 +20,7 @@ const client = getClient();
 
 export async function createUser(
   variables: Omit<UserInput, "isActive" | "createdAt" | "updatedAt">
-) {
+): Promise<User> {
   const query = `
     mutation CreateUser ($user:UserInput!) {
       createUser(data:$user){
@@ -44,7 +44,7 @@ export async function createUser(
     updatedAt: getIsoString()
   };
 
-  return client.request<User>(query, { user });
+  return (await client.request(query, { user })).createUser;
 }
 
 export async function getUser(redditName: string): Promise<User> {
