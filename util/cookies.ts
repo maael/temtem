@@ -18,6 +18,8 @@ const cookie = (
     options.maxAge /= 1000;
   }
 
+  console.info("setting cookie", name, String(stringValue));
+
   res.setHeader("Set-Cookie", serialize(name, String(stringValue), options));
 };
 

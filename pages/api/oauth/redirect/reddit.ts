@@ -30,6 +30,7 @@ export default cookies(async function(req, res) {
           name,
           nightmode
         });
+        console.info("got jwt", jwtToken);
         res.cookie("temtem-jwt", jwtToken);
         res.writeHead(301, { Location: "/" });
         res.end();
