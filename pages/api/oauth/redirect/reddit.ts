@@ -1,6 +1,5 @@
 import got from "got";
 import { stringify } from "querystring";
-import cookie from "cookie";
 import cookies from "../../../../util/cookies";
 import jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
@@ -13,13 +12,10 @@ type Error =
 
 export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
-  console.info("api/oauth/redirect/reddit", error, code, state);
   if (!error) {
     if (state === "testing") {
       const { access_token } = await getAccessToken(code);
-      console.info("got access token");
       if (access_token) {
-        console.info("getting identity");
         const {
           id,
           icon_img: icon,
@@ -41,13 +37,13 @@ export default cookies(async function(req, res) {
         res.writeHead(301, { Location: "/" });
         res.end();
       } else {
-        console.info("[response error]", "missing access_token");
+        console.error("[response error]", "missing access_token");
       }
     } else {
-      console.info("[state error]", "state mismatch", state, "testing");
+      console.error("[state error]", "state mismatch", state, "testing");
     }
   } else {
-    console.info("[error]", error);
+    console.error("[error]", error);
   }
 });
 
