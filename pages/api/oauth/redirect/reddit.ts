@@ -1,5 +1,6 @@
 import got from "got";
 import { stringify } from "querystring";
+import cookie from "cookie";
 import cookies from "../../../../util/cookies";
 import jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
@@ -13,6 +14,12 @@ type Error =
 export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
   console.info("api/oauth/redirect/reddit", error, code, state);
+  res.setHeader(
+    "set-cookie",
+    cookie.serialize("greeting", "beep boop", {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90)
+    })
+  );
   if (!error) {
     if (state === "testing") {
       const { access_token } = await getAccessToken(code);
