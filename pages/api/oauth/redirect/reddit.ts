@@ -14,12 +14,6 @@ type Error =
 export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
   console.info("api/oauth/redirect/reddit", error, code, state);
-  res.setHeader(
-    "set-cookie",
-    cookie.serialize("greeting", "beep boop", {
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90)
-    })
-  );
   if (!error) {
     if (state === "testing") {
       const { access_token } = await getAccessToken(code);
@@ -39,8 +33,11 @@ export default cookies(async function(req, res) {
           nightmode
         };
         const jwtToken = await jwt(toEncode);
-        console.info("got jwt", jwtToken);
-        res.cookie("temtem-jwt", jwtToken);
+        res.cookie("temtem-jwt", jwtToken, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 90),
+          sameSite: "Lax",
+          path: "/"
+        });
         res.writeHead(301, { Location: "/" });
         res.end();
       } else {
