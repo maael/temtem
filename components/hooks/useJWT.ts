@@ -8,7 +8,7 @@ export default function useJWT() {
   if (typeof document === "undefined") return;
   const parsed = cookie.parse(document.cookie)["temtem-jwt"];
   const decoded = jwt.decode(parsed, { json: true });
-  if (!jwt && isValidJWT(decoded)) {
+  if (!userJWT && isValidJWT(decoded)) {
     setUserJWT(decoded);
   }
   return userJWT;
