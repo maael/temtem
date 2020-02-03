@@ -19,7 +19,8 @@ export default function Tempedia() {
         "https://temtem-api.mael.tech/api/temtems?fields=number,name,types"
       );
       if (res.ok) {
-        setTemtem(await res.json());
+        const data = await res.json();
+        setTemtem(data);
       }
     })().catch(console.error);
   }, []);
@@ -98,7 +99,7 @@ export default function Tempedia() {
   );
 }
 
-function TemtemItem({ num, jwt, tamed, types, taming, onClick }: any) {
+function TemtemItem({ num, name, jwt, tamed, types, taming, onClick }: any) {
   return (
     <div
       css={{

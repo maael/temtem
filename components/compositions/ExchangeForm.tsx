@@ -22,7 +22,7 @@ function useApiState(path: string) {
 }
 
 export default function ExchangeForm() {
-  const [createListing, _, createLoading, createError] = useCallableFetch(
+  const [createListing, _, createLoading, _createError] = useCallableFetch(
     "/db/exchange/listings",
     {
       method: "POST"
