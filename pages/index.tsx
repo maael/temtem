@@ -5,7 +5,7 @@ import TemtemText from "@maael/temtem-text-component";
 
 export default function Home() {
   return (
-    <div css={{ margin: "10px auto", width: 900, textAlign: "center" }}>
+    <div css={{ margin: "10px auto", textAlign: "center" }}>
       <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
         textProps={{ borderWidth: 10 }}

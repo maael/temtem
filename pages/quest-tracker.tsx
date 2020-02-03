@@ -5,7 +5,7 @@ import TemtemText from "@maael/temtem-text-component";
 
 export default function QuestTracker() {
   return (
-    <div style={{ margin: "10px auto", maxWidth: 800, textAlign: "center" }}>
+    <div style={{ margin: "10px auto", textAlign: "center" }}>
       <TemtemDynamicChip
         style={{ textAlign: "center", padding: 20, fontSize: 30 }}
         textProps={{ borderWidth: 10 }}
