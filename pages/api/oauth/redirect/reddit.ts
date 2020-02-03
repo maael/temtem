@@ -42,7 +42,7 @@ export default cookies(async function(req, res) {
   const { error, code, state } = req.query;
   try {
     if (!error) {
-      if (state === "testing") {
+      if (state === process.env.OAUTH_STATE) {
         const { access_token } = await getAccessToken(code as string);
         if (access_token) {
           const identity = await getIdentity(access_token);
@@ -99,7 +99,7 @@ async function getAccessToken(code: string) {
   const body = stringify({
     grant_type: "authorization_code",
     code,
-    redirect_uri: "https://temtem.mael.tech/api/oauth/redirect/reddit"
+    redirect_uri: `${process.env.REDDIT_OAUTH_REDIRECT_ORIGIN}/api/oauth/redirect/reddit`
   });
   const Authorization = `Basic ${Buffer.from(
     `${process.env.REDDIT_OAUTH_ID}:${process.env.REDDIT_OAUTH_SECRET}`
