@@ -30,6 +30,7 @@ input UserPartialInput {
 
 type UserPreference @collection(name: "user_preferences") {
   userId: ID!
+  user: User! @relation
   key: String!
   value: String!
   createdAt: String!
@@ -52,6 +53,7 @@ input UserPreferencePartialInput {
 
 type ExchangeListing @collection(name: "exchange_listings") {
   userId: ID!
+  user: User! @relation
   temtem: ListingTemtem!
   request: ListingRequest!
   isActive: Boolean!
@@ -150,7 +152,9 @@ input ListingRequestPartialInput @embedded {
 
 type ExchangeSaved @collection(name: "exchange_saved") {
   userId: ID!
-  exchangeListId: ID!
+  user: User! @relation
+  exchangeListingId: ID!
+  exchangeListing: ExchangeListing! @relation
   isActive: Boolean!
   createdAt: String!
   updatedAt: String!
@@ -159,7 +163,7 @@ type ExchangeSaved @collection(name: "exchange_saved") {
 
 input ExchangeSavedInput {
   userId: ID!
-  exchangeListId: ID!
+  exchangeListingId: ID!
   isActive: Boolean!
   createdAt: String!
   updatedAt: String!
@@ -171,6 +175,7 @@ input ExchangeSavedPartialInput {
 
 type TempediaEntry @collection(name: "tempedia_entries") {
   userId: ID!
+  user: User! @relation
   temtemName: String!
   isActive: Boolean!
   createdAt: String!
@@ -192,6 +197,7 @@ input TempediaEntryPartialInput {
 
 type TrackedQuest @collection(name: "tracked_quests") {
   userId: ID!
+  user: User! @relation
   questName: String!
   isActive: Boolean!
   createdAt: String!

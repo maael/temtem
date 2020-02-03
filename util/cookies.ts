@@ -9,8 +9,9 @@ type NextApiResponseWithCookie = NextApiResponse & {
   cookie: (name: string, value: string, options: any) => void;
 };
 
-type NextApiRequestWithJWT = NextApiRequest & {
+type NextApiRequestWithJWT = Omit<NextApiRequest, "query"> & {
   getJWT: () => Promise<JWT | undefined>;
+  query: Record<string, string>;
 };
 /**
  * This sets `cookie` on `res` object

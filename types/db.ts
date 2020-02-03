@@ -4,6 +4,8 @@ export interface ListResponse<T> {
   after?: string;
 }
 
+export type RawCreateInput<T> = Omit<T, "isActive" | "createdAt" | "updatedAt">;
+
 export interface ListRequestParams {
   _size?: number;
   _cursor?: string;
