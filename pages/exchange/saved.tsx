@@ -4,10 +4,14 @@ import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
 
 export default function ExchangeSaved() {
-  const [saved] = useFetch("/db/exchange/saved", {
-    defaultValue: [],
-    source: "local"
-  });
+  const [saved] = useFetch(
+    "/db/exchange/saved",
+    {},
+    {
+      defaultValue: [],
+      source: "local"
+    }
+  );
   return (
     <React.Fragment>
       <ExchangeHeaderBar />

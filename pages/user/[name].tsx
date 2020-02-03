@@ -4,14 +4,22 @@ import { colors } from "@maael/temtem-theme";
 import useFetch from "../../components/hooks/useFetch";
 
 export default function UserPage({ user }) {
-  const [listingsResult] = useFetch(`/db/exchange/listings/user/${user._id}`, {
-    defaultValue: { data: [] },
-    source: "local"
-  });
-  const [tempediaResult] = useFetch(`/db/tempedia/user/${user._id}`, {
-    defaultValue: { data: [] },
-    source: "local"
-  });
+  const [listingsResult] = useFetch(
+    `/db/exchange/listings/user/${user._id}`,
+    {},
+    {
+      defaultValue: { data: [] },
+      source: "local"
+    }
+  );
+  const [tempediaResult] = useFetch(
+    `/db/tempedia/user/${user._id}`,
+    {},
+    {
+      defaultValue: { data: [] },
+      source: "local"
+    }
+  );
   return (
     <div css={{ textAlign: "center", marginTop: 10 }}>
       <img

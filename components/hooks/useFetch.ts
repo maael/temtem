@@ -16,8 +16,8 @@ const sourcePrefixMap: Record<FetchSource, string> = {
 
 export default function useFetch<T>(
   path: string,
-  customOptions: Options<T> = { source: "local" },
-  options: RequestInit = {}
+  options: RequestInit = {},
+  customOptions: Options<T> = { source: "local" }
 ): [T, boolean, string | undefined] {
   const [data, setData] = useState(customOptions.defaultValue as T);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,11 @@ export default function useFetch<T>(
               customOptions.source === "local"
                 ? "include"
                 : options.credentials,
-            ...options
+            ...options,
+            headers: {
+              "Content-Type": "application/json",
+              ...options.headers
+            }
           }
         );
         if (res.ok) {

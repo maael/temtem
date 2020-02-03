@@ -7,10 +7,12 @@ import TemtemSelect from "@maael/temtem-select-component";
 import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
 import useFetch from "../hooks/useFetch";
+import useCallableFetch from "../hooks/useCallableFetch";
 
 function useApiState(path: string) {
   const [data, loading, error] = useFetch<{ label: string; value: string }[]>(
     path,
+    {},
     {
       source: "temtem-api",
       mapper: v => v.map(({ name }) => ({ label: name, value: name }))
@@ -20,6 +22,12 @@ function useApiState(path: string) {
 }
 
 export default function ExchangeForm() {
+  const [createListing, _, createLoading, createError] = useCallableFetch(
+    "/db/exchange/listings",
+    {
+      method: "POST"
+    }
+  );
   const [temtems, loadingTemtems] = useApiState("/temtems");
   const [traits, loadingTraits] = useApiState("/traits");
   const [techniques, loadingTechniques] = useApiState("/techniques");
@@ -35,7 +43,6 @@ export default function ExchangeForm() {
   const [def, setDef] = useState("");
   const [spatk, setSpatk] = useState("");
   const [spdef, setSpdef] = useState("");
-  const [saving, setSaving] = useState(false);
   async function save() {
     const toSave = {
       temtem: temtem ? temtem.value : gender,
@@ -51,32 +58,21 @@ export default function ExchangeForm() {
       spatk: parseInt(spatk, 10),
       spdef: parseInt(spdef, 10)
     };
-    try {
-      console.info(toSave);
-      setSaving(true);
-      const res = await fetch("/api/db/exchange/listing", {
-        method: "POST",
-        body: JSON.stringify(toSave),
-        headers: { "Content-Type": "application/json" }
-      });
-      if (res.ok) {
-        console.info("save successful");
-        setTemtem("");
-        setGender("");
-        setTrait("");
-        setBredTechniques([]);
-        setFertility("");
-        setHp("");
-        setSta("");
-        setSpd("");
-        setAtk("");
-        setDef("");
-        setSpatk("");
-        setSpdef("");
-      }
-    } finally {
-      setSaving(false);
-    }
+    console.info(toSave);
+    await createListing({ body: JSON.stringify(toSave) });
+    console.info("save successful");
+    setTemtem("");
+    setGender("");
+    setTrait("");
+    setBredTechniques([]);
+    setFertility("");
+    setHp("");
+    setSta("");
+    setSpd("");
+    setAtk("");
+    setDef("");
+    setSpatk("");
+    setSpdef("");
   }
   return (
     <div css={{ maxWidth: 800, textAlign: "center", margin: "0 auto" }}>
@@ -186,11 +182,11 @@ export default function ExchangeForm() {
       </div>
       <TemtemButton
         type={"" as any}
-        disabled={saving}
+        disabled={createLoading}
         bgColor={colors.uiBlue}
         onClick={save}
       >
-        {saving ? "Saving" : "Save"}
+        {createLoading ? "Saving" : "Save"}
       </TemtemButton>
     </div>
   );

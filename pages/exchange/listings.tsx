@@ -8,10 +8,14 @@ import useFetch from "../../components/hooks/useFetch";
 
 export default function UserExchangeListings() {
   const [showingForm, setShowingForm] = useState(false);
-  const [ads] = useFetch("/db/exchange/listings", {
-    defaultValue: [],
-    source: "local"
-  });
+  const [ads] = useFetch(
+    "/db/exchange/listings",
+    {},
+    {
+      defaultValue: [],
+      source: "local"
+    }
+  );
   return (
     <div css={{ textAlign: "center" }}>
       <ExchangeHeaderBar />

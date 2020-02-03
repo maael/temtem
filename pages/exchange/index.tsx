@@ -7,10 +7,14 @@ import useFetch from "../../components/hooks/useFetch";
 import TemtemText from "@maael/temtem-text-component";
 
 export default function Trades() {
-  const [listings] = useFetch("/db/exchange/listings/all", {
-    defaultValue: [],
-    source: "local"
-  });
+  const [listings] = useFetch(
+    "/db/exchange/listings/all",
+    {},
+    {
+      defaultValue: [],
+      source: "local"
+    }
+  );
   return (
     <React.Fragment>
       <ExchangeHeaderBar />
