@@ -7,11 +7,13 @@ import { colors } from "@maael/temtem-theme";
 export default function NavItem({
   url,
   children,
-  exact = false
+  exact = false,
+  style
 }: {
   url: string;
   children: string;
   exact?: boolean;
+  style?: React.CSSProperties;
 }) {
   const [pathname, setPathname] = useState("");
   useEffect(() => {
@@ -33,7 +35,8 @@ export default function NavItem({
           cursor: "pointer",
           "&:hover": {
             borderColor: colors.uiBlue
-          }
+          },
+          ...style
         }}
       >
         {children}

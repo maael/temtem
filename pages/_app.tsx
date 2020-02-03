@@ -1,13 +1,16 @@
 /** @jsx jsx */
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { Global, jsx } from "@emotion/core";
 import { colors, fonts } from "@maael/temtem-theme";
 import NavItem from "../components/primitives/NavItem";
 import HeaderBar from "../components/primitives/HeaderBar";
 import AuthBlock from "../components/primitives/AuthBlock";
+import HideOnMobile from "../components/primitives/HideOnMobile";
+import OverlayMenu from "../components/primitives/OverlayMenu";
 
 export default function TemtemApp({ Component, pageProps }) {
+  const [overlay, setOverlay] = useState(false);
   return (
     <div css={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Head>
@@ -48,13 +51,19 @@ export default function TemtemApp({ Component, pageProps }) {
       </div>
       <HeaderBar>
         <React.Fragment>
-          <NavItem url="/" exact>
-            Home
-          </NavItem>
-          <NavItem url="/exchange">Temtem Exchange</NavItem>
-          <NavItem url="/tempedia">Personal Tempedia</NavItem>
-          <NavItem url="/quest-tracker">Quest Tracker</NavItem>
-          <NavItem url="/battle-tools">Battle Tools</NavItem>
+          <HideOnMobile>
+            <>
+              <NavItem url="/" exact>
+                Home
+              </NavItem>
+              <NavItem url="/exchange">Temtem Exchange</NavItem>
+              <NavItem url="/tempedia">Personal Tempedia</NavItem>
+              <NavItem url="/quest-tracker">Quest Tracker</NavItem>
+              <NavItem url="/battle-tools">Battle Tools</NavItem>
+            </>
+          </HideOnMobile>
+          <div onClick={() => setOverlay(true)}>Menu</div>
+          {overlay ? <OverlayMenu onClose={() => setOverlay(false)} /> : null}
           <AuthBlock />
         </React.Fragment>
       </HeaderBar>
