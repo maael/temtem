@@ -1,32 +1,21 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemSelect from "@maael/temtem-select-component";
 import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
+import useFetch from "../hooks/useFetch";
 
 function useApiState(path: string) {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`https://temtem-api.mael.tech/api${path}`);
-        if (res.ok) {
-          setData(
-            (await res.json()).map(({ name }) => ({ label: name, value: name }))
-          );
-        }
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    })().catch(console.error);
-  }, []);
+  const [data, loading, error] = useFetch<{ label: string; value: string }[]>(
+    path,
+    {
+      source: "temtem-api",
+      mapper: v => v.map(({ name }) => ({ label: name, value: name }))
+    }
+  );
   return [data, loading, error];
 }
 
