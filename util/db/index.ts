@@ -3,7 +3,11 @@ import {
   User,
   UserInput,
   UserPartialInput,
-  TempediaEntry
+  TempediaEntry,
+  ExchangeListingInput,
+  ExchangeSavedInput,
+  ExchangeSaved,
+  ExchangeListing
 } from "../../types/db";
 
 function getIsoString() {
@@ -124,4 +128,162 @@ export async function createTempediaEntry(
     console.error(e);
     return { error: e.message } as any;
   }
+}
+
+export async function getExchangeListings(): Promise<{
+  data: ExchangeListing[];
+}> {
+  const query = `
+    query ExchangeListings {
+      exchangeListings {
+        data {
+          _id
+          userId
+          temtem {
+            name
+            gender
+            fertility
+            trait
+            bredTechniques
+            svs {
+              hp
+              sta
+              spd
+              atk
+              def
+              spatk
+              spdef
+            }
+          }
+          request {
+            cost
+            details
+          }
+          isActive
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }
+    }
+  `;
+  return (await client.request(query)).exchangeListings;
+}
+
+export async function getUserExchangeListings(
+  userId: string
+): Promise<{ data: ExchangeListing[] }> {
+  const query = `
+    query UserExchangeListings ($userId: ID!) {
+      userExchangeListings (userId: $userId) {
+        data {
+          _id
+          userId
+          temtem {
+            name
+            gender
+            fertility
+            trait
+            bredTechniques
+            svs {
+              hp
+              sta
+              spd
+              atk
+              def
+              spatk
+              spdef
+            }
+          }
+          request {
+            cost
+            details
+          }
+          isActive
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }
+    }
+  `;
+  return (await client.request(query, { userId })).userExchangeListings;
+}
+
+export async function createExchangeListing(
+  data: ExchangeListingInput
+): Promise<ExchangeListing> {
+  const query = `
+    mutation CreateUserExchangeListing ($data:ExchangeListingInput!){
+      createExchangeListing(data: $data) {
+        _id
+        userId
+        temtem {
+          name
+          gender
+          fertility
+          trait
+          bredTechniques
+          svs {
+            hp
+            sta
+            spd
+            atk
+            def
+            spatk
+            spdef
+          }
+        }
+        request {
+          cost
+          details
+        }
+        isActive
+        createdAt
+        updatedAt
+        deletedAt
+      }
+    }
+  `;
+  return (await client.request(query, { data })).createExchangeListing;
+}
+
+export async function getExchangeSaved(
+  userId: string
+): Promise<{ data: ExchangeSaved[] }> {
+  const query = `
+    query UserExchangeSaved ($userId: ID!){
+      userExchangeSaved(userId: $userId) {
+        data {
+          _id
+          userId
+          exchangeListId
+          isActive
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }
+    }
+  `;
+  return (await client.request(query, { userId })).userExchangeSaved;
+}
+
+export async function createExchangeSaved(
+  data: ExchangeSavedInput
+): Promise<ExchangeSaved> {
+  const query = `
+    mutation CreateUserExchangeSaved ($data: ExchangeSavedInput!){
+      createExchangeSaved(data: $data) {
+        _id
+        userId
+        exchangeListId
+        isActive
+        createdAt
+        updatedAt
+        deletedAt
+      }
+    }
+  `;
+  return (await client.request(query, { data })).createExchangeSaved;
 }
