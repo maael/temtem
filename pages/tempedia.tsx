@@ -84,58 +84,71 @@ export default function Tempedia() {
             : true
         )
         .map(({ number: num, name, types }) => (
-          <div
+          <TemtemItem
             key={num}
-            css={{
-              display: "inline-block",
-              width: 170
-            }}
-          >
-            <div
-              css={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column"
-              }}
-            >
-              <TemtemPortrait
-                style={{ margin: "0 auto" }}
-                temtem={name}
-                shape="hexagon"
-                size={100}
-                borderWidth={5}
-              />
-              <TemtemText
-                style={{ fontSize: 20, textAlign: "center" }}
-                borderWidth={10}
-              >
-                {`#${num} ${name}`}
-              </TemtemText>
-              {jwt ? (
-                tamed.includes(name) ? (
-                  <TemtemText
-                    containerStyle={{ marginTop: 7 }}
-                    style={{ fontSize: 20 }}
-                    borderWidth={10}
-                  >
-                    Tamed
-                  </TemtemText>
-                ) : (
-                  <TemtemButton
-                    size="small"
-                    type={types[0]}
-                    theme="technique"
-                    disabled={taming.includes(name)}
-                    onClick={() => onClick(name)}
-                  >
-                    {taming.includes(name) ? "Taming" : "Tamed?"}
-                  </TemtemButton>
-                )
-              ) : null}
-            </div>
-          </div>
+            num={num}
+            name={name}
+            types={types}
+            tamed={tamed}
+            taming={taming}
+            onClick={onClick}
+          />
         ))}
+    </div>
+  );
+}
+
+function TemtemItem({ num, jwt, tamed, types, taming, onClick }: any) {
+  return (
+    <div
+      css={{
+        display: "inline-block",
+        width: 170
+      }}
+    >
+      <div
+        css={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column"
+        }}
+      >
+        <TemtemPortrait
+          style={{ margin: "0 auto" }}
+          temtem={name}
+          shape="hexagon"
+          size={100}
+          borderWidth={5}
+        />
+        <TemtemText
+          style={{ fontSize: 20, textAlign: "center" }}
+          borderWidth={10}
+        >
+          {`#${num} ${name}`}
+        </TemtemText>
+        {jwt ? (
+          tamed.includes(name) ? (
+            <TemtemText
+              containerStyle={{ marginTop: 7 }}
+              style={{ fontSize: 20 }}
+              borderWidth={10}
+            >
+              Tamed
+            </TemtemText>
+          ) : (
+            <TemtemButton
+              size="small"
+              type={types[0]}
+              theme="technique"
+              disabled={taming.includes(name)}
+              onClick={() => onClick(name)}
+            >
+              {taming.includes(name) ? "Taming" : "Tamed?"}
+            </TemtemButton>
+          )
+        ) : null}
+      </div>
     </div>
   );
 }
