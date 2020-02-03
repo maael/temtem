@@ -36,6 +36,7 @@ export default function NavItem({
           "&:hover": {
             borderColor: colors.uiBlue
           },
+          textAlign: "center",
           ...style
         }}
       >
