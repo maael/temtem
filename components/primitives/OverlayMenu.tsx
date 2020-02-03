@@ -23,11 +23,15 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
         left: 0,
         right: 0,
         background: colors.uiDark,
-        zIndex: 99
+        zIndex: 99,
+        paddingTop: 50
       }}
     >
-      <div onClick={() => onClose()}>
-        <IoIosCloseCircleOutline />
+      <div
+        onClick={() => onClose()}
+        style={{ position: "absolute", top: 10, left: 5 }}
+      >
+        <IoIosCloseCircleOutline color={colors.uiBlueFaded} size={50} />
       </div>
       <NavItem
         style={{

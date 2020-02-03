@@ -7,8 +7,8 @@ import NavItem from "../components/primitives/NavItem";
 import HeaderBar from "../components/primitives/HeaderBar";
 import AuthBlock from "../components/primitives/AuthBlock";
 import HideOnMobile from "../components/primitives/HideOnMobile";
+import HideOnDesktop from "../components/primitives/HideOnDesktop";
 import OverlayMenu from "../components/primitives/OverlayMenu";
-import { HideOnDesktop } from "@maael/temtem-stats-table-component";
 
 export default function TemtemApp({ Component, pageProps }) {
   const [overlay, setOverlay] = useState(false);
@@ -50,7 +50,12 @@ export default function TemtemApp({ Component, pageProps }) {
         <div css={{ padding: "0px 5px" }}>Temtem Tools</div>
         <div css={{ flex: 1, height: 1, backgroundColor: colors.uiBlue }}></div>
       </div>
-      <HeaderBar>
+      <HeaderBar
+        style={{
+          padding: "0 20px 10px 20px",
+          "@media (min-width: 800px)": { padding: 0 }
+        }}
+      >
         <React.Fragment>
           <HideOnMobile>
             <>
@@ -63,7 +68,7 @@ export default function TemtemApp({ Component, pageProps }) {
               <NavItem url="/battle-tools">Battle Tools</NavItem>
             </>
           </HideOnMobile>
-          <HideOnDesktop>
+          <HideOnDesktop style={{ flex: 1 }}>
             <div onClick={() => setOverlay(true)}>
               <img height={50} src="/backpack-by-the-backjack.png" />
             </div>

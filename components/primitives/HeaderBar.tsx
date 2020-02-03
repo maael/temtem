@@ -2,7 +2,13 @@
 import { jsx } from "@emotion/core";
 import { colors } from "@maael/temtem-theme";
 
-export default function HeaderBar({ children }: { children: JSX.Element }) {
+export default function HeaderBar({
+  children,
+  style
+}: {
+  children: JSX.Element;
+  style?: any;
+}) {
   return (
     <div
       css={{
@@ -11,7 +17,8 @@ export default function HeaderBar({ children }: { children: JSX.Element }) {
         fontSize: 20,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        ...style
       }}
     >
       {children}
