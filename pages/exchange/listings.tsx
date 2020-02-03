@@ -4,9 +4,14 @@ import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
 import ExchangeForm from "../../components/compositions/ExchangeForm";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
+import useFetch from "../../components/hooks/useFetch";
 
-export default function ExchangeAds() {
+export default function UserExchangeListings() {
   const [showingForm, setShowingForm] = useState(false);
+  const [ads] = useFetch("/db/exchange/listings", {
+    defaultValue: [],
+    source: "local"
+  });
   return (
     <div css={{ textAlign: "center" }}>
       <ExchangeHeaderBar />
@@ -20,7 +25,7 @@ export default function ExchangeAds() {
       </TemtemButton>
       {showingForm ? <ExchangeForm /> : null}
       <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
-        You have no listings.
+        {`You have ${ads.length || "no"} listings.`}
       </TemtemText>
     </div>
   );

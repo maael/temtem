@@ -10,16 +10,16 @@ export interface Options<T> {
 
 const sourcePrefixMap: Record<FetchSource, string> = {
   "temtem-api": "https://temtem-api.mael.tech/api",
-  local: "",
+  local: "/api",
   custom: ""
 };
 
 export default function useFetch<T>(
   path: string,
-  customOptions: Options<T> = { source: "custom" },
+  customOptions: Options<T> = { source: "local" },
   options: RequestInit = {}
 ): [T, boolean, string | undefined] {
-  const [data, setData] = useState();
+  const [data, setData] = useState(customOptions.defaultValue as T);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   useEffect(() => {

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import Link from "next/link";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
@@ -25,9 +26,13 @@ export default function AuthBlock() {
         }}
         src={jwt.redditIcon}
       />
-      <TemtemText containerStyle={{ marginRight: 5 }}>
-        {jwt.redditName}
-      </TemtemText>
+      <Link href="/user/[name]" as={`/user/${jwt.redditName}`}>
+        <a css={{ textDecoration: "none", cursor: "pointer" }}>
+          <TemtemText containerStyle={{ marginRight: 5 }}>
+            {jwt.redditName}
+          </TemtemText>
+        </a>
+      </Link>
       <a href="/api/logout">
         <TemtemButton type={"Neutral" as any} bgColor={colors.uiBlueFaded}>
           Logout
