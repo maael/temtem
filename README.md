@@ -1,4 +1,4 @@
-<img height="100" align="right" src="./public/favicon.png">
+<img height="100" align="right" src="https://temtem-api.mael.tech/images/portraits/temtem/large/Ganki.png">
 
 # Temtem App
 
