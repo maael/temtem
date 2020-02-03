@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { colors } from "@maael/temtem-theme";
 import NavItem from "./NavItem";
 
@@ -25,7 +26,9 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
         zIndex: 99
       }}
     >
-      <div onClick={() => onClose()}>X</div>
+      <div onClick={() => onClose()}>
+        <IoIosCloseCircleOutline />
+      </div>
       <NavItem
         style={{
           padding: "20px 10px 10px 10px",
