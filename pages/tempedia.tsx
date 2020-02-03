@@ -88,6 +88,7 @@ export default function Tempedia() {
           <TemtemItem
             key={num}
             num={num}
+            jwt={jwt}
             name={name}
             types={types}
             tamed={tamed}
