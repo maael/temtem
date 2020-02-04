@@ -7,7 +7,8 @@ export default cookies(async function(req, res) {
     return res.status(400).json({ error: "not authenticated" });
   }
   if (req.method === "GET") {
-    res.json(await getUser(req.query.id));
+    const user = await getUser(req.query.id);
+    res.json(user || {});
   } else {
     res.json({ error: "not-implemented" });
   }

@@ -5,11 +5,11 @@ import { JWT_VERSION } from "../util/constants";
 import MOCK_JWT from "../util/mockJWT";
 import { JWT } from "../types/index";
 
-type NextApiResponseWithCookie = NextApiResponse & {
+export type NextApiResponseWithCookie = NextApiResponse & {
   cookie: (name: string, value: string, options: any) => void;
 };
 
-type NextApiRequestWithJWT = Omit<NextApiRequest, "query"> & {
+export type NextApiRequestWithJWT = Omit<NextApiRequest, "query"> & {
   getJWT: () => Promise<JWT | undefined>;
   query: Record<string, string>;
 };

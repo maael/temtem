@@ -11,20 +11,25 @@ export async function getExchangeSaved(
 ): Promise<{ data: ExchangeSaved[] }> {
   const query = `
     query UserExchangeSaved ($userId: ID!){
-      userExchangeSaved(userId: $userId) {
+      getUserExchangeSaved(userId: $userId) {
         data {
           _id
-          userId
-          exchangeListId
+          user {
+            _id
+            redditName
+            redditIcon
+          }
+          exchangeListing {
+            _id
+          }
           isActive
           createdAt
           updatedAt
-          deletedAt
         }
       }
     }
   `;
-  return (await client.request(query, { userId })).userExchangeSaved;
+  return (await client.request(query, { userId })).getUserExchangeSaved;
 }
 
 export async function createExchangeSaved(
@@ -34,15 +39,25 @@ export async function createExchangeSaved(
     mutation CreateUserExchangeSaved ($data: ExchangeSavedInput!){
       createExchangeSaved(data: $data) {
         _id
-        userId
-        exchangeListId
+        user {
+          _id
+          redditName
+          redditIcon
+        }
+        exchangeListing {
+          _id
+        }
         isActive
         createdAt
         updatedAt
-        deletedAt
       }
     }
   `;
-  const data = embellishCreate(rawData);
+  const data = embellishCreate({
+    ...rawData,
+    user: {
+      connect: rawData.userId
+    }
+  });
   return (await client.request(query, { data })).createExchangeSaved;
 }

@@ -4,7 +4,7 @@ import TemtemPortrait from "@maael/temtem-portrait-component";
 import { colors } from "@maael/temtem-theme";
 import useFetch from "../../components/hooks/useFetch";
 
-export default function UserPage({ user }) {
+export default function UserPage({ user = {} }: any) {
   const [listingsResult] = useFetch(
     `/db/exchange/listings/user/${user._id}`,
     {},
@@ -72,13 +72,14 @@ UserPage.getInitialProps = async ({ req, query }) => {
       }`
     );
     if (res.ok) {
+      const user = await res.json();
       return {
-        user: await res.json()
+        user
       };
     }
     return {};
   } catch (e) {
-    console.error(e);
+    console.error("error", e);
     return {};
   }
 };

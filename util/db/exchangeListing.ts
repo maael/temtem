@@ -11,39 +11,36 @@ export async function getExchangeListings(): Promise<{
 }> {
   const query = `
     query ExchangeListings {
-      exchangeListings {
+      getExchangeListings {
         data {
-          _id
-          userId
-          temtem {
-            name
-            gender
-            fertility
-            trait
-            bredTechniques
-            svs {
-              hp
-              sta
-              spd
-              atk
-              def
-              spatk
-              spdef
-            }
+          user {
+            _id
+            redditName
+            redditIcon
           }
-          request {
-            cost
-            details
-          }
+          type
+          temtemName
+          temtemGender
+          temtemFertility
+          temtemTrait
+          temtemBredTechniques
+          temtemIsLuma
+          svHp
+          svSta
+          svSpd
+          svAtk
+          svDef
+          svSpatk
+          svSpdef
+          requestCost
+          requestDetails
           isActive
           createdAt
-          updatedAt
-          deletedAt
         }
       }
     }
   `;
-  return (await client.request(query)).exchangeListings;
+  return (await client.request(query)).getExchangeListings;
 }
 
 export async function getUserExchangeListings(
@@ -51,39 +48,36 @@ export async function getUserExchangeListings(
 ): Promise<{ data: ExchangeListing[] }> {
   const query = `
     query UserExchangeListings ($userId: ID!) {
-      userExchangeListings (userId: $userId) {
+      getUserExchangeListings (userId: $userId) {
         data {
-          _id
-          userId
-          temtem {
-            name
-            gender
-            fertility
-            trait
-            bredTechniques
-            svs {
-              hp
-              sta
-              spd
-              atk
-              def
-              spatk
-              spdef
-            }
+          user {
+            _id
+            redditName
+            redditIcon
           }
-          request {
-            cost
-            details
-          }
+          type
+          temtemName
+          temtemGender
+          temtemFertility
+          temtemTrait
+          temtemBredTechniques
+          temtemIsLuma
+          svHp
+          svSta
+          svSpd
+          svAtk
+          svDef
+          svSpatk
+          svSpdef
+          requestCost
+          requestDetails
           isActive
           createdAt
-          updatedAt
-          deletedAt
         }
       }
     }
   `;
-  return (await client.request(query, { userId })).userExchangeListings;
+  return (await client.request(query, { userId })).getUserExchangeListings;
 }
 
 export async function createExchangeListing(
@@ -92,28 +86,27 @@ export async function createExchangeListing(
   const query = `
     mutation CreateUserExchangeListing ($data:ExchangeListingInput!){
       createExchangeListing(data: $data) {
-        _id
-        userId
-        temtem {
-          name
-          gender
-          fertility
-          trait
-          bredTechniques
-          svs {
-            hp
-            sta
-            spd
-            atk
-            def
-            spatk
-            spdef
-          }
+        user {
+          _id
+          redditName
+          redditIcon
         }
-        request {
-          cost
-          details
-        }
+        type
+        temtemName
+        temtemGender
+        temtemFertility
+        temtemTrait
+        temtemBredTechniques
+        temtemIsLuma
+        svHp
+        svSta
+        svSpd
+        svAtk
+        svDef
+        svSpatk
+        svSpdef
+        requestCost
+        requestDetails
         isActive
         createdAt
         updatedAt
@@ -121,6 +114,11 @@ export async function createExchangeListing(
       }
     }
   `;
-  const data = embellishCreate(rawData);
+  const data = embellishCreate({
+    ...rawData,
+    user: {
+      connect: rawData.userId
+    }
+  });
   return (await client.request(query, { data })).createExchangeListing;
 }

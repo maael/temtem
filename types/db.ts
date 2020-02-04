@@ -4,149 +4,173 @@ export interface ListResponse<T> {
   after?: string;
 }
 
-export type RawCreateInput<T> = Omit<T, "isActive" | "createdAt" | "updatedAt">;
-
 export interface ListRequestParams {
   _size?: number;
   _cursor?: string;
 }
+
+export type RawCreateInput<T> = Omit<T, "isActive" | "createdAt" | "updatedAt">;
 
 export enum TemtemGender {
   MALE = "MALE",
   FEMALE = "FEMALE"
 }
 
-export interface User {
+export enum ExchangeListingType {
+  REQUEST = "REQUEST",
+  LISTING = "LISTING"
+}
+
+export enum UserReviewType {
+  GOOD = "GOOD",
+  MIXED = "MIXED",
+  BAD = "BAD"
+}
+
+export interface Entity {
   _id: string;
+  _ts: string;
+}
+
+export interface User extends Entity {
   redditId: string;
   redditName: string;
   redditIcon: string;
   redditDarkmode: boolean;
+  goodReviews: number;
+  mixedReviews: number;
+  badReviews: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 }
 
-export type UserInput = Pick<
-  User,
-  | "redditId"
-  | "redditName"
-  | "redditIcon"
-  | "redditDarkmode"
-  | "isActive"
-  | "createdAt"
-  | "updatedAt"
->;
+export type UserInput = Omit<User, "_id" | "_ts" | "deletedAt">;
+export type UserPartialInput = Partial<Omit<User, "_id" | "_ts">>;
 
-export type UserPartialInput = Partial<Pick<User, "isActive" | "updatedAt">>;
+export interface UserReview extends Entity {
+  targetUserId: string;
+  sourceUserId: string;
+  type: UserReviewType;
+  createdAt: string;
+  updatedAt: string;
+  isValid: boolean;
+}
 
-export interface UserPreference {
-  _id: string;
-  userId: string;
+export type UserReviewInput = Omit<UserReview, "_id" | "_ts">;
+export type UserReviewPartialInput = Partial<Omit<UserReview, "_id" | "_ts">>;
+
+export interface UserPreference extends Entity {
+  userId?: string;
+  user: User;
   key: string;
   value: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export type UserPreferenceInput = Pick<
-  UserPreference,
-  "userId" | "key" | "value" | "createdAt" | "updatedAt"
->;
-
+export type UserPreferenceInput = Omit<UserPreference, "_id" | "_ts" | "user">;
 export type UserPreferencePartialInput = Partial<
-  Pick<UserPreference, "userId" | "key" | "value" | "updatedAt">
+  Omit<UserPreference, "_id" | "_ts" | "user">
 >;
 
-export interface ExchangeListing {
-  _id: string;
+export interface Activity extends Entity {
+  userId?: string;
+  user: User;
+  type: string;
+  createdAt: string;
+}
+
+export type ActivityInput = Omit<Activity, "_id" | "_ts" | "user">;
+
+export interface ExchangeListing extends Entity {
   userId: string;
-  temtem: ListingTemtem;
-  request: ListingRequest;
+  user: User;
+  type: ExchangeListingType;
+  temtemName: string;
+  temtemGender: TemtemGender;
+  temtemFertility: number;
+  temtemTrait: string;
+  temtemBredTechniques: string[];
+  temtemIsLuma: boolean;
+  svHp?: number;
+  svSta?: number;
+  svSpd?: number;
+  svAtk?: number;
+  svDef?: number;
+  svSpatk?: number;
+  svSpdef?: number;
+  requestCost?: number;
+  requestDetails?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 }
 
-export interface ListingTemtem {
-  name: string;
-  gender: TemtemGender;
-  fertility: number;
-  trait: string;
-  bredTechniques: ReadonlyArray<string>;
-  svs: ListingTemtemSvs;
-}
-
-export interface ListingTemtemSvs {
-  hp: number;
-  sta: number;
-  spd: number;
-  atk: number;
-  def: number;
-  spatk: number;
-  spdef: number;
-}
-
-export interface ListingRequest {
-  cost?: number;
-  details?: string;
-}
-
-export type ExchangeListingInput = Pick<
+export type ExchangeListingInput = Omit<
   ExchangeListing,
-  "userId" | "temtem" | "request" | "isActive" | "createdAt" | "updatedAt"
+  "_id" | "_ts" | "user" | "deletedAt"
+>;
+export type ExchangeListingPartialInput = Partial<
+  Omit<ExchangeListing, "_id" | "_ts" | "user">
 >;
 
-export type ExchangeListingPartialInput = Partial<
-  Pick<ExchangeListing, "userId" | "request" | "isActive" | "updatedAt">
-> & { temtem: Partial<ListingTemtem> };
-
-export interface ExchangeSaved {
-  _id: string;
+export interface ExchangeSaved extends Entity {
   userId: string;
-  exchangeListId: string;
+  user: User;
+  exchangeListingId: string;
+  exchangeListing: ExchangeListing;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 }
 
-export type ExchangeSavedInput = Pick<
+export type ExchangeSavedInput = Omit<
   ExchangeSaved,
-  "userId" | "exchangeListId" | "isActive" | "createdAt" | "updatedAt"
+  "_id" | "_ts" | "user" | "deletedAt"
+>;
+export type ExchangeSavedPartialInput = Partial<
+  Omit<ExchangeSaved, "_id" | "_ts" | "user">
 >;
 
-export type ExchangeSavedPartialInput = Pick<ExchangeSaved, "isActive">;
-
-export interface TempediaEntry {
-  _id: string;
+export interface TempediaEntry extends Entity {
   userId: string;
+  user: User;
   temtemName: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 }
 
-export type TempediaEntryInput = Pick<
+export type TempediaEntryInput = Omit<
   TempediaEntry,
-  "userId" | "temtemName" | "isActive" | "createdAt" | "updatedAt"
+  "_id" | "_ts" | "user" | "deletedAt"
+>;
+export type TempediaEntryPartialInput = Partial<
+  Omit<TempediaEntry, "_id" | "_ts" | "user">
 >;
 
-export type TempediaEntryPartialInput = Pick<TempediaEntry, "isActive">;
-
-export interface TrackedQuest {
-  _id: string;
+export interface TrackedQuest extends Entity {
   userId: string;
+  user: User;
   questName: string;
+  questStarted: boolean;
+  questFinished: boolean;
+  questNote?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 }
 
-export type TrackedQuestInput = Pick<TrackedQuest, "userId" | "questName">;
-
-export type TrackedQuestPartial = Pick<TrackedQuest, "isActive">;
+export type TrackedQuestInput = Omit<
+  TrackedQuest,
+  "_id" | "_ts" | "user" | "deletedAt"
+>;
+export type TrackedQuestPartialInput = Partial<
+  Omit<TrackedQuest, "_id" | "_ts" | "user">
+>;

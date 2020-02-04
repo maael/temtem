@@ -11,7 +11,7 @@ export async function getTempediaEntries(
 ): Promise<{ data: TempediaEntry[] }> {
   const query = `
     query UserTempediaEntries ($user:ID!){
-      userTempediaEntries(userId:$user) {
+      getUserTempediaEntries(userId:$user) {
         data {
           _id
           temtemName
@@ -20,7 +20,7 @@ export async function getTempediaEntries(
       }
     }
   `;
-  return (await client.request(query, { user })).userTempediaEntries;
+  return (await client.request(query, { user })).getUserTempediaEntries;
 }
 
 export async function createTempediaEntry({
@@ -37,7 +37,10 @@ export async function createTempediaEntry({
   `;
   const data = embellishCreate({
     userId,
-    temtemName
+    temtemName,
+    user: {
+      connect: userId
+    }
   });
   try {
     return (await client.request(query, { data })).createTempediaEntry;

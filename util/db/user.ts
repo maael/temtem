@@ -1,28 +1,40 @@
 import client from "./client";
 import { getIsoString } from "./util";
-import { User, UserInput, UserPartialInput } from "../../types/db";
+import {
+  User,
+  UserInput,
+  UserPartialInput,
+  RawCreateInput
+} from "../../types/db";
 
 export async function createUser(
-  variables: Omit<UserInput, "isActive" | "createdAt" | "updatedAt">
+  variables: Omit<
+    RawCreateInput<UserInput>,
+    "goodReviews" | "mixedReviews" | "badReviews"
+  >
 ): Promise<User> {
   const query = `
     mutation CreateUser ($user:UserInput!) {
       createUser(data:$user){
-        deletedAt
-        updatedAt
         _id
-        redditName
-        redditDarkmode
         redditId
-        createdAt
-        isActive
+        redditName
         redditIcon
+        redditDarkmode
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
       }
     }
   `;
 
   const user: UserInput = {
     ...variables,
+    goodReviews: 0,
+    badReviews: 0,
+    mixedReviews: 0,
     isActive: true,
     createdAt: getIsoString(),
     updatedAt: getIsoString()
@@ -34,20 +46,21 @@ export async function createUser(
 export async function getUser(redditName: string): Promise<User> {
   const query = `
     query UserByRedditName ($redditName:String!) {
-      userByRedditName(redditName:$redditName){
-        deletedAt
-        updatedAt
+      getUserByRedditName(redditName:$redditName){
         _id
-        redditName
-        redditDarkmode
         redditId
-        createdAt
-        isActive
+        redditName
         redditIcon
+        redditDarkmode
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
       }
     }
   `;
-  return (await client.request(query, { redditName })).userByRedditName;
+  return (await client.request(query, { redditName })).getUserByRedditName;
 }
 
 export async function updateUser(variables: UserPartialInput) {

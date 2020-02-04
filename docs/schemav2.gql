@@ -1,0 +1,134 @@
+enum TemtemGender {
+  MALE
+  FEMALE
+}
+
+enum ExchangeListingType {
+  REQUEST,
+  LISTING
+}
+
+enum UserReviewType {
+  GOOD,
+  MIXED,
+  BAD
+}
+
+type User @collection(name: "users") {
+  redditId: String! @unique(index: "unique_reddit_id")
+  redditName: String! @unique(index: "unique_reddit_name")
+  redditIcon: String!
+  redditDarkmode: Boolean!
+  goodReviews: Int!
+  mixedReviews: Int!
+  badReviews: Int!
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type UserReview @collection(name: "user_reviews") {
+  targetUserId: ID!
+  sourceUserId: ID!
+  type: UserReviewType!
+  createdAt: Time!
+  updatedAt: Time!
+  isValid: Boolean!
+}
+
+type UserPreference @collection(name: "user_preferences") {
+  userId: ID!
+  user: User! @relation
+  key: String!
+  value: String!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Activity @collection(name: "activity") {
+  userId: ID!
+  user: User! @relation
+  type: String!
+  createdAt: Time!
+}
+
+type ExchangeListing @collection(name: "exchange_listings") {
+  userId: ID!
+  user: User! @relation
+  type: ExchangeListingType!
+  temtemName: String!
+  temtemGender: TemtemGender!
+  temtemFertility: Int!
+  temtemTrait: String!
+  temtemBredTechniques: [String!]!
+  temtemIsLuma: Boolean!
+  svHp: Int
+  svSta: Int
+  svSpd: Int
+  svAtk: Int
+  svDef: Int
+  svSpatk: Int
+  svSpdef: Int
+  requestCost: Int
+  requestDetails: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type ExchangeSaved @collection(name: "exchange_saved") {
+  userId: ID!
+  user: User! @relation
+  exchangeListingId: ID!
+  exchangeListing: ExchangeListing! @relation
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type TempediaEntry @collection(name: "tempedia_entries") {
+  userId: ID!
+  user: User! @relation
+  temtemName: String!
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type TrackedQuest @collection(name: "tracked_quests") {
+  userId: ID!
+  user: User! @relation
+  questName: String!
+  questStarted: Boolean!
+  questFinished: Boolean!
+  questNote: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type Query {
+  getUsers: [User!]!
+  getUserByRedditName(redditName: String): User
+  getUserPreferences(userId: ID!): [UserPreference!]!
+  getUserExchangeListings(userId: ID!): [ExchangeListing!]!
+  getUserExchangeListingsByType(userId: ID!, type: ExchangeListingType): [ExchangeListing!]!
+  getUserExchangeListingsByActive(userId: ID!, isActive: Boolean): [ExchangeListing!]!
+  getUserExchangeListingsByTypeAndActive(userId: ID!, type: ExchangeListingType, isActive: Boolean): [ExchangeListing!]!
+  getExchangeListingsByType(type: ExchangeListingType): [ExchangeListing!]!
+  getExchangeListingsByTypeAndActive(type: ExchangeListingType, isActive: Boolean): [ExchangeListing!]!
+  getUserExchangeSaved(userId: ID!): [ExchangeSaved!]!
+  getExchangedSaved: [ExchangeSaved!]!
+  getUserTempediaEntries(userId: ID!): [TempediaEntry!]!
+  getTempediaEntries: [TempediaEntry!]!
+  getUserTrackedQuests(userId: ID!): [TrackedQuest!]!
+  getTrackedQuests: [TrackedQuest!]!
+  getActivity: [Activity!]!
+  getUserReviewsFor(targetUserId: ID!): [UserReview!]!
+  getUserReviews: [UserReview!]!
+}
