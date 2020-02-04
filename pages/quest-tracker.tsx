@@ -5,6 +5,7 @@ import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemInput from "@maael/temtem-input-component";
+import RequireAuth from "../components/primitives/RequireAuth";
 import useFetch from "../components/hooks/useFetch";
 import useCallableFetch from "../components/hooks/useCallableFetch";
 
@@ -87,17 +88,19 @@ export default function QuestTracker() {
                   : "[Hidden Quest]"}
               </TemtemText>
             </a>
-            <TemtemButton
-              onClick={() => {
-                userQuests.push(q.name);
-                createUserQuest({
-                  body: JSON.stringify({ questName: q.name })
-                });
-              }}
-              disabled={userQuests.includes(q.name)}
-            >
-              {userQuests.includes(q.name) ? "Done" : "Done?"}
-            </TemtemButton>
+            <RequireAuth>
+              <TemtemButton
+                onClick={() => {
+                  userQuests.push(q.name);
+                  createUserQuest({
+                    body: JSON.stringify({ questName: q.name })
+                  });
+                }}
+                disabled={userQuests.includes(q.name)}
+              >
+                {userQuests.includes(q.name) ? "Done" : "Done?"}
+              </TemtemButton>
+            </RequireAuth>
           </div>
         ))}
         <TemtemText
@@ -133,18 +136,20 @@ export default function QuestTracker() {
                   {q.name}
                 </TemtemText>
               </a>
-              <TemtemButton
-                onClick={() => {
-                  userQuests.push(q.name);
-                  createUserQuest({
-                    body: JSON.stringify({ questName: q.name })
-                  });
-                }}
-                size="small"
-                disabled={userQuests.includes(q.name)}
-              >
-                {userQuests.includes(q.name) ? "Done" : "Done?"}
-              </TemtemButton>
+              <RequireAuth>
+                <TemtemButton
+                  onClick={() => {
+                    userQuests.push(q.name);
+                    createUserQuest({
+                      body: JSON.stringify({ questName: q.name })
+                    });
+                  }}
+                  size="small"
+                  disabled={userQuests.includes(q.name)}
+                >
+                  {userQuests.includes(q.name) ? "Done" : "Done?"}
+                </TemtemButton>
+              </RequireAuth>
             </div>
           ))}
       </div>
