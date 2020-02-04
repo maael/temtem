@@ -1,5 +1,5 @@
 import cookies from "../../../util/cookies";
-import { getUserQuests } from "../../../util/db";
+import { getUserQuests, createUserQuests } from "../../../util/db";
 
 export default cookies(async function(req, res) {
   const userJWT = await req.getJWT();
@@ -9,7 +9,12 @@ export default cookies(async function(req, res) {
   if (req.method === "GET") {
     res.json(await getUserQuests(userJWT._id));
   } else if (req.method === "POST") {
-    res.json({ error: "not-implemented" });
+    res.json(
+      await createUserQuests({
+        userId: userJWT._id,
+        questName: req.body.questName
+      })
+    );
   } else if (req.method === "DELETE") {
     res.json({ error: "not-implemented" });
   } else {
