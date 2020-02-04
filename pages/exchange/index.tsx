@@ -12,7 +12,8 @@ export default function Trades() {
     {},
     {
       defaultValue: [],
-      source: "local"
+      source: "local",
+      mapper: d => d.data
     }
   );
   return (
@@ -23,33 +24,25 @@ export default function Trades() {
           style={{ fontSize: 30 }}
           borderWidth={10}
         >{`${listings.length || "No"} Listings`}</TemtemText>
-        <TemtemStatsTable
-          temtem={{ name: "Ganki", stats: {}, types: ["Wind", "Electric"] }}
-          svs={{}}
-          trait="Botonophobia"
-          gender="m"
-          breedTechniques={[{ name: "Tesla Prison", type: "Electric" }]}
-          fertility={5}
-          isLuma={false}
-        />
-        <TemtemStatsTable
-          temtem={{ name: "Pigepic", stats: {}, types: ["Wind"] }}
-          svs={{}}
-          trait="Botonophobia"
-          gender="m"
-          breedTechniques={[]}
-          fertility={5}
-          isLuma
-        />
-        <TemtemStatsTable
-          temtem={{ name: "Loali", stats: {}, types: ["Wind"] }}
-          svs={{}}
-          trait="Botonophobia"
-          gender="f"
-          breedTechniques={[]}
-          fertility={5}
-          isLuma={false}
-        />
+        {listings.map(l => (
+          <TemtemStatsTable
+            key={l._id}
+            temtem={{
+              name: l.temtem.name,
+              stats: {},
+              types: ["Wind", "Electric"]
+            }}
+            svs={l.temtem.svs}
+            trait={l.temtem.trait}
+            gender={l.temtem.gender}
+            breedTechniques={l.temtem.bredTechniques.map(n => ({
+              name: n,
+              type: "Toxic"
+            }))}
+            fertility={l.temtem.fertility}
+            isLuma={false}
+          />
+        ))}
       </div>
     </React.Fragment>
   );

@@ -45,18 +45,25 @@ export default function ExchangeForm() {
   const [spdef, setSpdef] = useState("");
   async function save() {
     const toSave = {
-      temtem: temtem ? temtem.value : gender,
-      gender: gender ? gender.value : gender,
-      trait: trait ? trait.value : trait,
-      bredTechniques: bredTechniques.map(({ value }) => value),
-      fertility,
-      hp: parseInt(hp, 10),
-      sta: parseInt(sta, 10),
-      spd: parseInt(spd, 10),
-      atk: parseInt(atk, 10),
-      def: parseInt(def, 10),
-      spatk: parseInt(spatk, 10),
-      spdef: parseInt(spdef, 10)
+      temtem: {
+        name: temtem ? temtem.value : gender,
+        gender: gender ? gender.value : gender,
+        trait: trait ? trait.value : trait,
+        bredTechniques: bredTechniques.map(({ value }) => value),
+        fertility: parseInt(fertility, 10),
+        svs: {
+          hp: parseInt(hp, 10),
+          sta: parseInt(sta, 10),
+          spd: parseInt(spd, 10),
+          atk: parseInt(atk, 10),
+          def: parseInt(def, 10),
+          spatk: parseInt(spatk, 10),
+          spdef: parseInt(spdef, 10)
+        }
+      },
+      request: {
+        cost: 1000
+      }
     };
     console.info(toSave);
     const res = await createListing({ body: JSON.stringify(toSave) });

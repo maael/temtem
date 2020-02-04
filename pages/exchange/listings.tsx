@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
+import TemtemStatsTable from "@maael/temtem-stats-table-component";
 import { colors } from "@maael/temtem-theme";
 import ExchangeForm from "../../components/compositions/ExchangeForm";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
@@ -13,7 +14,8 @@ export default function UserExchangeListings() {
     {},
     {
       defaultValue: [],
-      source: "local"
+      source: "local",
+      mapper: d => d.data
     }
   );
   return (
@@ -31,6 +33,25 @@ export default function UserExchangeListings() {
       <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
         {`You have ${ads.length || "no"} listings.`}
       </TemtemText>
+      {ads.map(l => (
+        <TemtemStatsTable
+          key={l._id}
+          temtem={{
+            name: l.temtem.name,
+            stats: {},
+            types: ["Wind", "Electric"]
+          }}
+          svs={l.temtem.svs}
+          trait={l.temtem.trait}
+          gender={l.temtem.gender}
+          breedTechniques={l.temtem.bredTechniques.map(n => ({
+            name: n,
+            type: "Toxic"
+          }))}
+          fertility={l.temtem.fertility}
+          isLuma={false}
+        />
+      ))}
     </div>
   );
 }
