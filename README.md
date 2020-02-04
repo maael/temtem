@@ -4,7 +4,7 @@
 
 - App
   - https://github.com/maael/temtem
-  - https://temtem.mael.tech
+  - https://tem.tools
 - Temtem API
   - https://github.com/maael/temtem-api
   - https://temtem-api.mael.tech
