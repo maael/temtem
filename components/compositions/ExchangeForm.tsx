@@ -43,6 +43,8 @@ export default function ExchangeForm() {
   const [def, setDef] = useState("");
   const [spatk, setSpatk] = useState("");
   const [spdef, setSpdef] = useState("");
+  const [cost, setCost] = useState("");
+  const [details, setDetails] = useState("");
   async function save() {
     const toSave = {
       temtem: {
@@ -62,10 +64,10 @@ export default function ExchangeForm() {
         }
       },
       request: {
-        cost: 1000
+        cost: parseInt(cost, 10),
+        details
       }
     };
-    console.info(toSave);
     const res = await createListing({ body: JSON.stringify(toSave) });
     if (res) {
       console.info("save successful");
@@ -81,6 +83,8 @@ export default function ExchangeForm() {
       setDef("");
       setSpatk("");
       setSpdef("");
+      setCost("");
+      setDetails("");
     }
   }
   return (
@@ -208,6 +212,25 @@ export default function ExchangeForm() {
           type="number"
           value={spdef}
           onChange={({ target }) => setSpdef((target as any).value)}
+        />
+      </div>
+      <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
+        Request
+      </TemtemText>
+      <div css={{ display: "flex", flexDirection: "column" }}>
+        <TemtemInput
+          containerStyle={{ margin: 5 }}
+          prefix="Pansuns"
+          type="number"
+          value={cost}
+          onChange={({ target }) => setCost((target as any).value)}
+        />
+        <TemtemInput
+          containerStyle={{ margin: 5 }}
+          prefix="Details"
+          type="number"
+          value={details}
+          onChange={({ target }) => setDetails((target as any).value)}
         />
       </div>
       {createError ? (
