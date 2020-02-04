@@ -24,6 +24,11 @@ export default function QuestTracker() {
   const [createUserQuest] = useCallableFetch("/db/quests", { method: "POST" });
   console.info(userQuests);
   const [search, setSearch] = useState("");
+  const filteredMain = quests.filter(
+    q =>
+      q.type === "main" &&
+      (search ? q.name.toLowerCase().includes(search.toLowerCase()) : true)
+  );
   return (
     <div style={{ margin: "10px auto", textAlign: "center" }}>
       <TemtemDynamicChip
@@ -50,54 +55,51 @@ export default function QuestTracker() {
         value={search}
         onChange={e => setSearch((e.target as any).value)}
       />
-      <div css={{ maxWidth: 800, margin: "0 auto" }}>
+      <div css={{ maxWidth: 500, margin: "0 auto" }}>
         <TemtemText
           style={{ fontSize: 40, textAlign: "center" }}
           borderWidth={10}
         >
           Main Quests
         </TemtemText>
-        {quests
-          .filter(
-            q =>
-              q.type === "main" &&
-              (search
-                ? q.name.toLowerCase().includes(search.toLowerCase())
-                : true)
-          )
-          .map((q, i) => (
-            <div
-              key={`${q.name}${i}`}
-              css={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <a href={q.wikiUrl} style={{ textDecoration: "none" }}>
-                <TemtemText
-                  style={{ fontSize: 30, textAlign: "center" }}
-                  borderWidth={10}
-                >
-                  {i === 0 ||
-                  userQuests.includes(quests.map(({ name }) => name)[i - 1])
-                    ? q.name
-                    : "[Hidden Quest]"}
-                </TemtemText>
-              </a>
-              <TemtemButton
-                onClick={() => {
-                  userQuests.push(q.name);
-                  createUserQuest({
-                    body: JSON.stringify({ questName: q.name })
-                  });
-                }}
-                disabled={userQuests.includes(q.name)}
+        {filteredMain.map((q, i) => (
+          <div
+            key={`${q.name}${i}`}
+            css={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              margin: "10px 0px"
+            }}
+          >
+            <a href={q.wikiUrl} style={{ textDecoration: "none" }}>
+              <TemtemText
+                style={{ fontSize: 30, textAlign: "center" }}
+                borderWidth={10}
               >
-                {userQuests.includes(q.name) ? "Done" : "Done?"}
-              </TemtemButton>
-            </div>
-          ))}
+                {quests.findIndex(({ name }) => name === q.name) === 0 ||
+                userQuests.includes(
+                  quests.map(({ name }) => name)[
+                    quests.findIndex(({ name }) => name === q.name) - 1
+                  ]
+                )
+                  ? q.name
+                  : "[Hidden Quest]"}
+              </TemtemText>
+            </a>
+            <TemtemButton
+              onClick={() => {
+                userQuests.push(q.name);
+                createUserQuest({
+                  body: JSON.stringify({ questName: q.name })
+                });
+              }}
+              disabled={userQuests.includes(q.name)}
+            >
+              {userQuests.includes(q.name) ? "Done" : "Done?"}
+            </TemtemButton>
+          </div>
+        ))}
         <TemtemText
           containerStyle={{ marginTop: 10 }}
           style={{ fontSize: 40, textAlign: "center" }}
@@ -119,7 +121,8 @@ export default function QuestTracker() {
               css={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
+                margin: 10
               }}
             >
               <a href={q.wikiUrl} style={{ textDecoration: "none" }}>
