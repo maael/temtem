@@ -15,6 +15,7 @@ export async function getTempediaEntries(
         data {
           _id
           temtemName
+          createdAt
         }
       }
     }

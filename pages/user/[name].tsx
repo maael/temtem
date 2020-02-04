@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import TemtemText from "@maael/temtem-text-component";
+import TemtemPortrait from "@maael/temtem-portrait-component";
 import { colors } from "@maael/temtem-theme";
 import useFetch from "../../components/hooks/useFetch";
 
@@ -12,7 +13,7 @@ export default function UserPage({ user }) {
       source: "local"
     }
   );
-  const [tempediaResult] = useFetch(
+  const [tempediaResult] = useFetch<{ data: any[] }>(
     `/db/tempedia/user/${user._id}`,
     {},
     {
@@ -20,6 +21,11 @@ export default function UserPage({ user }) {
       source: "local"
     }
   );
+  const mostRecentlyTamed =
+    tempediaResult.data.length &&
+    tempediaResult.data.sort(
+      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)
+    )[0].temtemName;
   return (
     <div css={{ textAlign: "center", marginTop: 10 }}>
       <img
@@ -41,6 +47,18 @@ export default function UserPage({ user }) {
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         {`${tempediaResult.data.length} Tamed Temtem`}
       </TemtemText>
+      {tempediaResult.data.length ? (
+        <div>
+          <TemtemPortrait
+            style={{ margin: "0 auto" }}
+            shape="hexagon"
+            temtem={mostRecentlyTamed}
+          />
+          <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
+            {`Most recently tamed a ${mostRecentlyTamed}`}
+          </TemtemText>
+        </div>
+      ) : null}
     </div>
   );
 }
