@@ -18,17 +18,15 @@ export default function useCallableFetch<T>(
   path: string,
   options: RequestInit = {},
   customOptions: Options<T> = { source: "local" }
-): [
-  (requestInit: RequestInit) => Promise<void>,
-  T,
-  boolean,
-  string | undefined
-] {
+): [(requestInit: RequestInit) => Promise<T>, T, boolean, string | undefined] {
   const [data, setData] = useState(customOptions.defaultValue as T);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   async function callFetch(requestInit: RequestInit) {
+    let json;
     try {
+      setError(undefined);
+      setLoading(true);
       const res = await fetch(
         `${sourcePrefixMap[customOptions.source]}${path}`,
         {
@@ -44,14 +42,22 @@ export default function useCallableFetch<T>(
         }
       );
       if (res.ok) {
-        const json = await res.json();
-        setData(customOptions.mapper ? customOptions.mapper(json) : json);
+        const rawJson = await res.json();
+        const json = customOptions.mapper
+          ? customOptions.mapper(rawJson)
+          : rawJson;
+        setData(json);
+      } else {
+        const error = await json.text();
+        setError(error);
       }
     } catch (e) {
       setError(e.message);
+      return;
     } finally {
       setLoading(false);
     }
+    return json;
   }
   return [callFetch, data, loading, error];
 }

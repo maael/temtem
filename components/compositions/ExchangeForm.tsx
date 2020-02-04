@@ -22,7 +22,7 @@ function useApiState(path: string) {
 }
 
 export default function ExchangeForm() {
-  const [createListing, _, createLoading, _createError] = useCallableFetch(
+  const [createListing, _, createLoading, createError] = useCallableFetch(
     "/db/exchange/listings",
     {
       method: "POST"
@@ -59,24 +59,32 @@ export default function ExchangeForm() {
       spdef: parseInt(spdef, 10)
     };
     console.info(toSave);
-    await createListing({ body: JSON.stringify(toSave) });
-    console.info("save successful");
-    setTemtem("");
-    setGender("");
-    setTrait("");
-    setBredTechniques([]);
-    setFertility("");
-    setHp("");
-    setSta("");
-    setSpd("");
-    setAtk("");
-    setDef("");
-    setSpatk("");
-    setSpdef("");
+    const res = await createListing({ body: JSON.stringify(toSave) });
+    if (res) {
+      console.info("save successful");
+      setTemtem("");
+      setGender("");
+      setTrait("");
+      setBredTechniques([]);
+      setFertility("");
+      setHp("");
+      setSta("");
+      setSpd("");
+      setAtk("");
+      setDef("");
+      setSpatk("");
+      setSpdef("");
+    }
   }
   return (
     <div css={{ maxWidth: 800, textAlign: "center", margin: "0 auto" }}>
-      <div css={{ display: "flex", flexDirection: "row" }}>
+      <div
+        css={{
+          display: "flex",
+          flexDirection: "column",
+          "@media (min-width: 800px)": { flexDirection: "row" }
+        }}
+      >
         <div css={{ margin: 5, flex: 2 }}>
           <TemtemSelect
             prefix="Temtem"
@@ -98,7 +106,13 @@ export default function ExchangeForm() {
           />
         </div>
       </div>
-      <div css={{ display: "flex", flexDirection: "row" }}>
+      <div
+        css={{
+          display: "flex",
+          flexDirection: "column",
+          "@media (min-width: 800px)": { flexDirection: "row" }
+        }}
+      >
         <div css={{ margin: 5, flex: 1 }}>
           <TemtemSelect
             prefix="Trait"
@@ -111,7 +125,7 @@ export default function ExchangeForm() {
         <div css={{ margin: 5, flex: 1 }}>
           <TemtemSelect
             isMulti
-            prefix="Bred Techniques"
+            prefix="Techniques"
             options={techniques}
             value={bredTechniques}
             onChange={selected => setBredTechniques(selected)}
@@ -119,67 +133,82 @@ export default function ExchangeForm() {
           />
         </div>
       </div>
-      <TemtemInput
-        prefix="Fertility"
-        style={{ flex: 1 }}
-        type="number"
-        value={fertility}
-        onChange={({ target }) => setFertility((target as any).value)}
-      />
+      <div
+        css={{
+          margin: 5,
+          display: "flex",
+          flexDirection: "column",
+          "@media (min-width: 800px)": { flexDirection: "row" }
+        }}
+      >
+        <TemtemInput
+          prefix="Fertility"
+          containerStyle={{ flex: 1 }}
+          type="number"
+          value={fertility}
+          onChange={({ target }) => setFertility((target as any).value)}
+        />
+      </div>
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         SVs
       </TemtemText>
-      <div css={{ textAlign: "center" }}>
+      <div css={{ display: "flex", flexDirection: "column" }}>
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="HP"
           type="number"
           value={hp}
           onChange={({ target }) => setHp((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="STA"
           type="number"
           value={sta}
           onChange={({ target }) => setSta((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="SPD"
           type="number"
           value={spd}
           onChange={({ target }) => setSpd((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="ATK"
           type="number"
           value={atk}
           onChange={({ target }) => setAtk((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="DEF"
           type="number"
           value={def}
           onChange={({ target }) => setDef((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="SPATK"
           type="number"
           value={spatk}
           onChange={({ target }) => setSpatk((target as any).value)}
         />
         <TemtemInput
-          containerStyle={{ display: "inline-block", margin: 5 }}
+          containerStyle={{ margin: 5 }}
           prefix="SPDEF"
           type="number"
           value={spdef}
           onChange={({ target }) => setSpdef((target as any).value)}
         />
       </div>
+      {createError ? (
+        <TemtemText
+          containerStyle={{ margin: "10px 0" }}
+          style={{ fontSize: 20 }}
+        >{`Error: ${createError}`}</TemtemText>
+      ) : null}
       <TemtemButton
         type={"" as any}
         disabled={createLoading}

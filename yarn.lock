@@ -1181,10 +1181,10 @@
   dependencies:
     react "^16.12.0"
 
-"@maael/temtem-input-component@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@maael/temtem-input-component/-/temtem-input-component-1.1.0.tgz#b6fd5293126ebc86772738955cb38611a17c0211"
-  integrity sha512-ebMvNspmIF2r1rdSvayBkZnGOhSOf8melivAIJFJgw6TRujahnMItjulJd/nJFbKJhly8FfYmnGXuBsWAn9A+Q==
+"@maael/temtem-input-component@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@maael/temtem-input-component/-/temtem-input-component-1.2.0.tgz#f04c49d9c8bdd807e6b397d8384d0c238fb13fcb"
+  integrity sha512-u/uVReR69l34/m0BAIR05sCbC6g9NeuEi3ZI4HjSBUL44Qj0UTixvIWaggq1fcVztR6KuJYunHkcSLS4lo/5Zw==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@maael/temtem-theme" "^1.6.0"
