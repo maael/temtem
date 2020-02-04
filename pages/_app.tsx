@@ -19,7 +19,7 @@ export default function TemtemApp({ Component, pageProps }) {
         <meta httpEquiv="content-language" content="en-gb" />
         <meta name="theme-color" content={colors.uiBgGradientStart} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Temtem Tools</title>
+        <title>Temtools</title>
       </Head>
       <Global
         styles={{
@@ -47,7 +47,7 @@ export default function TemtemApp({ Component, pageProps }) {
         }}
       >
         <div css={{ flex: 1, height: 1, backgroundColor: colors.uiBlue }}></div>
-        <div css={{ padding: "0px 5px" }}>Temtem Tools</div>
+        <div css={{ padding: "0px 5px" }}>Temtools</div>
         <div css={{ flex: 1, height: 1, backgroundColor: colors.uiBlue }}></div>
       </div>
       <HeaderBar
