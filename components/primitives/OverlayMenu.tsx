@@ -84,6 +84,16 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
       >
         Battle Tools
       </NavItem>
+      <NavItem
+        style={{
+          padding: "20px 10px 10px 10px",
+          display: "block",
+          width: "100%"
+        }}
+        url="/users"
+      >
+        Search Users
+      </NavItem>
     </div>
   );
 }
