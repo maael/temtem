@@ -1,13 +1,16 @@
 /** @jsx jsx */
+import { useState } from "react";
 import { jsx } from "@emotion/core";
 import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
+import TemtemInput from "@maael/temtem-input-component";
 import useFetch from "../components/hooks/useFetch";
 
 export default function QuestTracker() {
   const [quests] = useFetch<
     { name: string; type: "side" | "main"; wikiUrl: string }[]
   >("/quests", {}, { source: "temtem-api", defaultValue: [] });
+  const [search, setSearch] = useState("");
   return (
     <div style={{ margin: "10px auto", textAlign: "center" }}>
       <TemtemDynamicChip
@@ -28,8 +31,20 @@ export default function QuestTracker() {
       >
         {`${quests.length} quests`}
       </TemtemText>
+      <TemtemInput
+        containerStyle={{ maxWidth: 400, margin: "0 auto" }}
+        placeholder="Search quests..."
+        value={search}
+        onChange={e => setSearch((e.target as any).value)}
+      />
       {quests
-        .filter(q => q.type === "main")
+        .filter(
+          q =>
+            q.type === "main" &&
+            (search
+              ? q.name.toLowerCase().includes(search.toLowerCase())
+              : true)
+        )
         .map(q => (
           <a href={q.wikiUrl} style={{ textDecoration: "none" }}>
             <TemtemText
@@ -42,7 +57,13 @@ export default function QuestTracker() {
           </a>
         ))}
       {quests
-        .filter(q => q.type === "side")
+        .filter(
+          q =>
+            q.type === "side" &&
+            (search
+              ? q.name.toLowerCase().includes(search.toLowerCase())
+              : true)
+        )
         .map(q => (
           <a href={q.wikiUrl} style={{ textDecoration: "none" }}>
             <TemtemText
