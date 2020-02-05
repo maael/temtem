@@ -45,7 +45,7 @@ export default function Home() {
       >
         Track your quests here.
       </TemtemText>
-      <TemtemDynamicChip
+      {/* <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
         textProps={{ borderWidth: 10 }}
       >
@@ -57,7 +57,7 @@ export default function Home() {
         borderWidth={10}
       >
         General battle tools here.
-      </TemtemText>
+      </TemtemText> */}
     </div>
   );
 }
