@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import fetch from "isomorphic-fetch";
 // import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemStatsTable from "../../../components/compositions/StatsTable";
