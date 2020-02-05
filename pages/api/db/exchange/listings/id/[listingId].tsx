@@ -12,7 +12,9 @@ export default paramGuard(
     jwtGuard(async function(req, res) {
       const userJWT = await req.getJWT();
       if (req.method === "GET") {
-        res.json(await getExchangeListing(req.query.listingId));
+        const listing = await getExchangeListing(req.query.listingId);
+        console.info(listing);
+        res.json(listing);
       } else if (req.method === "PUT") {
         res.json(
           await updateExchangeListing(req.query.listingId, {

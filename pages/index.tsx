@@ -6,7 +6,7 @@ import { colors } from "@maael/temtem-theme";
 
 export default function Home() {
   return (
-    <div css={{ margin: "10px auto", textAlign: "center" }}>
+    <div css={{ margin: "0px auto", textAlign: "center", padding: 10 }}>
       <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
         textProps={{ borderWidth: 10 }}
@@ -19,7 +19,11 @@ export default function Home() {
         style={{ fontSize: 36 }}
         borderWidth={10}
       >
-        A collection of different tools to augment Temtem.
+        <>
+          A collection of different tools to augment Temtem. Guaranteed to have
+          the latest data on Temtem, techniques, and traits, updated every 4
+          hours.
+        </>
       </TemtemText>
       <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}

@@ -17,6 +17,7 @@ const paramGuard = (
         r => Object.keys(req.query).includes(r) && req.query[r] !== undefined
       )
     ) {
+      console.warn("failed param check", req.query);
       return res.status(400).json({ error: "missing param" });
     }
     return await handler(req, res);
