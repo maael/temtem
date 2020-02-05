@@ -115,13 +115,15 @@ ListingPage.getInitialProps = async ({ req, query }) => {
     const res = await fetch(
       `${
         host.includes("localhost") ? "http" : "https"
-      }://${host}/api/db/exchange/listings/id/${query.listingId}`
+      }://${host}/api/db/exchange/listings/id/${query.listingId}`,
+      { headers: req.headers }
     );
     console.info(
       `${
         host.includes("localhost") ? "http" : "https"
       }://${host}/api/db/exchange/listings/id/${query.listingId}`,
-      res.ok
+      res.ok,
+      req.headers
     );
     if (res.ok) {
       const listing = await res.json();
