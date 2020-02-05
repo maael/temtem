@@ -47,26 +47,22 @@ export default function ExchangeForm() {
   const [details, setDetails] = useState("");
   async function save() {
     const toSave = {
-      temtem: {
-        name: temtem ? temtem.value : gender,
-        gender: gender ? gender.value : gender,
-        trait: trait ? trait.value : trait,
-        bredTechniques: bredTechniques.map(({ value }) => value),
-        fertility: parseInt(fertility, 10),
-        svs: {
-          hp: parseInt(hp, 10),
-          sta: parseInt(sta, 10),
-          spd: parseInt(spd, 10),
-          atk: parseInt(atk, 10),
-          def: parseInt(def, 10),
-          spatk: parseInt(spatk, 10),
-          spdef: parseInt(spdef, 10)
-        }
-      },
-      request: {
-        cost: parseInt(cost, 10),
-        details
-      }
+      type: "LISTING",
+      temtemName: temtem ? temtem.value : gender,
+      temtemGender: gender ? gender.value : gender,
+      temtemFertility: parseInt(fertility, 10),
+      temtemTrait: trait ? trait.value : trait,
+      temtemBredTechniques: bredTechniques.map(({ value }) => value),
+      temtemIsLuma: false,
+      svHp: parseInt(hp, 10),
+      svSta: parseInt(sta, 10),
+      svSpd: parseInt(spd, 10),
+      svAtk: parseInt(atk, 10),
+      svDef: parseInt(def, 10),
+      svSpatk: parseInt(spatk, 10),
+      svSpdef: parseInt(spdef, 10),
+      requestCost: parseInt(cost, 10),
+      requestDetails: details
     };
     const res = await createListing({ body: JSON.stringify(toSave) });
     if (res) {
@@ -228,7 +224,6 @@ export default function ExchangeForm() {
         <TemtemInput
           containerStyle={{ margin: 5 }}
           prefix="Details"
-          type="number"
           value={details}
           onChange={({ target }) => setDetails((target as any).value)}
         />
