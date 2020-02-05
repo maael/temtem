@@ -1,7 +1,8 @@
 /** @jsx jsx */
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { jsx } from "@emotion/core";
+import Fuse from "fuse.js";
 import TemtemStatsTable from "../../components/compositions/StatsTable";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";
@@ -19,6 +20,26 @@ export default function Trades() {
       mapper: d => d.data
     }
   );
+  const [search, setSearch] = useState("");
+  const fuse = useMemo(
+    () =>
+      new Fuse(listings, {
+        shouldSort: true,
+        threshold: 0.2,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        tokenize: true,
+        keys: [
+          "temtemName",
+          "user.redditName",
+          "temtemTrait",
+          "temtemGender",
+          "temtemBredTechniques"
+        ]
+      }),
+    [listings]
+  );
+  const results = search ? fuse.search(search) : listings;
   return (
     <React.Fragment>
       <ExchangeHeaderBar />
@@ -32,7 +53,12 @@ export default function Trades() {
             ? "Loading..."
             : `${listings.length || "No"} Listings`}
         </TemtemText>
-        {listings.map(l => (
+        <TemtemInput
+          placeholder="Fuzzy Search..."
+          value={search}
+          onChange={e => setSearch((e.target as any).value)}
+        />
+        {results.map(l => (
           <div key={l._id}>
             <Link href={`/exchange/listings/${l._id}`}>
               <a style={{ textDecoration: "none" }}>
