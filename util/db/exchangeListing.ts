@@ -40,7 +40,7 @@ export async function getExchangeListings(): Promise<{
       }
     }
   `;
-  return (await client.request(query)).getExchangeListings;
+  return (await client.request(query)).getExchangeListingsByTypeAndActive;
 }
 
 export async function getUserExchangeListings(
@@ -77,7 +77,8 @@ export async function getUserExchangeListings(
       }
     }
   `;
-  return (await client.request(query, { userId })).getUserExchangeListings;
+  return (await client.request(query, { userId }))
+    .getUserExchangeListingsByType;
 }
 
 export async function createExchangeListing(
