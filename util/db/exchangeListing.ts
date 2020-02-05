@@ -1,5 +1,5 @@
 import client from "./client";
-import { embellishCreate } from "./util";
+import { embellishCreate, embellishUpdate, embellishDelete } from "./util";
 import {
   ExchangeListingInput,
   ExchangeListing,
@@ -159,4 +159,71 @@ export async function getExchangeListing(listingId: string) {
   }
 `;
   return (await client.request(query, { listingId })).findExchangeListingByID;
+}
+
+export async function updateExchangeListing(
+  listingId: string,
+  rawData: Partial<ExchangeListing>
+) {
+  const query = `
+    mutation UpdateUserExchangeListing ($id: ID!, $data:ExchangeListingInput!){
+      updateExchangeListing(id: $id, data: $data) {
+        _id
+        user {
+          _id
+          redditName
+          redditIcon
+        }
+        type
+        temtemName
+        temtemGender
+        temtemFertility
+        temtemTrait
+        temtemBredTechniques
+        temtemIsLuma
+        svHp
+        svSta
+        svSpd
+        svAtk
+        svDef
+        svSpatk
+        svSpdef
+        requestCost
+        requestDetails
+        isActive
+        createdAt
+        updatedAt
+        deletedAt
+      }
+    }
+  `;
+  const data = embellishUpdate(
+    embellishCreate({
+      ...rawData
+    })
+  );
+  return (await client.request(query, { id: listingId, data }))
+    .updateExchangeListing;
+}
+
+export async function setExchangeInactive(
+  listingId: string,
+  rawData: Partial<ExchangeListing>
+) {
+  const query = `
+    mutation setExchangeInactive ($id: ID!, $data:ExchangeListingInput!){
+      updateExchangeListing(id: $id, data: $data) {
+        _id
+        isActive
+        deletedAt
+      }
+    }
+  `;
+  const data = embellishDelete(
+    embellishCreate({
+      ...rawData
+    })
+  );
+  return (await client.request(query, { id: listingId, data }))
+    .updateExchangeListing;
 }

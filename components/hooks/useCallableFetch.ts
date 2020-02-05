@@ -43,9 +43,7 @@ export default function useCallableFetch<T>(
       );
       if (res.ok) {
         const rawJson = await res.json();
-        const json = customOptions.mapper
-          ? customOptions.mapper(rawJson)
-          : rawJson;
+        json = customOptions.mapper ? customOptions.mapper(rawJson) : rawJson;
         setData(json);
       } else {
         const error = await json.text();

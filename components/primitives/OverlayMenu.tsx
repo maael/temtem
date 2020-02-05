@@ -74,7 +74,7 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
       >
         Quest Tracker
       </NavItem>
-      <NavItem
+      {/* <NavItem
         style={{
           padding: "20px 10px 10px 10px",
           display: "block",
@@ -83,7 +83,7 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
         url="/battle-tools"
       >
         Battle Tools
-      </NavItem>
+      </NavItem> */}
       <NavItem
         style={{
           padding: "20px 10px 10px 10px",

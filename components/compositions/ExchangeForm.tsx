@@ -21,30 +21,55 @@ function useApiState(path: string) {
   return [data, loading, error];
 }
 
-export default function ExchangeForm() {
+export default function ExchangeForm({
+  existing = {},
+  onSave
+}: {
+  existing?: any;
+  onSave?: any;
+}) {
   const [createListing, _, createLoading, createError] = useCallableFetch(
-    "/db/exchange/listings",
+    `/db/exchange/listings${existing._id ? `/id/${existing._id}` : ""}`,
     {
-      method: "POST"
+      method: existing._id ? "PUT" : "POST"
     }
   );
   const [temtems, loadingTemtems] = useApiState("/temtems");
   const [traits, loadingTraits] = useApiState("/traits");
   const [techniques, loadingTechniques] = useApiState("/techniques");
-  const [temtem, setTemtem] = useState();
-  const [gender, setGender] = useState();
-  const [trait, setTrait] = useState();
-  const [bredTechniques, setBredTechniques] = useState([]);
-  const [fertility, setFertility] = useState("");
-  const [hp, setHp] = useState("");
-  const [sta, setSta] = useState("");
-  const [spd, setSpd] = useState("");
-  const [atk, setAtk] = useState("");
-  const [def, setDef] = useState("");
-  const [spatk, setSpatk] = useState("");
-  const [spdef, setSpdef] = useState("");
-  const [cost, setCost] = useState("");
-  const [details, setDetails] = useState("");
+  const [temtem, setTemtem] = useState(
+    existing._id
+      ? { value: existing.temtemName, label: existing.temtemName }
+      : undefined
+  );
+  const [gender, setGender] = useState(
+    existing._id
+      ? {
+          value: existing.temtemGender,
+          label: existing.temtemGender === "MALE" ? "Male" : "Female"
+        }
+      : undefined
+  );
+  const [trait, setTrait] = useState(
+    existing._id
+      ? { value: existing.temtemTrait, label: existing.temtemTrait }
+      : undefined
+  );
+  const [bredTechniques, setBredTechniques] = useState(
+    existing._id
+      ? existing.temtemBredTechniques.map(value => ({ value, label: value }))
+      : undefined
+  );
+  const [fertility, setFertility] = useState(existing.temtemFertility || "");
+  const [hp, setHp] = useState(existing.svHp || "");
+  const [sta, setSta] = useState(existing.svSta || "");
+  const [spd, setSpd] = useState(existing.svSpd || "");
+  const [atk, setAtk] = useState(existing.svAtk || "");
+  const [def, setDef] = useState(existing.svDef || "");
+  const [spatk, setSpatk] = useState(existing.svSpatk || "");
+  const [spdef, setSpdef] = useState(existing.svSpdef || "");
+  const [cost, setCost] = useState(existing.requestCost || "");
+  const [details, setDetails] = useState(existing.requestDetails || "");
   async function save() {
     const toSave = {
       type: "LISTING",
@@ -66,10 +91,9 @@ export default function ExchangeForm() {
     };
     const res = await createListing({ body: JSON.stringify(toSave) });
     if (res) {
-      console.info("save successful");
-      setTemtem("");
-      setGender("");
-      setTrait("");
+      setTemtem(undefined);
+      setGender(undefined);
+      setTrait(undefined);
       setBredTechniques([]);
       setFertility("");
       setHp("");
@@ -81,6 +105,7 @@ export default function ExchangeForm() {
       setSpdef("");
       setCost("");
       setDetails("");
+      onSave && onSave(res);
     }
   }
   return (

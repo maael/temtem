@@ -13,7 +13,7 @@ export default function QuestTracker() {
   const [quests] = useFetch<
     { name: string; type: "side" | "main"; wikiUrl: string }[]
   >("/quests", {}, { source: "temtem-api", defaultValue: [] });
-  const [userQuests] = useFetch<string[]>(
+  const [userQuests, loadingUserQuests] = useFetch<string[]>(
     "/db/quests",
     {},
     {
@@ -23,7 +23,6 @@ export default function QuestTracker() {
     }
   );
   const [createUserQuest] = useCallableFetch("/db/quests", { method: "POST" });
-  console.info(userQuests);
   const [search, setSearch] = useState("");
   const filteredMain = quests.filter(
     q =>
@@ -48,7 +47,7 @@ export default function QuestTracker() {
         style={{ fontSize: 40, textAlign: "center" }}
         borderWidth={10}
       >
-        {`${quests.length} quests`}
+        {loadingUserQuests ? "Loading..." : `${quests.length} quests`}
       </TemtemText>
       <TemtemInput
         containerStyle={{ maxWidth: 400, margin: "0 auto" }}

@@ -65,7 +65,7 @@ export default function TemtemApp({ Component, pageProps }) {
               <NavItem url="/exchange">Temtem Exchange</NavItem>
               <NavItem url="/tempedia">Personal Tempedia</NavItem>
               <NavItem url="/quest-tracker">Quest Tracker</NavItem>
-              <NavItem url="/battle-tools">Battle Tools</NavItem>
+              {/* <NavItem url="/battle-tools">Battle Tools</NavItem> */}
               <NavItem url="/users">Search Users</NavItem>
             </>
           </HideOnMobile>

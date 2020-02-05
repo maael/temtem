@@ -4,7 +4,7 @@ import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
 
 export default function ExchangeSaved() {
-  const [saved] = useFetch(
+  const [saved, loadingSaved] = useFetch(
     "/db/exchange/saved",
     {},
     {
@@ -17,7 +17,9 @@ export default function ExchangeSaved() {
       <ExchangeHeaderBar />
       <div css={{ textAlign: "center", marginTop: 10 }}>
         <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
-          {`You have ${saved.length || "no"} saved listings.`}
+          {loadingSaved
+            ? "Loading..."
+            : `You have ${saved.length || "no"} saved listings.`}
         </TemtemText>
       </div>
     </React.Fragment>

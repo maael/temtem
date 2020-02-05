@@ -11,13 +11,13 @@ import useFetch from "../../../components/hooks/useFetch";
 
 export default function UserExchangeListings() {
   const [showingForm, setShowingForm] = useState(false);
-  const [ads] = useFetch(
+  const [ads, loadingAds] = useFetch(
     "/db/exchange/listings",
     {},
     {
       defaultValue: [],
       source: "local",
-      mapper: d => d.data
+      mapper: d => d.data.filter(i => i.isActive)
     }
   );
   return (
@@ -31,16 +31,20 @@ export default function UserExchangeListings() {
       >
         {showingForm ? "Close Listing Form" : "New Listing"}
       </TemtemButton>
-      {showingForm ? <ExchangeForm /> : null}
+      {showingForm ? (
+        <ExchangeForm onSave={() => setShowingForm(false)} />
+      ) : null}
+
       <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
-        {`You have ${ads.length || "no"} listings.`}
+        {loadingAds
+          ? "Loading..."
+          : `You have ${ads.length || "no"} active listings.`}
       </TemtemText>
       <div css={{ maxWidth: 1000, margin: "0 auto" }}>
         {ads.map(l => (
-          <Link href={`/exchange/listings/${l._id}`}>
+          <Link href={`/exchange/listings/${l._id}`} key={l._id}>
             <a style={{ textDecoration: "none" }}>
               <TemtemStatsTable
-                key={l._id}
                 temtem={{
                   name: l.temtemName,
                   stats: {},

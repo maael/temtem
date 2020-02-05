@@ -1,54 +1,64 @@
 import React, { useState } from "react";
-import TemtemText from "@maael/temtem-text-component";
+// import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemStatsTable from "@maael/temtem-stats-table-component";
 import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
 import ExchangeHeaderBar from "../../../components/compositions/ExchangeHeaderBar";
 import ExchangeForm from "../../../components/compositions/ExchangeForm";
 import useJWT from "../../../components/hooks/useJWT";
+import useCallableFetch from "../../../components/hooks/useCallableFetch";
 import { colors } from "@maael/temtem-theme";
 
 export default function ListingPage({ listing }: any) {
   const jwt = useJWT();
   const [editing, setEditing] = useState(false);
+  const { user, _id, ...remaining } = listing;
+  const [stateListing, setStateListing] = useState(listing);
+  const [removeListing, _, removeLoading] = useCallableFetch(
+    `/db/exchange/listings/id/${listing ? listing._id : ""}`,
+    {
+      method: "DELETE",
+      body: JSON.stringify(remaining)
+    }
+  );
   return (
     <>
       <ExchangeHeaderBar />
-      {listing ? (
+      {stateListing && stateListing.isActive ? (
         <div css={{ textAlign: "center" }}>
           <div css={{ maxWidth: 1000, margin: "0 auto" }}>
             <TemtemStatsTable
-              key={listing._id}
+              key={stateListing._id}
               temtem={{
-                name: listing.temtemName,
+                name: stateListing.temtemName,
                 stats: {},
                 types: []
               }}
               svs={{
-                hp: listing.svHp,
-                sta: listing.svSta,
-                spd: listing.svSpd,
-                atk: listing.svAtk,
-                def: listing.svDef,
-                spatk: listing.svSpatk,
-                spdef: listing.svSpdef
+                hp: stateListing.svHp,
+                sta: stateListing.svSta,
+                spd: stateListing.svSpd,
+                atk: stateListing.svAtk,
+                def: stateListing.svDef,
+                spatk: stateListing.svSpatk,
+                spdef: stateListing.svSpdef
               }}
-              trait={listing.temtemTrait}
-              gender={listing.temtemGender}
-              breedTechniques={listing.temtemBredTechniques.map(n => ({
+              trait={stateListing.temtemTrait}
+              gender={stateListing.temtemGender}
+              breedTechniques={stateListing.temtemBredTechniques.map(n => ({
                 name: n,
                 type: "Toxic"
               }))}
-              fertility={listing.temtemFertility}
-              isLuma={listing.temtemIsLuma}
+              fertility={stateListing.temtemFertility}
+              isLuma={stateListing.temtemIsLuma}
             />
             <ListingRequestDetails
-              user={listing.user}
-              cost={listing.requestCost}
-              details={listing.requestDetails}
+              user={stateListing.user}
+              cost={stateListing.requestCost}
+              details={stateListing.requestDetails}
             />
           </div>
-          {jwt && listing.user._id === jwt._id ? (
+          {jwt && stateListing.user._id === jwt._id ? (
             <div>
               <TemtemButton
                 style={{ margin: 5 }}
@@ -56,7 +66,14 @@ export default function ListingPage({ listing }: any) {
               >
                 {editing ? "Cancel" : "Edit"}
               </TemtemButton>
-              <TemtemButton style={{ margin: 5 }} bgColor={colors.typeFire}>
+              <TemtemButton
+                disabled={removeLoading}
+                style={{ margin: 5 }}
+                bgColor={colors.typeFire}
+                onClick={() => {
+                  removeListing({});
+                }}
+              >
                 Remove
               </TemtemButton>
             </div>
@@ -65,7 +82,14 @@ export default function ListingPage({ listing }: any) {
               <TemtemButton>Save</TemtemButton>
             </div>
           )}
-          {editing ? <ExchangeForm /> : null}
+          {editing ? (
+            <ExchangeForm
+              existing={stateListing}
+              onSave={res => {
+                setEditing(false);
+              }}
+            />
+          ) : null}
         </div>
       ) : (
         <div>Not found</div>
@@ -77,12 +101,6 @@ export default function ListingPage({ listing }: any) {
 ListingPage.getInitialProps = async ({ req, query }) => {
   try {
     const host = req ? req.headers.host : window.location.host;
-    console.info(
-      "trying",
-      `${
-        host.includes("localhost") ? "http" : "https"
-      }://${host}/api/db/exchange/listings/id/${query.listingId}`
-    );
     const res = await fetch(
       `${
         host.includes("localhost") ? "http" : "https"

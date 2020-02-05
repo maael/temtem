@@ -9,7 +9,7 @@ import ListingRequestDetails from "../../components/compositions/ListingRequestD
 import useFetch from "../../components/hooks/useFetch";
 
 export default function Trades() {
-  const [listings] = useFetch(
+  const [listings, loadingListings] = useFetch(
     "/db/exchange/listings/all",
     {},
     {
@@ -22,10 +22,11 @@ export default function Trades() {
     <React.Fragment>
       <ExchangeHeaderBar />
       <div css={{ maxWidth: 1000, margin: "10px auto", textAlign: "center" }}>
-        <TemtemText
-          style={{ fontSize: 30 }}
-          borderWidth={10}
-        >{`${listings.length || "No"} Listings`}</TemtemText>
+        <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
+          {loadingListings
+            ? "Loading..."
+            : `${listings.length || "No"} Listings`}
+        </TemtemText>
         {listings.map(l => (
           <div>
             <Link href={`/exchange/listings/${l._id}`}>

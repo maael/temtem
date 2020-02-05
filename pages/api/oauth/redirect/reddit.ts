@@ -110,10 +110,9 @@ async function getAccessToken(code: string) {
     headers: { Authorization }
   });
   if (gotRes.statusCode === 200) {
-    console.info("[user info]", gotRes.body);
     return JSON.parse(gotRes.body || "{}");
   } else {
-    console.info("[auth error]", gotRes.body);
+    console.error("[auth error]", gotRes.body);
   }
 }
 
@@ -126,6 +125,6 @@ async function getIdentity(accessToken: string) {
   if (res.statusCode === 200) {
     return JSON.parse(res.body || "{}");
   } else {
-    console.info("[auth error]", res.body);
+    console.error("[auth error]", res.body);
   }
 }
