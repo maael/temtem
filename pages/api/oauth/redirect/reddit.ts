@@ -1,4 +1,5 @@
 import got from "got";
+import url from "url";
 import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import * as jwt from "../../../../util/jwt";
@@ -53,11 +54,12 @@ export default cookies(async function(req, res) {
             redditDarkmode,
             redditIcon
           } = await getOrCreateUser(identity);
+          const parsedIconUrl = url.parse(redditIcon);
           const toEncode: JWT = {
             _id,
             redditId,
             redditName,
-            redditIcon,
+            redditIcon: `${parsedIconUrl.protocol}://${parsedIconUrl.host}${parsedIconUrl.pathname}`,
             redditDarkmode,
             version: JWT_VERSION
           };
