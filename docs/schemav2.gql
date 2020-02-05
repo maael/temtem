@@ -61,7 +61,7 @@ type ExchangeListing @collection(name: "exchange_listings") {
   temtemGender: TemtemGender!
   temtemFertility: Int!
   temtemTrait: String!
-  temtemBredTechniques: [String!]!
+  temtemBredTechniques: [String]
   temtemIsLuma: Boolean!
   svHp: Int
   svSta: Int

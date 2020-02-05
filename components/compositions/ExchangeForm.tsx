@@ -77,7 +77,7 @@ export default function ExchangeForm({
       temtemGender: gender ? gender.value : gender,
       temtemFertility: parseInt(fertility, 10),
       temtemTrait: trait ? trait.value : trait,
-      temtemBredTechniques: bredTechniques.map(({ value }) => value),
+      temtemBredTechniques: (bredTechniques || []).map(({ value }) => value),
       temtemIsLuma: false,
       svHp: parseInt(hp, 10),
       svSta: parseInt(sta, 10),

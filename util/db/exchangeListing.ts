@@ -120,10 +120,12 @@ export async function createExchangeListing(
   `;
   const data = embellishCreate({
     ...rawData,
+    temtemBredTechniques: rawData.temtemBredTechniques || [],
     user: {
       connect: rawData.userId
     }
   });
+  console.info(data);
   return (await client.request(query, { data })).createExchangeListing;
 }
 
@@ -199,7 +201,8 @@ export async function updateExchangeListing(
   `;
   const data = embellishUpdate(
     embellishCreate({
-      ...rawData
+      ...rawData,
+      temtemBredTechniques: rawData.temtemBredTechniques || []
     })
   );
   return (await client.request(query, { id: listingId, data }))
@@ -221,7 +224,8 @@ export async function setExchangeInactive(
   `;
   const data = embellishDelete(
     embellishCreate({
-      ...rawData
+      ...rawData,
+      temtemBredTechniques: rawData.temtemBredTechniques || []
     })
   );
   return (await client.request(query, { id: listingId, data }))
