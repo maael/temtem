@@ -96,7 +96,14 @@ export default function ListingPage({ listing }: any) {
           ) : null}
         </div>
       ) : (
-        <TemtemText containerStyle={{ marginTop: 10 }}>Not found</TemtemText>
+        <div css={{ textAlign: "center" }}>
+          <TemtemText
+            containerStyle={{ marginTop: 10, fontSize: 40 }}
+            borderWidth={10}
+          >
+            Not found
+          </TemtemText>
+        </div>
       )}
     </>
   );
@@ -110,8 +117,15 @@ ListingPage.getInitialProps = async ({ req, query }) => {
         host.includes("localhost") ? "http" : "https"
       }://${host}/api/db/exchange/listings/id/${query.listingId}`
     );
+    console.info(
+      `${
+        host.includes("localhost") ? "http" : "https"
+      }://${host}/api/db/exchange/listings/id/${query.listingId}`,
+      res.ok
+    );
     if (res.ok) {
       const listing = await res.json();
+      console.info("got listing", listing);
       return {
         listing
       };
