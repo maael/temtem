@@ -22,7 +22,6 @@ export default function ListingPage({ listing }: any) {
       body: JSON.stringify(remaining)
     }
   );
-  console.info(stateListing);
   return (
     <>
       <ExchangeHeaderBar />
@@ -118,16 +117,8 @@ ListingPage.getInitialProps = async ({ req, query }) => {
       }://${host}/api/db/exchange/listings/id/${query.listingId}`,
       { headers: req.headers }
     );
-    console.info(
-      `${
-        host.includes("localhost") ? "http" : "https"
-      }://${host}/api/db/exchange/listings/id/${query.listingId}`,
-      res.ok,
-      req.headers
-    );
     if (res.ok) {
       const listing = await res.json();
-      console.info("got listing", listing);
       return {
         listing
       };

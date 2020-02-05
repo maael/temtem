@@ -13,7 +13,6 @@ export default paramGuard(
       const userJWT = await req.getJWT();
       if (req.method === "GET") {
         const listing = await getExchangeListing(req.query.listingId);
-        console.info(listing);
         res.json(listing);
       } else if (req.method === "PUT") {
         res.json(
