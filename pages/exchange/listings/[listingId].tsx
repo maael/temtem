@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
-import TemtemStatsTable from "@maael/temtem-stats-table-component";
+import TemtemStatsTable from "../../../components/compositions/StatsTable";
 import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
 import ExchangeHeaderBar from "../../../components/compositions/ExchangeHeaderBar";
 import ExchangeForm from "../../../components/compositions/ExchangeForm";
@@ -31,7 +31,6 @@ export default function ListingPage({ listing }: any) {
               key={stateListing._id}
               temtem={{
                 name: stateListing.temtemName,
-                stats: {},
                 types: []
               }}
               svs={{
@@ -86,7 +85,10 @@ export default function ListingPage({ listing }: any) {
             <ExchangeForm
               existing={stateListing}
               onSave={res => {
-                setEditing(false);
+                window.setTimeout(() => {
+                  setEditing(false);
+                  window.location.reload();
+                }, 100);
               }}
             />
           ) : null}

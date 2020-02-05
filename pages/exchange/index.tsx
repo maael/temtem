@@ -2,8 +2,9 @@
 import React from "react";
 import Link from "next/link";
 import { jsx } from "@emotion/core";
-import TemtemStatsTable from "@maael/temtem-stats-table-component";
+import TemtemStatsTable from "../../components/compositions/StatsTable";
 import TemtemText from "@maael/temtem-text-component";
+import TemtemInput from "@maael/temtem-input-component";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
 import useFetch from "../../components/hooks/useFetch";
@@ -28,14 +29,12 @@ export default function Trades() {
             : `${listings.length || "No"} Listings`}
         </TemtemText>
         {listings.map(l => (
-          <div>
+          <div key={l._id}>
             <Link href={`/exchange/listings/${l._id}`}>
               <a style={{ textDecoration: "none" }}>
                 <TemtemStatsTable
-                  key={l._id}
                   temtem={{
                     name: l.temtemName,
-                    stats: {},
                     types: []
                   }}
                   svs={{

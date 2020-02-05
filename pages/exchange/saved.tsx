@@ -1,5 +1,6 @@
 import React from "react";
 import TemtemText from "@maael/temtem-text-component";
+import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
 
@@ -16,6 +17,18 @@ export default function ExchangeSaved() {
     <React.Fragment>
       <ExchangeHeaderBar />
       <div css={{ textAlign: "center", marginTop: 10 }}>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: 20, fontSize: 30 }}
+          textProps={{ borderWidth: 10 }}
+        >
+          Work in progress
+        </TemtemDynamicChip>
+        <TemtemText
+          style={{ fontSize: 40, textAlign: "center" }}
+          borderWidth={10}
+        >
+          Eventually you'll be able to see saved listings here.
+        </TemtemText>
         <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
           {loadingSaved
             ? "Loading..."

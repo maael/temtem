@@ -11,7 +11,7 @@ export async function getExchangeSaved(
 ): Promise<{ data: ExchangeSaved[] }> {
   const query = `
     query UserExchangeSaved ($userId: ID!){
-      getUserExchangeSaved(userId: $userId) {
+      getUserExchangeSaved(userId: $userId, _size: 10000) {
         data {
           _id
           user {

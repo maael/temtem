@@ -11,7 +11,8 @@ export default function ListingRequestDetails({ user, cost, details }: any) {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-around",
-        padding: 5
+        padding: 5,
+        marginBottom: 10
       }}
     >
       <div
