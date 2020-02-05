@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import fetch from "isomorphic-fetch";
-// import TemtemText from "@maael/temtem-text-component";
+import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemStatsTable from "../../../components/compositions/StatsTable";
 import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
@@ -13,7 +13,7 @@ import { colors } from "@maael/temtem-theme";
 export default function ListingPage({ listing }: any) {
   const jwt = useJWT();
   const [editing, setEditing] = useState(false);
-  const { user, _id, ...remaining } = listing;
+  const { user, _id, ...remaining } = listing || {};
   const [stateListing, setStateListing] = useState(listing);
   const [removeListing, _, removeLoading] = useCallableFetch(
     `/db/exchange/listings/id/${listing ? listing._id : ""}`,
@@ -27,6 +27,10 @@ export default function ListingPage({ listing }: any) {
       <ExchangeHeaderBar />
       {stateListing && stateListing.isActive ? (
         <div css={{ textAlign: "center" }}>
+          <TemtemText>
+            Find Temtem here, and DM their tamers on Reddit to organise an
+            exchange!
+          </TemtemText>
           <div css={{ maxWidth: 1000, margin: "0 auto" }}>
             <TemtemStatsTable
               key={stateListing._id}
@@ -85,7 +89,7 @@ export default function ListingPage({ listing }: any) {
           {editing ? (
             <ExchangeForm
               existing={stateListing}
-              onSave={res => {
+              onSave={() => {
                 window.setTimeout(() => {
                   setEditing(false);
                   window.location.reload();
@@ -115,6 +119,7 @@ ListingPage.getInitialProps = async ({ req, query }) => {
         listing
       };
     }
+    console.warn("failed to get listing");
     return {};
   } catch (e) {
     console.error("error", e);
