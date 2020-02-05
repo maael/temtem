@@ -10,9 +10,10 @@ export async function getExchangeListings(): Promise<{
   data: ExchangeListing[];
 }> {
   const query = `
-    query ExchangeListings(type: LISTING, isActive: true) {
-      getExchangeListingsByTypeAndActive {
+    query ExchangeListings {
+      getExchangeListingsByTypeAndActive(type: LISTING, isActive: true) {
         data {
+          _id
           user {
             _id
             redditName
@@ -50,6 +51,7 @@ export async function getUserExchangeListings(
     query UserExchangeListings ($userId: ID!) {
       getUserExchangeListingsByType (userId: $userId, type: LISTING) {
         data {
+          _id
           user {
             _id
             redditName
@@ -87,6 +89,7 @@ export async function createExchangeListing(
   const query = `
     mutation CreateUserExchangeListing ($data:ExchangeListingInput!){
       createExchangeListing(data: $data) {
+        _id
         user {
           _id
           redditName
@@ -122,4 +125,38 @@ export async function createExchangeListing(
     }
   });
   return (await client.request(query, { data })).createExchangeListing;
+}
+
+export async function getExchangeListing(listingId: string) {
+  const query = `
+  query UserExchangeListings ($listingId: ID!) {
+    findExchangeListingByID (id: $listingId) {
+      _id
+      user {
+        _id
+        redditName
+        redditIcon
+      }
+      type
+      temtemName
+      temtemGender
+      temtemFertility
+      temtemTrait
+      temtemBredTechniques
+      temtemIsLuma
+      svHp
+      svSta
+      svSpd
+      svAtk
+      svDef
+      svSpatk
+      svSpdef
+      requestCost
+      requestDetails
+      isActive
+      createdAt
+    }
+  }
+`;
+  return (await client.request(query, { listingId })).findExchangeListingByID;
 }

@@ -1,11 +1,15 @@
 import fetch from "isomorphic-fetch";
+import Link from "next/link";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import { colors } from "@maael/temtem-theme";
 import useFetch from "../../components/hooks/useFetch";
+// import TemtemButton from "@maael/temtem-button-component";
+import TemtemStatsTable from "@maael/temtem-stats-table-component";
+import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
 
 export default function UserPage({ user = {} }: any) {
-  const [listingsResult] = useFetch(
+  const [listingsResult] = useFetch<any>(
     `/db/exchange/listings/user/${user._id}`,
     {},
     {
@@ -59,6 +63,53 @@ export default function UserPage({ user = {} }: any) {
           </TemtemText>
         </div>
       ) : null}
+      {listingsResult.data.length ? (
+        <TemtemText
+          containerStyle={{ marginTop: 40, marginBottom: -20 }}
+          style={{ fontSize: 40 }}
+          borderWidth={10}
+        >
+          Listings
+        </TemtemText>
+      ) : null}
+      <div css={{ maxWidth: 1000, margin: "0 auto" }}>
+        {listingsResult.data.map(l => (
+          <Link href={`/exchange/listings/${l._id}`}>
+            <a style={{ textDecoration: "none" }}>
+              <TemtemStatsTable
+                key={l._id}
+                temtem={{
+                  name: l.temtemName,
+                  stats: {},
+                  types: []
+                }}
+                svs={{
+                  hp: l.svHp,
+                  sta: l.svSta,
+                  spd: l.svSpd,
+                  atk: l.svAtk,
+                  def: l.svDef,
+                  spatk: l.svSpatk,
+                  spdef: l.svSpdef
+                }}
+                trait={l.temtemTrait}
+                gender={l.temtemGender}
+                breedTechniques={l.temtemBredTechniques.map(n => ({
+                  name: n,
+                  type: "Toxic"
+                }))}
+                fertility={l.temtemFertility}
+                isLuma={l.temtemIsLuma}
+              />
+              <ListingRequestDetails
+                user={l.user}
+                cost={l.requestCost}
+                details={l.requestDetails}
+              />
+            </a>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

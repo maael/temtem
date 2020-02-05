@@ -1,7 +1,8 @@
 export {
   getUserExchangeListings,
   getExchangeListings,
-  createExchangeListing
+  createExchangeListing,
+  getExchangeListing
 } from "./exchangeListing";
 export { getExchangeSaved, createExchangeSaved } from "./exchangeSaved";
 export { getUserQuests, createUserQuests } from "./quests";

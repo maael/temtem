@@ -11,7 +11,9 @@ export default function ExchangeHeaderBar() {
           All Listings
         </NavItem>
         <RequireAuth>
-          <NavItem url="/exchange/listings">My Listings</NavItem>
+          <NavItem url="/exchange/listings" exact>
+            My Listings
+          </NavItem>
         </RequireAuth>
         <RequireAuth>
           <NavItem url="/exchange/saved">My Saved</NavItem>

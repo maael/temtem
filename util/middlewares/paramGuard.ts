@@ -13,7 +13,7 @@ const paramGuard = (
 ) => {
   try {
     if (
-      requiredParams.every(
+      !requiredParams.every(
         r => Object.keys(req.query).includes(r) && req.query[r] !== undefined
       )
     ) {

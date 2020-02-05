@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import React from "react";
+import Link from "next/link";
 import { jsx } from "@emotion/core";
 import TemtemStatsTable from "@maael/temtem-stats-table-component";
-import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
-import useFetch from "../../components/hooks/useFetch";
 import TemtemText from "@maael/temtem-text-component";
+import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
+import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
+import useFetch from "../../components/hooks/useFetch";
 
 export default function Trades() {
   const [listings] = useFetch(
@@ -25,23 +27,42 @@ export default function Trades() {
           borderWidth={10}
         >{`${listings.length || "No"} Listings`}</TemtemText>
         {listings.map(l => (
-          <TemtemStatsTable
-            key={l._id}
-            temtem={{
-              name: l.temtem.name,
-              stats: {},
-              types: ["Wind", "Electric"]
-            }}
-            svs={l.temtem.svs}
-            trait={l.temtem.trait}
-            gender={l.temtem.gender}
-            breedTechniques={l.temtem.bredTechniques.map(n => ({
-              name: n,
-              type: "Toxic"
-            }))}
-            fertility={l.temtem.fertility}
-            isLuma={false}
-          />
+          <div>
+            <Link href={`/exchange/listings/${l._id}`}>
+              <a style={{ textDecoration: "none" }}>
+                <TemtemStatsTable
+                  key={l._id}
+                  temtem={{
+                    name: l.temtemName,
+                    stats: {},
+                    types: []
+                  }}
+                  svs={{
+                    hp: l.svHp,
+                    sta: l.svSta,
+                    spd: l.svSpd,
+                    atk: l.svAtk,
+                    def: l.svDef,
+                    spatk: l.svSpatk,
+                    spdef: l.svSpdef
+                  }}
+                  trait={l.temtemTrait}
+                  gender={l.temtemGender}
+                  breedTechniques={l.temtemBredTechniques.map(n => ({
+                    name: n,
+                    type: "Toxic"
+                  }))}
+                  fertility={l.temtemFertility}
+                  isLuma={l.temtemIsLuma}
+                />
+              </a>
+            </Link>
+            <ListingRequestDetails
+              user={l.user}
+              cost={l.requestCost}
+              details={l.requestDetails}
+            />
+          </div>
         ))}
       </div>
     </React.Fragment>

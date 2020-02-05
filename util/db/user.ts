@@ -74,4 +74,24 @@ export async function updateUser(variables: UserPartialInput) {
   return client.request<User>(query, variables);
 }
 
-export function getUsers() {}
+export async function getUsers() {
+  const query = `
+  query Users {
+    getUsers (_size: 10000){
+      data {
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
+    }
+  }
+`;
+  return (await client.request(query)).getUsers;
+}
