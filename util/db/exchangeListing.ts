@@ -10,8 +10,8 @@ export async function getExchangeListings(): Promise<{
   data: ExchangeListing[];
 }> {
   const query = `
-    query ExchangeListings {
-      getExchangeListings {
+    query ExchangeListings(type: LISTING, isActive: true) {
+      getExchangeListingsByTypeAndActive {
         data {
           user {
             _id
@@ -48,7 +48,7 @@ export async function getUserExchangeListings(
 ): Promise<{ data: ExchangeListing[] }> {
   const query = `
     query UserExchangeListings ($userId: ID!) {
-      getUserExchangeListings (userId: $userId) {
+      getUserExchangeListingsByType (userId: $userId, type: LISTING) {
         data {
           user {
             _id
