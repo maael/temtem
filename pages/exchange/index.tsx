@@ -23,6 +23,10 @@ export default function Trades() {
     <React.Fragment>
       <ExchangeHeaderBar />
       <div css={{ maxWidth: 1000, margin: "10px auto", textAlign: "center" }}>
+        <TemtemText>
+          Find Temtem here, and DM their tamers on Reddit to organise an
+          exchange!
+        </TemtemText>
         <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
           {loadingListings
             ? "Loading..."

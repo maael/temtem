@@ -2,10 +2,25 @@
 import { jsx } from "@emotion/core";
 import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
+import { colors } from "@maael/temtem-theme";
 
 export default function Home() {
   return (
     <div css={{ margin: "10px auto", textAlign: "center" }}>
+      <TemtemDynamicChip
+        style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
+        textProps={{ borderWidth: 10 }}
+        chipColor={colors.uiYellow}
+      >
+        {`tem.tools`}
+      </TemtemDynamicChip>
+      <TemtemText
+        containerStyle={{ marginBottom: 20 }}
+        style={{ fontSize: 36 }}
+        borderWidth={10}
+      >
+        A collection of different tools to augment Temtem.
+      </TemtemText>
       <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
         textProps={{ borderWidth: 10 }}

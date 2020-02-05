@@ -42,7 +42,7 @@ export default function AuthBlock() {
   ) : (
     <a href="/api/login">
       <TemtemButton type={"Neutral" as any} bgColor={colors.uiBlue}>
-        Login
+        Login with Reddit
       </TemtemButton>
     </a>
   );

@@ -14,7 +14,7 @@ export default function ListingPage({ listing }: any) {
   const jwt = useJWT();
   const [editing, setEditing] = useState(false);
   const { user, _id, ...remaining } = listing || {};
-  const [stateListing, setStateListing] = useState(listing);
+  const [stateListing] = useState(listing);
   const [removeListing, _, removeLoading] = useCallableFetch(
     `/db/exchange/listings/id/${listing ? listing._id : ""}`,
     {
@@ -22,15 +22,12 @@ export default function ListingPage({ listing }: any) {
       body: JSON.stringify(remaining)
     }
   );
+  console.info(stateListing);
   return (
     <>
       <ExchangeHeaderBar />
       {stateListing && stateListing.isActive ? (
         <div css={{ textAlign: "center" }}>
-          <TemtemText>
-            Find Temtem here, and DM their tamers on Reddit to organise an
-            exchange!
-          </TemtemText>
           <div css={{ maxWidth: 1000, margin: "0 auto" }}>
             <TemtemStatsTable
               key={stateListing._id}
@@ -99,7 +96,7 @@ export default function ListingPage({ listing }: any) {
           ) : null}
         </div>
       ) : (
-        <div>Not found</div>
+        <TemtemText containerStyle={{ marginTop: 10 }}>Not found</TemtemText>
       )}
     </>
   );
