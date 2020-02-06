@@ -25,7 +25,14 @@ export default function UsersSearch() {
         onChange={e => setSearch((e.target as any).value)}
       />
       <div
-        css={{ display: "flex", justifyContent: "center", padding: "10px 0" }}
+        css={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "10px 0",
+          flexWrap: "wrap",
+          margin: "0 auto",
+          maxWidth: 600
+        }}
       >
         {users
           .filter(u =>
@@ -37,7 +44,8 @@ export default function UsersSearch() {
               css={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "center",
+                margin: "5px 10px"
               }}
             >
               <img

@@ -18,6 +18,7 @@ async function getOrCreateUser(identity: any) {
       redditIcon: result.redditIcon
     };
   }
+  const parsedIconUrl = url.parse(identity.icon_img);
   const {
     _id,
     redditName,
@@ -26,7 +27,7 @@ async function getOrCreateUser(identity: any) {
     redditIcon
   } = await createUser({
     redditDarkmode: identity.pref_nightmode,
-    redditIcon: identity.icon_img,
+    redditIcon: `${parsedIconUrl.protocol}://${parsedIconUrl.host}${parsedIconUrl.pathname}`,
     redditName: identity.name,
     redditId: identity.id
   });
@@ -54,12 +55,11 @@ export default cookies(async function(req, res) {
             redditDarkmode,
             redditIcon
           } = await getOrCreateUser(identity);
-          const parsedIconUrl = url.parse(redditIcon);
           const toEncode: JWT = {
             _id,
             redditId,
             redditName,
-            redditIcon: `${parsedIconUrl.protocol}://${parsedIconUrl.host}${parsedIconUrl.pathname}`,
+            redditIcon,
             redditDarkmode,
             version: JWT_VERSION
           };
