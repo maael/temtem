@@ -27,7 +27,7 @@ async function getOrCreateUser(identity: any) {
     redditIcon
   } = await createUser({
     redditDarkmode: identity.pref_nightmode,
-    redditIcon: `${parsedIconUrl.protocol}://${parsedIconUrl.host}${parsedIconUrl.pathname}`,
+    redditIcon: `${parsedIconUrl.protocol}//${parsedIconUrl.host}${parsedIconUrl.pathname}`,
     redditName: identity.name,
     redditId: identity.id
   });
