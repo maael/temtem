@@ -125,7 +125,6 @@ export async function createExchangeListing(
       connect: rawData.userId
     }
   });
-  console.info(data);
   return (await client.request(query, { data })).createExchangeListing;
 }
 

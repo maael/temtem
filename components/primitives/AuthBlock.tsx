@@ -7,6 +7,7 @@ import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
 import useJWT from "../hooks/useJWT";
 import { JWT_VERSION } from "../../util/constants";
+import * as userUtil from "../../util/user";
 
 export default function AuthBlock() {
   const jwt = useJWT();
@@ -26,15 +27,12 @@ export default function AuthBlock() {
           borderRadius: "50%",
           margin: "0px 5px"
         }}
-        src={jwt.redditIcon || jwt.discordIcon}
+        src={userUtil.getUserIcon(jwt)}
       />
-      <Link
-        href="/user/[name]"
-        as={`/user/${jwt.redditName || jwt.discordName}`}
-      >
+      <Link href="/user/[type]/[name]" as={userUtil.getUserProfileLink(jwt)}>
         <a css={{ textDecoration: "none", cursor: "pointer" }}>
           <TemtemText containerStyle={{ marginRight: 5 }}>
-            {jwt.redditName || jwt.discordName}
+            {userUtil.getUserName(jwt)}
           </TemtemText>
         </a>
       </Link>

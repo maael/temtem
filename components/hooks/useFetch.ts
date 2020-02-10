@@ -17,7 +17,8 @@ const sourcePrefixMap: Record<FetchSource, string> = {
 export default function useFetch<T>(
   path: string,
   options: RequestInit = {},
-  customOptions: Options<T> = { source: "local" }
+  customOptions: Options<T> = { source: "local" },
+  dependencies: any[] = []
 ): [T, boolean, string | undefined] {
   const [data, setData] = useState(customOptions.defaultValue as T);
   const [loading, setLoading] = useState(true);
@@ -49,6 +50,6 @@ export default function useFetch<T>(
         setLoading(false);
       }
     })().catch(console.error);
-  }, []);
+  }, dependencies);
   return [data, loading, error];
 }

@@ -2,11 +2,11 @@ import fetch from "isomorphic-fetch";
 import Link from "next/link";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
-import { colors } from "@maael/temtem-theme";
-import useFetch from "../../components/hooks/useFetch";
 import TemtemButton from "@maael/temtem-button-component";
-import TemtemStatsTable from "../../components/compositions/StatsTable";
-import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
+import { colors } from "@maael/temtem-theme";
+import useFetch from "../../../components/hooks/useFetch";
+import TemtemStatsTable from "../../../components/compositions/StatsTable";
+import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
 
 export default function UserPage({ user = {} }: any) {
   const [listingsResult] = useFetch<any>(
@@ -15,7 +15,8 @@ export default function UserPage({ user = {} }: any) {
     {
       defaultValue: { data: [] },
       source: "local"
-    }
+    },
+    [user._id]
   );
   const [tempediaResult] = useFetch<{ data: any[] }>(
     `/db/tempedia/user/${user._id}`,
@@ -23,7 +24,8 @@ export default function UserPage({ user = {} }: any) {
     {
       defaultValue: { data: [] },
       source: "local"
-    }
+    },
+    [user._id]
   );
   const mostRecentlyTamed =
     tempediaResult.data.length &&
@@ -92,10 +94,9 @@ export default function UserPage({ user = {} }: any) {
         {listingsResult.data
           .filter(i => i.isActive)
           .map(l => (
-            <Link href={`/exchange/listings/${l._id}`}>
+            <Link href={`/exchange/listings/${l._id}`} key={l._id}>
               <a style={{ textDecoration: "none" }}>
                 <TemtemStatsTable
-                  key={l._id}
                   temtem={{
                     name: l.temtemName,
                     types: []
@@ -136,8 +137,9 @@ UserPage.getInitialProps = async ({ req, query }) => {
     const host = req ? req.headers.host : window.location.host;
     const res = await fetch(
       `${host.includes("localhost") ? "http" : "https"}://${host}/api/db/user/${
-        query.name
-      }`
+        query.type
+      }/${query.name}`,
+      { headers: req ? req.headers : {} }
     );
     if (res.ok) {
       const user = await res.json();
@@ -145,6 +147,7 @@ UserPage.getInitialProps = async ({ req, query }) => {
         user
       };
     }
+    console.warn("failed to get user");
     return {};
   } catch (e) {
     console.error("error", e);

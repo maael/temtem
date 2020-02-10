@@ -4,6 +4,7 @@ import TemtemInput from "@maael/temtem-input-component";
 import TemtemText from "@maael/temtem-text-component";
 import useFetch from "../components/hooks/useFetch";
 import { colors } from "@maael/temtem-theme";
+import * as userUtil from "../util/user";
 
 export default function UsersSearch() {
   const [search, setSearch] = useState("");
@@ -36,7 +37,8 @@ export default function UsersSearch() {
       >
         {users
           .filter(u =>
-            (u.redditName || u.discordName || "")
+            userUtil
+              .getUserName(u)
               .toLowerCase()
               .includes(search.toLowerCase())
           )
@@ -58,15 +60,15 @@ export default function UsersSearch() {
                   borderRadius: "50%",
                   margin: "0px 5px"
                 }}
-                src={user.redditIcon || user.discordIcon}
+                src={userUtil.getUserIcon(user)}
               />
               <Link
-                href="/user/[name]"
-                as={`/user/${user.redditName || user.discordName}`}
+                href="/user/[type]/[name]"
+                as={userUtil.getUserProfileLink(user)}
               >
                 <a css={{ textDecoration: "none", cursor: "pointer" }}>
                   <TemtemText containerStyle={{ marginRight: 5 }}>
-                    {user.redditName || user.discordName}
+                    {userUtil.getUserName(user)}
                   </TemtemText>
                 </a>
               </Link>

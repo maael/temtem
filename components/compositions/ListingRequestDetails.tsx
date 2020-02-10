@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
+import * as userUtils from "../../util/user";
 
 export default function ListingRequestDetails({ user, cost, details }: any) {
   return (
@@ -30,12 +31,12 @@ export default function ListingRequestDetails({ user, cost, details }: any) {
             borderRadius: "50%",
             margin: "0px 5px"
           }}
-          src={user.redditIcon}
+          src={userUtils.getUserIcon(user)}
         />
-        <Link href="/user/[name]" as={`/user/${user.redditName}`}>
+        <Link href="/user/[type][name]" as={userUtils.getUserProfileLink(user)}>
           <a css={{ textDecoration: "none", cursor: "pointer" }}>
             <TemtemText containerStyle={{ marginRight: 5 }}>
-              {user.redditName}
+              {userUtils.getUserName(user)}
             </TemtemText>
           </a>
         </Link>

@@ -9,3 +9,8 @@ export interface JWT {
   discordIcon?: string;
   version: number;
 }
+
+export enum UserType {
+  DISCORD = "discord",
+  REDDIT = "reddit"
+}

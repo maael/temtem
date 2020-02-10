@@ -12,7 +12,6 @@ export default cookies(async function(req, res) {
   const { code, _state } = req.query;
   const { access_token, token_type } = await getTokenFromCode(code);
   const identity = await getIdentityFromToken(token_type, access_token);
-  console.info("identity", identity);
   const user = await getOrCreateUser(identity);
   await setUserCookie(res, user);
   res.writeHead(301, { Location: "/" });
