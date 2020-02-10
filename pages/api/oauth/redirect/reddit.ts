@@ -45,7 +45,7 @@ export default cookies(async function(req, res) {
   try {
     if (!error) {
       if (state === process.env.OAUTH_STATE) {
-        const { access_token } = await getAccessToken(code as string);
+        const { access_token } = await getAccessToken(code);
         if (access_token) {
           const identity = await getIdentity(access_token);
           const {
