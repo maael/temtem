@@ -36,7 +36,9 @@ export default function UsersSearch() {
       >
         {users
           .filter(u =>
-            u.redditName.toLowerCase().includes(search.toLowerCase())
+            (u.redditName || u.discordName || "")
+              .toLowerCase()
+              .includes(search.toLowerCase())
           )
           .map(user => (
             <div
@@ -56,12 +58,15 @@ export default function UsersSearch() {
                   borderRadius: "50%",
                   margin: "0px 5px"
                 }}
-                src={user.redditIcon}
+                src={user.redditIcon || user.discordIcon}
               />
-              <Link href="/user/[name]" as={`/user/${user.redditName}`}>
+              <Link
+                href="/user/[name]"
+                as={`/user/${user.redditName || user.discordName}`}
+              >
                 <a css={{ textDecoration: "none", cursor: "pointer" }}>
                   <TemtemText containerStyle={{ marginRight: 5 }}>
-                    {user.redditName}
+                    {user.redditName || user.discordName}
                   </TemtemText>
                 </a>
               </Link>

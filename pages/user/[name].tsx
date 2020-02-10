@@ -40,20 +40,22 @@ export default function UserPage({ user = {} }: any) {
           borderRadius: "50%",
           margin: "0px 5px"
         }}
-        src={user.redditIcon}
+        src={user.redditIcon || user.discordIcon}
       />
       <TemtemText style={{ fontSize: 40 }} borderWidth={10}>
-        {user.redditName}
+        {user.redditName || user.discordName}
       </TemtemText>
-      <a href={`https://reddit.com/user/${user.redditName}`}>
-        <TemtemButton
-          size="small"
-          style={{ marginBottom: 10 }}
-          bgColor="#FF5700"
-        >
-          Open on Reddit
-        </TemtemButton>
-      </a>
+      {user.redditName ? (
+        <a href={`https://reddit.com/user/${user.redditName}`}>
+          <TemtemButton
+            size="small"
+            style={{ marginBottom: 10 }}
+            bgColor="#FF5700"
+          >
+            Open on Reddit
+          </TemtemButton>
+        </a>
+      ) : null}
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         {`${listingsResult.data.length} Total Listings`}
       </TemtemText>

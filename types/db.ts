@@ -33,10 +33,14 @@ export interface Entity {
 }
 
 export interface User extends Entity {
-  redditId: string;
-  redditName: string;
-  redditIcon: string;
-  redditDarkmode: boolean;
+  redditId?: string;
+  redditName?: string;
+  redditIcon?: string;
+  redditDarkmode?: boolean;
+  discordId?: string;
+  discordName?: string;
+  discordIcon?: string;
+  steamId?: string;
   goodReviews: number;
   mixedReviews: number;
   badReviews: number;

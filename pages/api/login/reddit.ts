@@ -5,7 +5,7 @@ export default function(_req, res) {
     client_id: process.env.REDDIT_OAUTH_ID,
     response_type: "code",
     state: process.env.OAUTH_STATE,
-    redirect_uri: `${process.env.REDDIT_OAUTH_REDIRECT_ORIGIN}/api/oauth/redirect/reddit`,
+    redirect_uri: `${process.env.OAUTH_REDIRECT_ORIGIN}/api/oauth/redirect/reddit`,
     duration: "temporary",
     scope: "identity"
   })}`;

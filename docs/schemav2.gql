@@ -14,11 +14,20 @@ enum UserReviewType {
   BAD
 }
 
+enum UserRelationType {
+  FOLLOWING,
+}
+
 type User @collection(name: "users") {
-  redditId: String! @unique(index: "unique_reddit_id")
-  redditName: String! @unique(index: "unique_reddit_name")
-  redditIcon: String!
-  redditDarkmode: Boolean!
+  redditId: String @unique(index: "unique_reddit_id")
+  redditName: String @unique(index: "unique_reddit_name")
+  redditIcon: String
+  redditDarkmode: Boolean
+  discordId: String
+  discordName: String
+  discordIcon: String
+  temtemName: String
+  steamId: String
   goodReviews: Int!
   mixedReviews: Int!
   badReviews: Int!
@@ -26,6 +35,16 @@ type User @collection(name: "users") {
   createdAt: Time!
   updatedAt: Time!
   deletedAt: Time
+}
+
+type UserRelation @collection(name: "user_relations") {
+  type: UserRelationType!
+  sourceUserId: ID!
+  sourceUser: User! @relation
+  targetUserId: ID!
+  targetUser: User! @relation
+  createdAt: Time!
+  updatedAt: Time!
 }
 
 type UserReview @collection(name: "user_reviews") {
@@ -44,6 +63,30 @@ type UserPreference @collection(name: "user_preferences") {
   value: String!
   createdAt: Time!
   updatedAt: Time!
+}
+
+type Encounter @collection(name: "encounter") {
+  userId: ID!
+  user: User! @relation
+  temtemName: String!
+  numberOfEncounters: Int!
+  lastLumaEncounterNumber: Int!
+  location: String
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Tournament @collection(name: "tournament") {
+  userId: ID!
+  user: User! @relation
+  name: String!
+  tournamentJson: String!
+  startAt: Time!
+  signupCloseAt: Time!
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
 }
 
 type Activity @collection(name: "activity") {
@@ -103,6 +146,7 @@ type TrackedQuest @collection(name: "tracked_quests") {
   userId: ID!
   user: User! @relation
   questName: String!
+  questStep: Int
   questStarted: Boolean!
   questFinished: Boolean!
   questNote: String
@@ -115,6 +159,7 @@ type TrackedQuest @collection(name: "tracked_quests") {
 type Query {
   getUsers: [User!]!
   getUserByRedditName(redditName: String): User
+  getUserByDiscordName(discordName: String): User
   getUserPreferences(userId: ID!): [UserPreference!]!
   getUserExchangeListings(userId: ID!): [ExchangeListing!]!
   getUserExchangeListingsByType(userId: ID!, type: ExchangeListingType): [ExchangeListing!]!

@@ -21,6 +21,9 @@ export async function createUser(
         redditName
         redditIcon
         redditDarkmode
+        discordId
+        discordName
+        discordIcon
         goodReviews
         mixedReviews
         badReviews
@@ -43,7 +46,30 @@ export async function createUser(
   return (await client.request(query, { user })).createUser;
 }
 
-export async function getUser(redditName: string): Promise<User> {
+export async function getUserByDiscordName(discordName: string): Promise<User> {
+  const query = `
+    query UserByDiscordName ($discordName:String!) {
+      getUserByDiscordName(discordName:$discordName){
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        discordId
+        discordName
+        discordIcon
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
+    }
+  `;
+  return (await client.request(query, { discordName })).getUserByDiscordName;
+}
+
+export async function getUserByRedditName(redditName: string): Promise<User> {
   const query = `
     query UserByRedditName ($redditName:String!) {
       getUserByRedditName(redditName:$redditName){
@@ -52,6 +78,9 @@ export async function getUser(redditName: string): Promise<User> {
         redditName
         redditIcon
         redditDarkmode
+        discordId
+        discordName
+        discordIcon
         goodReviews
         mixedReviews
         badReviews
@@ -84,6 +113,9 @@ export async function getUsers() {
         redditName
         redditIcon
         redditDarkmode
+        discordId
+        discordName
+        discordIcon
         goodReviews
         mixedReviews
         badReviews

@@ -2,7 +2,6 @@ import { serialize, parse } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 import * as jwt from "../util/jwt";
 import { JWT_VERSION } from "../util/constants";
-import MOCK_JWT from "../util/mockJWT";
 import { JWT } from "../types/index";
 
 export type NextApiResponseWithCookie = NextApiResponse & {
@@ -44,10 +43,6 @@ const cookies = (
 ) => async (req: NextApiRequestWithJWT, res: NextApiResponseWithCookie) => {
   res.cookie = (name, value, options) => cookie(res, name, value, options);
   req.getJWT = async () => {
-    if (process.env.NODE_ENV !== "production") {
-      console.warn("Using mock user", JSON.stringify(MOCK_JWT));
-      return MOCK_JWT;
-    }
     const items = parse(req.headers.cookie || "");
     if (!items["temtem-jwt"]) return;
     const decoded = await jwt.verify(items["temtem-jwt"]);

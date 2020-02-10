@@ -4,11 +4,11 @@ import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import * as jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
-import { createUser, getUser } from "../../../../util/db";
+import { createUser, getUserByRedditName } from "../../../../util/db";
 import { JWT_VERSION } from "../../../../util/constants";
 
 async function getOrCreateUser(identity: any) {
-  const result = await getUser(identity.name);
+  const result = await getUserByRedditName(identity.name);
   if (result) {
     return {
       _id: result._id,
@@ -57,10 +57,10 @@ export default cookies(async function(req, res) {
           } = await getOrCreateUser(identity);
           const toEncode: JWT = {
             _id,
-            redditId,
-            redditName,
-            redditIcon,
-            redditDarkmode,
+            redditId: redditId!,
+            redditName: redditName!,
+            redditIcon: redditIcon!,
+            redditDarkmode: redditDarkmode!,
             version: JWT_VERSION
           };
           const jwtToken = await jwt.sign(toEncode);
@@ -101,7 +101,7 @@ async function getAccessToken(code: string) {
   const body = stringify({
     grant_type: "authorization_code",
     code,
-    redirect_uri: `${process.env.REDDIT_OAUTH_REDIRECT_ORIGIN}/api/oauth/redirect/reddit`
+    redirect_uri: `${process.env.OAUTH_REDIRECT_ORIGIN}/api/oauth/redirect/reddit`
   });
   const Authorization = `Basic ${Buffer.from(
     `${process.env.REDDIT_OAUTH_ID}:${process.env.REDDIT_OAUTH_SECRET}`

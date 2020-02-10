@@ -1,1 +1,1 @@
-export const JWT_VERSION = 2;
+export const JWT_VERSION = 3;
