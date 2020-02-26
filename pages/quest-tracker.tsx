@@ -135,7 +135,8 @@ function MainQuestItem({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        margin: "10px 0px"
+        marginTop: 10,
+        marginBottom: 25
       }}
     >
       <div style={{ flex: 1 }}>
@@ -166,6 +167,7 @@ function MainQuestItem({
           </TemtemText>
         </a>
         <TemtemText
+          containerStyle={{ marginLeft: 24 }}
           style={{ fontSize: 20, textAlign: "left" }}
           borderWidth={10}
         >
@@ -204,7 +206,8 @@ function SideQuestItem({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        margin: 10
+        marginTop: 10,
+        marginBottom: 25
       }}
     >
       <div style={{ flex: 1 }}>
@@ -233,6 +236,7 @@ function SideQuestItem({
           </TemtemText>
         </a>
         <TemtemText
+          containerStyle={{ marginLeft: 24 }}
           style={{ fontSize: 20, textAlign: "left" }}
           borderWidth={10}
         >
