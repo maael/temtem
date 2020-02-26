@@ -13,7 +13,7 @@ export default function QuestTracker() {
   const [quests] = useFetch<
     { name: string; type: "side" | "main"; wikiUrl: string }[]
   >("/quests", {}, { source: "temtem-api", defaultValue: [] });
-  const [userQuests, loadingUserQuests] = useFetch<
+  const [userQuests, loadingUserQuests, _, refetchUserQuests] = useFetch<
     {
       questName: string;
       questStep: number;
@@ -82,6 +82,7 @@ export default function QuestTracker() {
             quests={quests}
             userQuests={userQuests}
             createUserQuest={createUserQuest}
+            refetchUserQuests={refetchUserQuests}
           />
         ))}
         <TemtemText
@@ -105,6 +106,7 @@ export default function QuestTracker() {
               quest={q}
               userQuests={userQuests}
               createUserQuest={createUserQuest}
+              refetchUserQuests={refetchUserQuests}
             />
           ))}
       </div>
@@ -116,19 +118,26 @@ function MainQuestItem({
   quest: q,
   userQuests,
   createUserQuest,
-  quests
+  quests,
+  refetchUserQuests
 }: {
   quest: any;
   quests: any[];
   userQuests: any[];
   createUserQuest: (d: any) => void;
+  refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
-  const userIsOn = userQuestsNames.includes(
+  const userIsOnQuest = userQuestsNames.includes(
     quests.map(({ name }) => name)[
       quests.findIndex(({ name }) => name === q.name) - 1
     ]
   );
+  const isFirstMainQuest =
+    quests.findIndex(({ name }) => name === q.name) === 0;
+  const userQuest = userQuests.find(
+    ({ questName }) => questName === q.name
+  ) || { questStep: 0 };
   return (
     <div
       css={{
@@ -152,9 +161,7 @@ function MainQuestItem({
             style={{ fontSize: 30, textAlign: "left" }}
             borderWidth={10}
           >
-            {quests.findIndex(({ name }) => name === q.name) === 0 || userIsOn
-              ? q.name
-              : "[Hidden Quest]"}
+            {isFirstMainQuest || userIsOnQuest ? q.name : "[Hidden Quest]"}
           </TemtemText>
           <TemtemText
             containerStyle={{ marginLeft: 12 }}
@@ -171,19 +178,26 @@ function MainQuestItem({
           style={{ fontSize: 20, textAlign: "left" }}
           borderWidth={10}
         >
-          {userIsOn ? q.steps[0] || "???" : "[Hidden Step]"}
+          {isFirstMainQuest || userIsOnQuest
+            ? q.steps[userQuest.questStep] || "???"
+            : "[Hidden Step]"}
         </TemtemText>
       </div>
       <RequireAuth>
         <TemtemButton
-          onClick={() => {
-            createUserQuest({
+          onClick={async () => {
+            await createUserQuest({
               body: JSON.stringify({ questName: q.name })
             });
+            await refetchUserQuests();
           }}
           disabled={userQuestsNames.includes(q.name)}
         >
-          {userQuestsNames.includes(q.name) ? "Finish Step" : "Start"}
+          {userQuestsNames.includes(q.name)
+            ? userQuest.step >= q.steps.length
+              ? "Finish quest"
+              : "Finish Step"
+            : "Start"}
         </TemtemButton>
       </RequireAuth>
     </div>
@@ -193,13 +207,18 @@ function MainQuestItem({
 function SideQuestItem({
   quest: q,
   userQuests,
-  createUserQuest
+  createUserQuest,
+  refetchUserQuests
 }: {
   quest: any;
   userQuests: any[];
   createUserQuest: (d: any) => void;
+  refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
+  const userQuest = userQuests.find(
+    ({ questName }) => questName === q.name
+  ) || { questStep: 0 };
   return (
     <div
       css={{
@@ -240,20 +259,25 @@ function SideQuestItem({
           style={{ fontSize: 20, textAlign: "left" }}
           borderWidth={10}
         >
-          {q.steps[0] || "???"}
+          {q.steps[userQuest.questStep] || "???"}
         </TemtemText>
       </div>
       <RequireAuth>
         <TemtemButton
-          onClick={() => {
-            createUserQuest({
+          onClick={async () => {
+            await createUserQuest({
               body: JSON.stringify({ questName: q.name })
             });
+            await refetchUserQuests();
           }}
           size="small"
           disabled={userQuestsNames.includes(q.name)}
         >
-          {userQuestsNames.includes(q.name) ? "Finish Step" : "Start"}
+          {userQuestsNames.includes(q.name)
+            ? userQuest.step >= q.steps.length
+              ? "Finish quest"
+              : "Finish Step"
+            : "Start"}
         </TemtemButton>
       </RequireAuth>
     </div>

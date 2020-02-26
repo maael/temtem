@@ -19,37 +19,38 @@ export default function useFetch<T>(
   options: RequestInit = {},
   customOptions: Options<T> = { source: "local" },
   dependencies: any[] = []
-): [T, boolean, string | undefined] {
+): [T, boolean, string | undefined, () => Promise<void>] {
   const [data, setData] = useState(customOptions.defaultValue as T);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(
-          `${sourcePrefixMap[customOptions.source]}${path}`,
-          {
-            credentials:
-              customOptions.source === "local"
-                ? "include"
-                : options.credentials,
-            ...options,
-            headers: {
-              "Content-Type": "application/json",
-              ...options.headers
-            }
+  async function refetch() {
+    setLoading(true);
+    setError(undefined);
+    try {
+      const res = await fetch(
+        `${sourcePrefixMap[customOptions.source]}${path}`,
+        {
+          credentials:
+            customOptions.source === "local" ? "include" : options.credentials,
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...options.headers
           }
-        );
-        if (res.ok) {
-          const json = await res.json();
-          setData(customOptions.mapper ? customOptions.mapper(json) : json);
         }
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+      );
+      if (res.ok) {
+        const json = await res.json();
+        setData(customOptions.mapper ? customOptions.mapper(json) : json);
       }
-    })().catch(console.error);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    refetch().catch(console.error);
   }, dependencies);
-  return [data, loading, error];
+  return [data, loading, error, refetch];
 }
