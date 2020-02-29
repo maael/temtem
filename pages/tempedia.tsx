@@ -155,7 +155,8 @@ function TemtemModal({ temtem, data, onClose }: any) {
           top: 0,
           left: 0,
           right: 0,
-          bottom: 0
+          bottom: 0,
+          maxHeight: "60vh"
         }
       }}
     >
@@ -190,7 +191,9 @@ function TemtemModal({ temtem, data, onClose }: any) {
           marginBottom: 5
         }}
       >
-        <TemtemText containerStyle={{ width: 100 }}>Island</TemtemText>
+        <TemtemText containerStyle={{ width: 100, marginRight: 20 }}>
+          Island
+        </TemtemText>
         <TemtemText containerStyle={{ flex: 1, marginRight: 20 }}>
           Location
         </TemtemText>
@@ -211,7 +214,9 @@ function TemtemModal({ temtem, data, onClose }: any) {
                 margin: "5px 0px"
               }}
             >
-              <TemtemText containerStyle={{ width: 100 }}>{island}</TemtemText>
+              <TemtemText containerStyle={{ width: 100, marginRight: 20 }}>
+                {island}
+              </TemtemText>
               <TemtemText containerStyle={{ flex: 1, marginRight: 20 }}>
                 {location.replace(/[a-z]([A-Z])/g, ", $1")}
               </TemtemText>
