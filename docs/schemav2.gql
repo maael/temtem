@@ -69,8 +69,7 @@ type Encounter @collection(name: "encounter") {
   userId: ID!
   user: User! @relation
   temtemName: String!
-  numberOfEncounters: Int!
-  lastLumaEncounterNumber: Int!
+  isLuma: Boolean!
   location: String
   createdAt: Time!
   updatedAt: Time!
