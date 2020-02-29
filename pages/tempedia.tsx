@@ -78,7 +78,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
             containerStyle={{ flex: 1, textAlign: "left" }}
             value={search}
             onChange={({ target }) => setSearch(() => (target as any).value)}
-            placeholder="Search..."
+            placeholder={`Search ${temtem.length} temtem...`}
           />
           {jwt ? (
             <TemtemText
