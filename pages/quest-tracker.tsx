@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { useState } from "react";
 import { jsx } from "@emotion/core";
+import { IoIosLink } from "react-icons/io";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemInput from "@maael/temtem-input-component";
@@ -150,6 +151,7 @@ function MainQuestItem({
             alignItems: "center"
           }}
         >
+          <IoIosLink style={{ marginRight: 10, color: "#FFFFFF" }} size={14} />
           <TemtemText
             style={{ fontSize: 30, textAlign: "left" }}
             borderWidth={10}
@@ -166,7 +168,8 @@ function MainQuestItem({
             })`}
           </TemtemText>
         </a>
-        {userQuest.questFinished || !userQuestsNames.includes(q.name) ? null : (
+        {(isFirstMainQuest && !userQuest.questFinished) ||
+        (!userQuest.questFinished && userQuestsNames.includes(q.name)) ? (
           <TemtemText
             containerStyle={{ marginLeft: 24 }}
             style={{ fontSize: 20, textAlign: "left" }}
@@ -178,38 +181,42 @@ function MainQuestItem({
                 }` || "???"
               : "[Hidden Step]"}
           </TemtemText>
-        )}
+        ) : null}
       </div>
-      <RequireAuth>
-        <TemtemButton
-          onClick={async () => {
-            if (userQuestsNames.includes(q.name)) {
-              const newStep = (userQuest.questStep || 0) + 1;
-              await updateUserQuest({
-                body: JSON.stringify({
-                  ...userQuest,
-                  questStep: newStep,
-                  questFinished: newStep >= q.steps.length
-                })
-              });
-            } else {
-              await createUserQuest({
-                body: JSON.stringify({ questName: q.name })
-              });
+      {isFirstMainQuest || userIsOnQuest ? (
+        <RequireAuth>
+          <TemtemButton
+            onClick={async () => {
+              if (userQuestsNames.includes(q.name)) {
+                const newStep = (userQuest.questStep || 0) + 1;
+                await updateUserQuest({
+                  body: JSON.stringify({
+                    ...userQuest,
+                    questStep: newStep,
+                    questFinished: newStep >= q.steps.length
+                  })
+                });
+              } else {
+                await createUserQuest({
+                  body: JSON.stringify({ questName: q.name })
+                });
+              }
+              await refetchUserQuests();
+            }}
+            disabled={
+              userQuestsNames.includes(q.name) && userQuest.questFinished
             }
-            await refetchUserQuests();
-          }}
-          disabled={userQuestsNames.includes(q.name) && userQuest.questFinished}
-        >
-          {userQuestsNames.includes(q.name)
-            ? userQuest.questFinished
-              ? "Finished"
-              : userQuest.questStep >= q.steps.length - 1
-              ? "Finish quest"
-              : "Complete Step"
-            : "Start"}
-        </TemtemButton>
-      </RequireAuth>
+          >
+            {userQuestsNames.includes(q.name)
+              ? userQuest.questFinished
+                ? "Finished"
+                : userQuest.questStep >= q.steps.length - 1
+                ? "Finish quest"
+                : "Complete Step"
+              : "Start"}
+          </TemtemButton>
+        </RequireAuth>
+      ) : null}
     </div>
   );
 }
@@ -250,6 +257,7 @@ function SideQuestItem({
             alignItems: "center"
           }}
         >
+          <IoIosLink style={{ marginRight: 10, color: "#FFFFFF" }} size={14} />
           <TemtemText
             style={{ fontSize: 20, textAlign: "left" }}
             borderWidth={10}
@@ -272,9 +280,8 @@ function SideQuestItem({
             style={{ fontSize: 20, textAlign: "left" }}
             borderWidth={10}
           >
-            {`Step ${userQuest.questStep + 1}. ${
-              q.steps[userQuest.questStep]
-            }` || "???"}
+            {`Step ${userQuest.questStep + 1}. ${q.steps[userQuest.questStep] ||
+              "???"}`}
           </TemtemText>
         ) : null}
       </div>
