@@ -1,25 +1,20 @@
 /** @jsx jsx */
 import { useState } from "react";
 import { jsx } from "@emotion/core";
-import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemInput from "@maael/temtem-input-component";
 import RequireAuth from "../components/primitives/RequireAuth";
 import useFetch from "../components/hooks/useFetch";
 import useCallableFetch from "../components/hooks/useCallableFetch";
+import { TrackedQuest } from "../types/db";
 
 export default function QuestTracker() {
   const [quests] = useFetch<
     { name: string; type: "side" | "main"; wikiUrl: string }[]
   >("/quests", {}, { source: "temtem-api", defaultValue: [] });
   const [userQuests, loadingUserQuests, _, refetchUserQuests] = useFetch<
-    {
-      questName: string;
-      questStep: number;
-      questStarted: boolean;
-      questFinished: boolean;
-    }[]
+    Array<TrackedQuest>
   >(
     "/db/quests",
     {},
@@ -27,8 +22,8 @@ export default function QuestTracker() {
       source: "local",
       defaultValue: [],
       mapper: d =>
-        d.data.map(({ questName, questStep, questStarted, questFinished }) => ({
-          questName,
+        d.data.map(({ questStep, questStarted, questFinished, ...q }) => ({
+          ...q,
           questStep: questStep || 0,
           questStarted: !!questStarted,
           questFinished: !!questFinished
@@ -36,6 +31,16 @@ export default function QuestTracker() {
     }
   );
   const [createUserQuest] = useCallableFetch("/db/quests", { method: "POST" });
+  const [updateUserQuest] = useCallableFetch(
+    "/db/quests",
+    { method: "PUT" },
+    {
+      source: "local",
+      generateSuffixFromBody: (b = "") => {
+        return `/${typeof b === "string" ? JSON.parse(b)._id : ""}`;
+      }
+    }
+  );
   const [search, setSearch] = useState("");
   const filteredMain = quests.filter(
     q =>
@@ -66,6 +71,7 @@ export default function QuestTracker() {
             quests={quests}
             userQuests={userQuests}
             createUserQuest={createUserQuest}
+            updateUserQuest={updateUserQuest}
             refetchUserQuests={refetchUserQuests}
           />
         ))}
@@ -90,6 +96,7 @@ export default function QuestTracker() {
               quest={q}
               userQuests={userQuests}
               createUserQuest={createUserQuest}
+              updateUserQuest={updateUserQuest}
               refetchUserQuests={refetchUserQuests}
             />
           ))}
@@ -102,6 +109,7 @@ function MainQuestItem({
   quest: q,
   userQuests,
   createUserQuest,
+  updateUserQuest,
   quests,
   refetchUserQuests
 }: {
@@ -109,6 +117,7 @@ function MainQuestItem({
   quests: any[];
   userQuests: any[];
   createUserQuest: (d: any) => void;
+  updateUserQuest: (d: any) => void;
   refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
@@ -157,30 +166,47 @@ function MainQuestItem({
             })`}
           </TemtemText>
         </a>
-        <TemtemText
-          containerStyle={{ marginLeft: 24 }}
-          style={{ fontSize: 20, textAlign: "left" }}
-          borderWidth={10}
-        >
-          {isFirstMainQuest || userIsOnQuest
-            ? q.steps[userQuest.questStep] || "???"
-            : "[Hidden Step]"}
-        </TemtemText>
+        {userQuest.questFinished || !userQuestsNames.includes(q.name) ? null : (
+          <TemtemText
+            containerStyle={{ marginLeft: 24 }}
+            style={{ fontSize: 20, textAlign: "left" }}
+            borderWidth={10}
+          >
+            {isFirstMainQuest || userIsOnQuest
+              ? `Step ${userQuest.questStep + 1}. ${
+                  q.steps[userQuest.questStep]
+                }` || "???"
+              : "[Hidden Step]"}
+          </TemtemText>
+        )}
       </div>
       <RequireAuth>
         <TemtemButton
           onClick={async () => {
-            await createUserQuest({
-              body: JSON.stringify({ questName: q.name })
-            });
+            if (userQuestsNames.includes(q.name)) {
+              const newStep = (userQuest.questStep || 0) + 1;
+              await updateUserQuest({
+                body: JSON.stringify({
+                  ...userQuest,
+                  questStep: newStep,
+                  questFinished: newStep >= q.steps.length
+                })
+              });
+            } else {
+              await createUserQuest({
+                body: JSON.stringify({ questName: q.name })
+              });
+            }
             await refetchUserQuests();
           }}
-          disabled={userQuestsNames.includes(q.name)}
+          disabled={userQuestsNames.includes(q.name) && userQuest.questFinished}
         >
           {userQuestsNames.includes(q.name)
-            ? userQuest.step >= q.steps.length
+            ? userQuest.questFinished
+              ? "Finished"
+              : userQuest.questStep >= q.steps.length - 1
               ? "Finish quest"
-              : "Finish Step"
+              : "Complete Step"
             : "Start"}
         </TemtemButton>
       </RequireAuth>
@@ -192,11 +218,13 @@ function SideQuestItem({
   quest: q,
   userQuests,
   createUserQuest,
+  updateUserQuest,
   refetchUserQuests
 }: {
   quest: any;
   userQuests: any[];
   createUserQuest: (d: any) => void;
+  updateUserQuest: (d: any) => void;
   refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
@@ -238,29 +266,46 @@ function SideQuestItem({
             })`}
           </TemtemText>
         </a>
-        <TemtemText
-          containerStyle={{ marginLeft: 24 }}
-          style={{ fontSize: 20, textAlign: "left" }}
-          borderWidth={10}
-        >
-          {q.steps[userQuest.questStep] || "???"}
-        </TemtemText>
+        {!userQuest.questFinished && userQuestsNames.includes(q.name) ? (
+          <TemtemText
+            containerStyle={{ marginLeft: 24 }}
+            style={{ fontSize: 20, textAlign: "left" }}
+            borderWidth={10}
+          >
+            {`Step ${userQuest.questStep + 1}. ${
+              q.steps[userQuest.questStep]
+            }` || "???"}
+          </TemtemText>
+        ) : null}
       </div>
       <RequireAuth>
         <TemtemButton
           onClick={async () => {
-            await createUserQuest({
-              body: JSON.stringify({ questName: q.name })
-            });
+            if (userQuestsNames.includes(q.name)) {
+              const newStep = (userQuest.questStep || 0) + 1;
+              await updateUserQuest({
+                body: JSON.stringify({
+                  ...userQuest,
+                  questStep: newStep,
+                  questFinished: newStep >= q.steps.length
+                })
+              });
+            } else {
+              await createUserQuest({
+                body: JSON.stringify({ questName: q.name })
+              });
+            }
             await refetchUserQuests();
           }}
           size="small"
-          disabled={userQuestsNames.includes(q.name)}
+          disabled={userQuestsNames.includes(q.name) && userQuest.questFinished}
         >
           {userQuestsNames.includes(q.name)
-            ? userQuest.step >= q.steps.length
+            ? userQuest.questFinished
+              ? "Finished"
+              : userQuest.questStep >= q.steps.length - 1
               ? "Finish quest"
-              : "Finish Step"
+              : "Complete Step"
             : "Start"}
         </TemtemButton>
       </RequireAuth>

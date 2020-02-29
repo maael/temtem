@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type FetchSource = "temtem-api" | "local" | "custom";
 
@@ -6,6 +6,7 @@ export interface Options<T> {
   source: FetchSource;
   defaultValue?: T;
   mapper?: (v: any) => T;
+  generateSuffixFromBody?: (v: RequestInit["body"]) => string;
 }
 
 const sourcePrefixMap: Record<FetchSource, string> = {
@@ -28,7 +29,11 @@ export default function useCallableFetch<T>(
       setError(undefined);
       setLoading(true);
       const res = await fetch(
-        `${sourcePrefixMap[customOptions.source]}${path}`,
+        `${sourcePrefixMap[customOptions.source]}${path}${
+          customOptions.generateSuffixFromBody
+            ? customOptions.generateSuffixFromBody(requestInit.body)
+            : ""
+        }`,
         {
           credentials:
             customOptions.source === "local" ? "include" : options.credentials,

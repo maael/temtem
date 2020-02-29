@@ -1,6 +1,6 @@
-import cookies from "../../../util/cookies";
-import jwtGuard from "../../../util/middlewares/jwtGuard";
-import { getUserQuests, createUserQuests } from "../../../util/db";
+import cookies from "../../../../util/cookies";
+import jwtGuard from "../../../../util/middlewares/jwtGuard";
+import { getUserQuests, createUserQuests } from "../../../../util/db";
 
 export default cookies(
   jwtGuard(async function(req, res) {
@@ -13,11 +13,10 @@ export default cookies(
           userId: userJWT._id,
           questName: req.body.questName,
           questStarted: false,
+          questStep: 0,
           questFinished: false
         })
       );
-    } else if (req.method === "DELETE") {
-      res.json({ error: "not-implemented" });
     } else {
       res.json({ error: "not-implemented" });
     }

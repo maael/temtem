@@ -12,6 +12,7 @@ export function embellishCreate(data: any) {
 }
 
 export function embellishUpdate(data: any) {
+  delete data._id;
   return {
     ...data,
     updatedAt: getIsoString()

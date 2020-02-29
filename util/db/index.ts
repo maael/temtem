@@ -7,7 +7,7 @@ export {
   setExchangeInactive
 } from "./exchangeListing";
 export { getExchangeSaved, createExchangeSaved } from "./exchangeSaved";
-export { getUserQuests, createUserQuests } from "./quests";
+export { getUserQuests, createUserQuests, updateUserQuest } from "./quests";
 export { getTempediaEntries, createTempediaEntry } from "./tempedia";
 export {
   getUserByRedditName,

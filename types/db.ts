@@ -163,6 +163,7 @@ export interface TrackedQuest extends Entity {
   user: User;
   questName: string;
   questStarted: boolean;
+  questStep: null | number;
   questFinished: boolean;
   questNote?: string;
   isActive: boolean;

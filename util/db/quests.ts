@@ -1,5 +1,5 @@
 import client from "./client";
-import { embellishCreate } from "./util";
+import { embellishCreate, embellishUpdate } from "./util";
 import {
   TrackedQuest,
   TrackedQuestInput,
@@ -14,13 +14,9 @@ export async function getUserQuests(
       getUserTrackedQuests(userId: $userId) {
         data {
           _id
-          user {
-            _id
-            redditName
-            redditIcon
-          }
           questName
           questStarted
+          questStep
           questFinished
           questNote
           isActive
@@ -40,13 +36,9 @@ export async function createUserQuests(
     mutation CreateUserTrackedQuest ($data: TrackedQuestInput!){
       createTrackedQuest(data: $data) {
         _id
-        user {
-          _id
-          redditName
-          redditIcon
-        }
         questName
         questStarted
+        questStep
         questFinished
         questNote
         isActive
@@ -57,9 +49,37 @@ export async function createUserQuests(
   `;
   const data = embellishCreate({
     ...rawData,
+    questStarted: true,
+    questStep: 0,
+    questFinished: false,
     user: {
       connect: rawData.userId
     }
   });
   return (await client.request(query, { data })).createTrackedQuest;
+}
+
+export async function updateUserQuest(
+  id: string,
+  rawData: Partial<TrackedQuestInput>
+): Promise<{ data: TrackedQuest[] }> {
+  const query = `
+    mutation UpdateUserTrackedQuest ($id: ID!, $data: TrackedQuestInput!){
+      updateTrackedQuest(id: $id, data: $data) {
+        _id
+        questName
+        questStarted
+        questStep
+        questFinished
+        questNote
+        isActive
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+  const data = embellishUpdate({
+    ...rawData
+  });
+  return (await client.request(query, { id, data })).updateTrackedQuest;
 }
