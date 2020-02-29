@@ -64,7 +64,7 @@ export default function UserPage({ user = {} }: any) {
           <TemtemButton
             size="small"
             style={{ marginBottom: 10 }}
-            bgColor="#FF5700"
+            bgColor={colors.uiBlueFaded}
           >
             User Tempedia
           </TemtemButton>

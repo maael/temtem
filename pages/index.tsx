@@ -83,7 +83,24 @@ export default function Home() {
         style={{ fontSize: 26 }}
         borderWidth={10}
       >
-        Track your quests here.
+        Track what quests you've picked up and your progress in them here.
+      </TemtemText>
+      <Link href="/encounter-tracker">
+        <a>
+          <TemtemDynamicChip
+            style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
+            textProps={{ borderWidth: 10 }}
+          >
+            {`Encounter Tracker`}
+          </TemtemDynamicChip>
+        </a>
+      </Link>
+      <TemtemText
+        containerStyle={{ marginBottom: 30 }}
+        style={{ fontSize: 26 }}
+        borderWidth={10}
+      >
+        Track your temtem encounters here, and any Lumas you find.
       </TemtemText>
       {/* <TemtemDynamicChip
         style={{ textAlign: "center", padding: "20px 40px", fontSize: 30 }}
