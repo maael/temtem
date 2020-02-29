@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import { Global, jsx } from "@emotion/core";
+import { TiHomeOutline } from "react-icons/ti";
 import { colors, fonts } from "@maael/temtem-theme";
 import NavItem from "../components/primitives/NavItem";
 import HeaderBar from "../components/primitives/HeaderBar";
@@ -60,13 +61,14 @@ export default function TemtemApp({ Component, pageProps }) {
           <HideOnMobile>
             <>
               <NavItem url="/" exact>
-                Home
+                <TiHomeOutline />
               </NavItem>
               <NavItem url="/exchange">Temtem Exchange</NavItem>
               <NavItem url="/tempedia">Personal Tempedia</NavItem>
               <NavItem url="/quest-tracker">Quest Tracker</NavItem>
+              <NavItem url="/encounter-tracker">Encounter Tracker</NavItem>
               {/* <NavItem url="/battle-tools">Battle Tools</NavItem> */}
-              <NavItem url="/users">Search Users</NavItem>
+              <NavItem url="/users">Users</NavItem>
             </>
           </HideOnMobile>
           <HideOnDesktop style={{ flex: 1 }}>

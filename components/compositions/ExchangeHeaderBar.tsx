@@ -5,7 +5,9 @@ import RequireAuth from "../primitives/RequireAuth";
 
 export default function ExchangeHeaderBar() {
   return (
-    <HeaderBar>
+    <HeaderBar
+      style={{ alignItems: "flex-end !important", padding: 5, fontSize: 18 }}
+    >
       <React.Fragment>
         <NavItem url="/exchange" exact>
           All Listings

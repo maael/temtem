@@ -44,27 +44,11 @@ export default function QuestTracker() {
   );
   return (
     <div style={{ margin: "10px auto", textAlign: "center" }}>
-      <TemtemDynamicChip
-        style={{ textAlign: "center", padding: 20, fontSize: 30 }}
-        textProps={{ borderWidth: 10 }}
-      >
-        Work in progress
-      </TemtemDynamicChip>
-      <TemtemText
-        style={{ fontSize: 40, textAlign: "center" }}
-        borderWidth={10}
-      >
-        Eventually you'll be able to track your quests here.
-      </TemtemText>
-      <TemtemText
-        style={{ fontSize: 40, textAlign: "center" }}
-        borderWidth={10}
-      >
-        {loadingUserQuests ? "Loading..." : `${quests.length} quests`}
-      </TemtemText>
       <TemtemInput
         containerStyle={{ maxWidth: 400, margin: "0 auto" }}
-        placeholder="Search quests..."
+        placeholder={
+          loadingUserQuests ? "Loading..." : `Search ${quests.length} quests...`
+        }
         value={search}
         onChange={e => setSearch((e.target as any).value)}
       />

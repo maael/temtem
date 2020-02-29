@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/core";
 import Link from "next/link";
 import { FaDiscord, FaRedditAlien } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
@@ -19,26 +20,35 @@ export default function AuthBlock() {
         alignItems: "center"
       }}
     >
-      <img
-        css={{
-          border: `2px solid ${colors.uiBlueFaded}`,
-          height: 30,
-          width: 30,
-          borderRadius: "50%",
-          margin: "0px 5px"
-        }}
-        src={userUtil.getUserIcon(jwt)}
-      />
       <Link href="/user/[type]/[name]" as={userUtil.getUserProfileLink(jwt)}>
-        <a css={{ textDecoration: "none", cursor: "pointer" }}>
-          <TemtemText containerStyle={{ marginRight: 5 }}>
-            {userUtil.getUserName(jwt)}
-          </TemtemText>
+        <a
+          css={{
+            textDecoration: "none",
+            cursor: "pointer",
+            flexDirection: "row",
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          <img
+            css={{
+              border: `2px solid ${colors.uiBlueFaded}`,
+              height: 30,
+              width: 30,
+              borderRadius: "50%",
+              margin: "0px 5px"
+            }}
+            src={userUtil.getUserIcon(jwt)}
+          />
         </a>
       </Link>
       <a href={`/api/logout?v${JWT_VERSION}&cb=${Math.random()}`}>
-        <TemtemButton type={"Neutral" as any} bgColor={colors.uiBlueFaded}>
-          Logout
+        <TemtemButton
+          type={"Neutral" as any}
+          style={{ height: 30, width: 30, padding: 7 }}
+          bgColor={colors.uiBlueFaded}
+        >
+          <FiLogOut size={16} />
         </TemtemButton>
       </a>
     </div>
@@ -49,11 +59,11 @@ export default function AuthBlock() {
           type={"Neutral" as any}
           bgColor="#FF5700"
           size="small"
-          style={{ paddingLeft: 35, position: "relative" }}
+          style={{ padding: 5, paddingLeft: 30, position: "relative" }}
         >
           <>
             <FaRedditAlien
-              style={{ fontSize: 18, position: "absolute", left: 10, top: 9 }}
+              style={{ fontSize: 18, position: "absolute", left: 5, top: 3 }}
             />
             Login
           </>
@@ -64,11 +74,11 @@ export default function AuthBlock() {
           type={"Neutral" as any}
           bgColor="#7289DA"
           size="small"
-          style={{ paddingLeft: 35, position: "relative" }}
+          style={{ padding: 5, paddingLeft: 30, position: "relative" }}
         >
           <>
             <FaDiscord
-              style={{ fontSize: 18, position: "absolute", left: 10, top: 10 }}
+              style={{ fontSize: 18, position: "absolute", left: 5, top: 4 }}
             />
             Login
           </>

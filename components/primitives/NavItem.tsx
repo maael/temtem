@@ -11,7 +11,7 @@ export default function NavItem({
   style
 }: {
   url: string;
-  children: string;
+  children: string | JSX.Element;
   exact?: boolean;
   style?: React.CSSProperties;
 }) {
@@ -30,7 +30,7 @@ export default function NavItem({
               ? colors.uiBlue
               : colors.uiBlueFaded
           }`,
-          margin: "0 10px",
+          margin: "0 5px",
           padding: "0px 2px",
           cursor: "pointer",
           "&:hover": {

@@ -5,9 +5,10 @@ import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
+import HideOnMobile from "../components/primitives/HideOnMobile";
 import useJWT from "../components/hooks/useJWT";
 
-export default function Tempedia() {
+export default function Tempedia({ userId }: { userId?: string }) {
   const jwt = useJWT();
   const [search, setSearch] = useState("");
   const [temtem, setTemtem] = useState<any[]>([]);
@@ -26,13 +27,15 @@ export default function Tempedia() {
   }, []);
   useEffect(() => {
     (async () => {
-      const res = await fetch("/api/db/tempedia");
+      const res = await fetch(
+        `/api/db/tempedia/user/${userId || (jwt && jwt._id)}`
+      );
       if (res.ok) {
         const { data = [] } = await res.json();
-        setTamed(t => t.concat(data.map(({ temtemName }) => temtemName)));
+        setTamed(t => data.map(({ temtemName }) => temtemName));
       }
     })().catch(console.error);
-  }, []);
+  }, [userId, jwt]);
   async function onClick(name: string) {
     setTaming(t => t.concat(name));
     try {
@@ -77,6 +80,17 @@ export default function Tempedia() {
           style={{ fontSize: 20 }}
           borderWidth={10}
         >{`Total: ${temtem.length}`}</TemtemText>
+        {jwt ? (
+          <HideOnMobile>
+            <TemtemText
+              containerStyle={{ margin: 10 }}
+              style={{ fontSize: 20 }}
+              borderWidth={10}
+            >{`${((tamed.length / temtem.length || 0) * 100).toFixed(
+              1
+            )}%`}</TemtemText>
+          </HideOnMobile>
+        ) : null}
       </div>
       {temtem
         .filter(({ name }) =>
@@ -94,13 +108,23 @@ export default function Tempedia() {
             tamed={tamed}
             taming={taming}
             onClick={onClick}
+            userId={userId}
           />
         ))}
     </div>
   );
 }
 
-function TemtemItem({ num, name, jwt, tamed, types, taming, onClick }: any) {
+function TemtemItem({
+  num,
+  name,
+  jwt,
+  tamed,
+  types,
+  taming,
+  onClick,
+  userId
+}: any) {
   return (
     <div
       css={{
@@ -138,7 +162,7 @@ function TemtemItem({ num, name, jwt, tamed, types, taming, onClick }: any) {
             >
               Tamed
             </TemtemText>
-          ) : (
+          ) : !userId || jwt._id === userId ? (
             <TemtemButton
               size="small"
               type={types[0]}
@@ -148,7 +172,7 @@ function TemtemItem({ num, name, jwt, tamed, types, taming, onClick }: any) {
             >
               {taming.includes(name) ? "Taming" : "Tamed?"}
             </TemtemButton>
-          )
+          ) : null
         ) : null}
       </div>
     </div>

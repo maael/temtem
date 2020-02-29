@@ -4,9 +4,10 @@ import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
-import useFetch from "../../../components/hooks/useFetch";
-import TemtemStatsTable from "../../../components/compositions/StatsTable";
-import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
+import useFetch from "../../../../components/hooks/useFetch";
+import TemtemStatsTable from "../../../../components/compositions/StatsTable";
+import ListingRequestDetails from "../../../../components/compositions/ListingRequestDetails";
+import { getUserName, getUserProfileLink } from "../../../../util/user";
 
 export default function UserPage({ user = {} }: any) {
   const [listingsResult] = useFetch<any>(
@@ -45,7 +46,7 @@ export default function UserPage({ user = {} }: any) {
         src={user.redditIcon || user.discordIcon}
       />
       <TemtemText style={{ fontSize: 40 }} borderWidth={10}>
-        {user.redditName || user.discordName}
+        {getUserName(user)}
       </TemtemText>
       {user.redditName ? (
         <a href={`https://reddit.com/user/${user.redditName}`}>
@@ -58,6 +59,17 @@ export default function UserPage({ user = {} }: any) {
           </TemtemButton>
         </a>
       ) : null}
+      <Link href={`${getUserProfileLink(user)}/tempedia`}>
+        <a style={{ textDecoration: "none" }}>
+          <TemtemButton
+            size="small"
+            style={{ marginBottom: 10 }}
+            bgColor="#FF5700"
+          >
+            User Tempedia
+          </TemtemButton>
+        </a>
+      </Link>
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         {`${listingsResult.data.length} Total Listings`}
       </TemtemText>

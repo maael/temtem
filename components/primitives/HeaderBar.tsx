@@ -16,9 +16,13 @@ export default function HeaderBar({
         padding: "10px 5px",
         fontSize: 20,
         display: "flex",
+        height: 25,
         alignItems: "center",
         justifyContent: "center",
-        ...style
+        ...style,
+        "@media (min-width: 800px)": {
+          alignItems: "flex-start"
+        }
       }}
     >
       {children}
