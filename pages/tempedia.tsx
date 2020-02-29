@@ -255,7 +255,7 @@ function TemtemItem({
           flexDirection: "column"
         }}
       >
-        <div onClick={onClickInfo}>
+        <div onClick={onClickInfo} css={{ cursor: "pointer" }}>
           <TemtemPortrait
             style={{ margin: "0 auto" }}
             temtem={name}
