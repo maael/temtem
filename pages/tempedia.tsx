@@ -1,12 +1,17 @@
 /** @jsx jsx */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { jsx } from "@emotion/core";
+import ReactModal from "react-modal";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
+import { colors } from "@maael/temtem-theme";
 import HideOnMobile from "../components/primitives/HideOnMobile";
 import useJWT from "../components/hooks/useJWT";
+import useFetch from "../components/hooks/useFetch";
+
+ReactModal.setAppElement("#__next");
 
 export default function Tempedia({ userId }: { userId?: string }) {
   const jwt = useJWT();
@@ -14,6 +19,12 @@ export default function Tempedia({ userId }: { userId?: string }) {
   const [temtem, setTemtem] = useState<any[]>([]);
   const [taming, setTaming] = useState<string[]>([]);
   const [tamed, setTamed] = useState<string[]>([]);
+  const [modalTemtem, setModalTemtem] = useState<string | undefined>();
+  const [temtems] = useFetch<any[]>(
+    `/temtems?expand=techniques,traits,type`,
+    {},
+    { source: "temtem-api", defaultValue: [] }
+  );
   useEffect(() => {
     (async () => {
       const res = await fetch(
@@ -54,7 +65,100 @@ export default function Tempedia({ userId }: { userId?: string }) {
     }
   }
   return (
-    <div style={{ margin: "10px auto", maxWidth: 1200, textAlign: "center" }}>
+    <React.Fragment>
+      <div style={{ margin: "10px auto", maxWidth: 1200, textAlign: "center" }}>
+        <div
+          css={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <TemtemInput
+            containerStyle={{ flex: 1, textAlign: "left" }}
+            value={search}
+            onChange={({ target }) => setSearch(() => (target as any).value)}
+            placeholder="Search..."
+          />
+          {jwt ? (
+            <TemtemText
+              containerStyle={{ margin: 10 }}
+              style={{ fontSize: 20 }}
+              borderWidth={10}
+            >{`Tamed: ${tamed.length}`}</TemtemText>
+          ) : null}
+          <TemtemText
+            containerStyle={{ margin: 10 }}
+            style={{ fontSize: 20 }}
+            borderWidth={10}
+          >{`Total: ${temtem.length}`}</TemtemText>
+          {jwt ? (
+            <HideOnMobile>
+              <TemtemText
+                containerStyle={{ margin: 10 }}
+                style={{ fontSize: 20 }}
+                borderWidth={10}
+              >{`${((tamed.length / temtem.length || 0) * 100).toFixed(
+                1
+              )}%`}</TemtemText>
+            </HideOnMobile>
+          ) : null}
+        </div>
+        {temtem
+          .filter(({ name }) =>
+            search.trim()
+              ? name.toLowerCase().includes(search.trim().toLowerCase())
+              : true
+          )
+          .map(({ number: num, name, types }) => (
+            <TemtemItem
+              key={num}
+              num={num}
+              jwt={jwt}
+              name={name}
+              types={types}
+              tamed={tamed}
+              taming={taming}
+              onClick={onClick}
+              onClickInfo={() => setModalTemtem(name)}
+              userId={userId}
+            />
+          ))}
+      </div>
+      <TemtemModal
+        temtem={modalTemtem}
+        data={temtems.find(({ name }) => modalTemtem === name)}
+        onClose={() => setModalTemtem(undefined)}
+      />
+    </React.Fragment>
+  );
+}
+
+function TemtemModal({ temtem, data, onClose }: any) {
+  return (
+    <ReactModal
+      isOpen={!!temtem}
+      onRequestClose={onClose}
+      style={{
+        overlay: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0, 0, 0, 0.5)"
+        },
+        content: {
+          backgroundColor: colors.uiBgGradientStart,
+          borderColor: colors.uiBlueFaded,
+          borderWidth: 2,
+          maxWidth: 800,
+          position: "relative",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }
+      }}
+    >
       <div
         css={{
           display: "flex",
@@ -62,56 +166,66 @@ export default function Tempedia({ userId }: { userId?: string }) {
           alignItems: "center"
         }}
       >
-        <TemtemInput
-          containerStyle={{ flex: 1, textAlign: "left" }}
-          value={search}
-          onChange={({ target }) => setSearch(() => (target as any).value)}
-          placeholder="Search..."
+        <TemtemPortrait
+          style={{ marginTop: -25, marginRight: 10 }}
+          temtem={temtem}
+          shape="hexagon"
+          size={100}
+          borderWidth={5}
         />
-        {jwt ? (
-          <TemtemText
-            containerStyle={{ margin: 10 }}
-            style={{ fontSize: 20 }}
-            borderWidth={10}
-          >{`Tamed: ${tamed.length}`}</TemtemText>
-        ) : null}
-        <TemtemText
-          containerStyle={{ margin: 10 }}
-          style={{ fontSize: 20 }}
-          borderWidth={10}
-        >{`Total: ${temtem.length}`}</TemtemText>
-        {jwt ? (
-          <HideOnMobile>
-            <TemtemText
-              containerStyle={{ margin: 10 }}
-              style={{ fontSize: 20 }}
-              borderWidth={10}
-            >{`${((tamed.length / temtem.length || 0) * 100).toFixed(
-              1
-            )}%`}</TemtemText>
-          </HideOnMobile>
-        ) : null}
+        <TemtemText style={{ fontSize: 30 }}>{temtem}</TemtemText>
       </div>
-      {temtem
-        .filter(({ name }) =>
-          search.trim()
-            ? name.toLowerCase().includes(search.trim().toLowerCase())
-            : true
-        )
-        .map(({ number: num, name, types }) => (
-          <TemtemItem
-            key={num}
-            num={num}
-            jwt={jwt}
-            name={name}
-            types={types}
-            tamed={tamed}
-            taming={taming}
-            onClick={onClick}
-            userId={userId}
-          />
-        ))}
-    </div>
+      <TemtemText
+        style={{ fontSize: 24 }}
+        containerStyle={{ marginBottom: 10 }}
+      >
+        Locations
+      </TemtemText>
+      <div
+        css={{
+          display: "flex",
+          flexDirection: "row",
+          borderBottom: `2px solid ${colors.uiBlueFaded}`,
+          padding: "0px 20px",
+          marginBottom: 5
+        }}
+      >
+        <TemtemText containerStyle={{ width: 100 }}>Island</TemtemText>
+        <TemtemText containerStyle={{ flex: 1, marginRight: 20 }}>
+          Location
+        </TemtemText>
+        <TemtemText containerStyle={{ width: 150, marginRight: 20 }}>
+          Frequency
+        </TemtemText>
+        <TemtemText containerStyle={{ width: 100 }}>Level</TemtemText>
+      </div>
+      {data && data.locations && data.locations.length ? (
+        data.locations.map(({ location, island, frequency, level }, i) => {
+          return (
+            <div
+              key={`${location}${i}`}
+              css={{
+                display: "flex",
+                flexDirection: "row",
+                padding: "0px 20px",
+                margin: "5px 0px"
+              }}
+            >
+              <TemtemText containerStyle={{ width: 100 }}>{island}</TemtemText>
+              <TemtemText containerStyle={{ flex: 1, marginRight: 20 }}>
+                {location.replace(/[a-z]([A-Z])/g, ", $1")}
+              </TemtemText>
+              <TemtemText containerStyle={{ width: 150, marginRight: 20 }}>
+                {frequency}
+              </TemtemText>
+              <TemtemText containerStyle={{ width: 100 }}>{level}</TemtemText>
+            </div>
+          );
+        })
+      ) : (
+        <TemtemText style={{ textAlign: "center" }}>???</TemtemText>
+      )}
+    </ReactModal>
   );
 }
 
@@ -123,7 +237,8 @@ function TemtemItem({
   types,
   taming,
   onClick,
-  userId
+  userId,
+  onClickInfo
 }: any) {
   return (
     <div
@@ -140,19 +255,21 @@ function TemtemItem({
           flexDirection: "column"
         }}
       >
-        <TemtemPortrait
-          style={{ margin: "0 auto" }}
-          temtem={name}
-          shape="hexagon"
-          size={100}
-          borderWidth={5}
-        />
-        <TemtemText
-          style={{ fontSize: 20, textAlign: "center" }}
-          borderWidth={10}
-        >
-          {`#${num} ${name}`}
-        </TemtemText>
+        <div onClick={onClickInfo}>
+          <TemtemPortrait
+            style={{ margin: "0 auto" }}
+            temtem={name}
+            shape="hexagon"
+            size={100}
+            borderWidth={5}
+          />
+          <TemtemText
+            style={{ fontSize: 20, textAlign: "center" }}
+            borderWidth={10}
+          >
+            {`#${num} ${name}`}
+          </TemtemText>
+        </div>
         {jwt ? (
           tamed.includes(name) ? (
             <TemtemText
