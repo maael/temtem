@@ -255,7 +255,14 @@ function TemtemItem({
           flexDirection: "column"
         }}
       >
-        <div onClick={onClickInfo} css={{ cursor: "pointer" }}>
+        <div
+          onClick={onClickInfo}
+          css={{
+            cursor: "pointer",
+            opacity: tamed.includes(name) ? 1 : 0.5,
+            filter: tamed.includes(name) ? "" : "grayscale(100%)"
+          }}
+        >
           <TemtemPortrait
             style={{ margin: "0 auto" }}
             temtem={name}
@@ -270,7 +277,7 @@ function TemtemItem({
             {`#${num} ${name}`}
           </TemtemText>
         </div>
-        {jwt ? (
+        {!userId && jwt ? (
           tamed.includes(name) ? (
             <TemtemText
               containerStyle={{ marginTop: 7 }}
@@ -279,7 +286,7 @@ function TemtemItem({
             >
               Tamed
             </TemtemText>
-          ) : !userId || jwt._id === userId ? (
+          ) : (
             <TemtemButton
               size="small"
               type={types[0]}
@@ -289,7 +296,7 @@ function TemtemItem({
             >
               {taming.includes(name) ? "Taming" : "Tamed?"}
             </TemtemButton>
-          ) : null
+          )
         ) : null}
       </div>
     </div>
