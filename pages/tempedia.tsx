@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { jsx } from "@emotion/core";
 import ReactModal from "react-modal";
+import { IoIosCloseCircle } from "react-icons/io";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
@@ -10,16 +11,27 @@ import { colors } from "@maael/temtem-theme";
 import HideOnMobile from "../components/primitives/HideOnMobile";
 import useJWT from "../components/hooks/useJWT";
 import useFetch from "../components/hooks/useFetch";
+import useCallableFetch from "../components/hooks/useCallableFetch";
 
 ReactModal.setAppElement("#__next");
+
+/**
+ * TODO: INDICATOR ON HOVERING TEMTEM THAT CLICKING WILL SHOW LOCATION
+ * TODO: ADD WAY TO REMOVE TEMTEM MISTAKENLY ADDED
+ */
 
 export default function Tempedia({ userId }: { userId?: string }) {
   const jwt = useJWT();
   const [search, setSearch] = useState("");
   const [temtem, setTemtem] = useState<any[]>([]);
   const [taming, setTaming] = useState<string[]>([]);
-  const [tamed, setTamed] = useState<string[]>([]);
+  const [tamed, setTamed] = useState<{ _id: string; name: string }[]>([]);
   const [modalTemtem, setModalTemtem] = useState<string | undefined>();
+  const [deleteTamed] = useCallableFetch(
+    "/db/tempedia",
+    { method: "DELETE" },
+    { source: "local" }
+  );
   const [temtems] = useFetch<any[]>(
     `/temtems?expand=techniques,traits,type`,
     {},
@@ -43,7 +55,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
       );
       if (res.ok) {
         const { data = [] } = await res.json();
-        setTamed(t => data.map(({ temtemName }) => temtemName));
+        setTamed(t => data.map(({ temtemName: name, _id }) => ({ name, _id })));
       }
     })().catch(console.error);
   }, [userId, jwt]);
@@ -58,10 +70,19 @@ export default function Tempedia({ userId }: { userId?: string }) {
         body: JSON.stringify({ temtemName: name })
       });
       if (res.ok) {
-        setTamed(t => t.concat(name));
+        const json = await res.json();
+        setTamed(t => t.concat({ name, _id: json._id }));
       }
     } finally {
       setTaming(t => t.filter(i => i !== name));
+    }
+  }
+  async function onDelete({ _id }) {
+    try {
+      const res = await deleteTamed({}, _id);
+      setTamed(t => t.filter(t => t._id !== _id));
+    } catch (e) {
+      console.error(e);
     }
   }
   return (
@@ -120,6 +141,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
               tamed={tamed}
               taming={taming}
               onClick={onClick}
+              onDelete={onDelete}
               onClickInfo={() => setModalTemtem(name)}
               userId={userId}
             />
@@ -242,9 +264,11 @@ function TemtemItem({
   types,
   taming,
   onClick,
+  onDelete,
   userId,
   onClickInfo
 }: any) {
+  const tamedInfo = tamed.find(t => t.name === name);
   return (
     <div
       css={{
@@ -264,8 +288,8 @@ function TemtemItem({
           onClick={onClickInfo}
           css={{
             cursor: "pointer",
-            opacity: tamed.includes(name) ? 1 : 0.5,
-            filter: tamed.includes(name) ? "" : "grayscale(100%)"
+            opacity: tamedInfo ? 1 : 0.5,
+            filter: tamedInfo ? "" : "grayscale(100%)"
           }}
         >
           <TemtemPortrait
@@ -283,14 +307,17 @@ function TemtemItem({
           </TemtemText>
         </div>
         {!userId && jwt ? (
-          tamed.includes(name) ? (
-            <TemtemText
-              containerStyle={{ marginTop: 7 }}
-              style={{ fontSize: 20 }}
-              borderWidth={10}
-            >
-              Tamed
-            </TemtemText>
+          tamedInfo ? (
+            <div css={{ marginTop: 7, display: "flex", alignItems: "center" }}>
+              <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
+                Tamed
+              </TemtemText>
+              <IoIosCloseCircle
+                size={16}
+                style={{ marginLeft: 5, marginTop: -1, cursor: "pointer" }}
+                onClick={() => onDelete(tamedInfo)}
+              />
+            </div>
           ) : (
             <TemtemButton
               size="small"

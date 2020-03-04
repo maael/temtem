@@ -49,3 +49,19 @@ export async function createTempediaEntry({
     return { error: e.message } as any;
   }
 }
+
+export async function deleteTempediaEntry(id: string) {
+  const query = `
+    mutation DeleteUserTempediaEntry ($id:ID!){
+      deleteTempediaEntry(id:$id) {
+        _id
+      }
+    }
+  `;
+  try {
+    return (await client.request(query, { id })).deleteTempediaEntry;
+  } catch (e) {
+    console.error(e);
+    return { error: e.message } as any;
+  }
+}

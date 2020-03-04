@@ -8,7 +8,11 @@ export {
 } from "./exchangeListing";
 export { getExchangeSaved, createExchangeSaved } from "./exchangeSaved";
 export { getUserQuests, createUserQuests, updateUserQuest } from "./quests";
-export { getTempediaEntries, createTempediaEntry } from "./tempedia";
+export {
+  getTempediaEntries,
+  createTempediaEntry,
+  deleteTempediaEntry
+} from "./tempedia";
 export {
   getUserByRedditName,
   getUsers,
