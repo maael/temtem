@@ -5,7 +5,7 @@ import { colors } from "@maael/temtem-theme";
 import NavItem from "./NavItem";
 
 export default function OverlayMenu({ onClose }: { onClose: () => void }) {
-  const [first, setFirst] = useState();
+  const [first, setFirst] = useState<boolean>();
   const router = useRouter();
   useEffect(() => {
     if (first) {
@@ -74,16 +74,16 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
       >
         Quest Tracker
       </NavItem>
-      {/* <NavItem
+      <NavItem
         style={{
           padding: "20px 10px 10px 10px",
           display: "block",
           width: "100%"
         }}
-        url="/battle-tools"
+        url="/encounter-tracker"
       >
-        Battle Tools
-      </NavItem> */}
+        Encounter Tracker
+      </NavItem>
       <NavItem
         style={{
           padding: "20px 10px 10px 10px",
@@ -92,7 +92,7 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
         }}
         url="/users"
       >
-        Search Users
+        Users
       </NavItem>
     </div>
   );
