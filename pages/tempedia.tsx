@@ -15,11 +15,6 @@ import useCallableFetch from "../components/hooks/useCallableFetch";
 
 ReactModal.setAppElement("#__next");
 
-/**
- * TODO: INDICATOR ON HOVERING TEMTEM THAT CLICKING WILL SHOW LOCATION
- * TODO: ADD WAY TO REMOVE TEMTEM MISTAKENLY ADDED
- */
-
 export default function Tempedia({ userId }: { userId?: string }) {
   const jwt = useJWT();
   const [search, setSearch] = useState("");
