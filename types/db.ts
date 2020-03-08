@@ -134,7 +134,7 @@ export interface ExchangeSaved extends Entity {
 
 export type ExchangeSavedInput = Omit<
   ExchangeSaved,
-  "_id" | "_ts" | "user" | "deletedAt"
+  "_id" | "_ts" | "user" | "deletedAt" | "exchangeListing"
 >;
 export type ExchangeSavedPartialInput = Partial<
   Omit<ExchangeSaved, "_id" | "_ts" | "user">

@@ -7,6 +7,7 @@ export interface Options<T> {
   defaultValue?: T;
   mapper?: (v: any) => T;
   generateSuffixFromBody?: (v: RequestInit["body"]) => string;
+  suffix?: string;
 }
 
 const sourcePrefixMap: Record<FetchSource, string> = {
@@ -20,7 +21,7 @@ export default function useCallableFetch<T>(
   options: RequestInit = {},
   customOptions: Options<T> = { source: "local" }
 ): [
-  (requestInit: RequestInit, suffix?: string) => Promise<T>,
+  (requestInit?: RequestInit, suffix?: string) => Promise<T>,
   T,
   boolean,
   string | undefined
@@ -28,7 +29,7 @@ export default function useCallableFetch<T>(
   const [data, setData] = useState(customOptions.defaultValue as T);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  async function callFetch(requestInit: RequestInit, suffix: string = "") {
+  async function callFetch(requestInit: RequestInit = {}, suffix: string = "") {
     let json;
     try {
       setError(undefined);
@@ -39,7 +40,9 @@ export default function useCallableFetch<T>(
             ? customOptions.generateSuffixFromBody(requestInit.body)
             : suffix
             ? `/${suffix}`
-            : suffix
+            : customOptions.suffix
+            ? customOptions.suffix
+            : ""
         }`,
         {
           credentials:

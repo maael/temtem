@@ -1,6 +1,7 @@
 import React from "react";
 import TemtemText from "@maael/temtem-text-component";
 import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
+import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
 
@@ -9,6 +10,7 @@ export default function ExchangeSaved() {
     "/db/exchange/saved",
     {},
     {
+      mapper: res => (res.data ? res.data : []),
       defaultValue: [],
       source: "local"
     }
@@ -34,6 +36,14 @@ export default function ExchangeSaved() {
             ? "Loading..."
             : `You have ${saved.length || "no"} saved listings.`}
         </TemtemText>
+        {saved.map(s => (
+          <ListingRequestDetails
+            key={s._id}
+            user={s.user}
+            cost={s.requestCost}
+            details={s.requestDetails}
+          />
+        ))}
       </div>
     </React.Fragment>
   );

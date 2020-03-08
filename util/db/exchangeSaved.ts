@@ -21,6 +21,29 @@ export async function getExchangeSaved(
           }
           exchangeListing {
             _id
+            user {
+              _id
+              redditName
+              redditIcon
+            }
+            type
+            temtemName
+            temtemGender
+            temtemFertility
+            temtemTrait
+            temtemBredTechniques
+            temtemIsLuma
+            svHp
+            svSta
+            svSpd
+            svAtk
+            svDef
+            svSpatk
+            svSpdef
+            requestCost
+            requestDetails
+            isActive
+            createdAt
           }
           isActive
           createdAt
@@ -57,7 +80,26 @@ export async function createExchangeSaved(
     ...rawData,
     user: {
       connect: rawData.userId
+    },
+    exchangeListing: {
+      connect: rawData.exchangeListingId
     }
   });
   return (await client.request(query, { data })).createExchangeSaved;
+}
+
+export async function deleteExchangeSaved(id: string) {
+  const query = `
+    mutation DeleteExchangeSaved ($id:ID!){
+      deleteExchangeSaved(id:$id) {
+        _id
+      }
+    }
+  `;
+  try {
+    return (await client.request(query, { id })).deleteExchangeSaved;
+  } catch (e) {
+    console.error(e);
+    return { error: e.message } as any;
+  }
 }

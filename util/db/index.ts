@@ -6,7 +6,11 @@ export {
   updateExchangeListing,
   setExchangeInactive
 } from "./exchangeListing";
-export { getExchangeSaved, createExchangeSaved } from "./exchangeSaved";
+export {
+  getExchangeSaved,
+  createExchangeSaved,
+  deleteExchangeSaved
+} from "./exchangeSaved";
 export { getUserQuests, createUserQuests, updateUserQuest } from "./quests";
 export {
   getTempediaEntries,
