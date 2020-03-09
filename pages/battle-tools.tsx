@@ -15,7 +15,7 @@ export default function BattleTools() {
       if (res.ok) {
         setTypes((await res.json()).map(({ name }) => name));
       }
-    })();
+    })().catch(e => console.error(e));
   });
   useEffect(() => {
     (async () => {
@@ -23,7 +23,7 @@ export default function BattleTools() {
       if (res.ok) {
         setWeaknessTable(await res.json());
       }
-    })();
+    })().catch(e => console.error(e));
   });
   return (
     <div style={{ margin: "10px auto", textAlign: "center" }}>

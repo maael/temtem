@@ -61,8 +61,9 @@ async function getTokenFromCode(
   refresh_token: string;
   scope: string;
 }> {
-  const basicAuth = new Buffer(
-    `${process.env.DISCORD_OAUTH_ID!}:${process.env.DISCORD_OAUTH_SECRET!}`
+  const basicAuth = Buffer.from(
+    `${process.env.DISCORD_OAUTH_ID!}:${process.env.DISCORD_OAUTH_SECRET!}`,
+    "utf-8"
   ).toString("base64");
   return got
     .post(

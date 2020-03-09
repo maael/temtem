@@ -61,12 +61,12 @@ export default function useCallableFetch<T>(
         json = customOptions.mapper ? customOptions.mapper(rawJson) : rawJson;
         setData(json);
       } else {
-        const error = await json.text();
-        setError(error);
+        const e = await json.text();
+        setError(e);
       }
     } catch (e) {
       setError(e.message);
-      return;
+      return undefined;
     } finally {
       setLoading(false);
     }

@@ -118,8 +118,8 @@ function MainQuestItem({
   quest: any;
   quests: any[];
   userQuests: any[];
-  createUserQuest: (d: any) => void;
-  updateUserQuest: (d: any) => void;
+  createUserQuest: (d: any) => Promise<unknown>;
+  updateUserQuest: (d: any) => Promise<unknown>;
   refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
@@ -181,7 +181,7 @@ function MainQuestItem({
             borderWidth={10}
           >
             {isFirstMainQuest || userIsOnQuest
-              ? `Step ${userQuest.questStep + 1}. ${q.steps[
+              ? `Step ${Number(userQuest.questStep) + 1}. ${q.steps[
                   userQuest.questStep
                 ] || "???"}`
               : "[Hidden Step]"}
@@ -216,7 +216,7 @@ function MainQuestItem({
           <TemtemButton
             onClick={async () => {
               if (userQuestsNames.includes(q.name)) {
-                const newStep = (userQuest.questStep || 0) + 1;
+                const newStep = Number(userQuest.questStep || 0) + 1;
                 await updateUserQuest({
                   body: JSON.stringify({
                     ...userQuest,
@@ -258,8 +258,8 @@ function SideQuestItem({
 }: {
   quest: any;
   userQuests: any[];
-  createUserQuest: (d: any) => void;
-  updateUserQuest: (d: any) => void;
+  createUserQuest: (d: any) => Promise<unknown>;
+  updateUserQuest: (d: any) => Promise<unknown>;
   refetchUserQuests: () => Promise<void>;
 }) {
   const userQuestsNames = userQuests.map(({ questName }) => questName);
@@ -308,8 +308,9 @@ function SideQuestItem({
             style={{ fontSize: 20, textAlign: "left" }}
             borderWidth={10}
           >
-            {`Step ${userQuest.questStep + 1}. ${q.steps[userQuest.questStep] ||
-              "???"}`}
+            {`Step ${Number(userQuest.questStep) + 1}. ${q.steps[
+              userQuest.questStep
+            ] || "???"}`}
           </TemtemText>
         ) : !userQuest.questFinished ? (
           <div
@@ -360,7 +361,7 @@ function SideQuestItem({
         <TemtemButton
           onClick={async () => {
             if (userQuestsNames.includes(q.name)) {
-              const newStep = (userQuest.questStep || 0) + 1;
+              const newStep = Number(userQuest.questStep || 0) + 1;
               await updateUserQuest({
                 body: JSON.stringify({
                   ...userQuest,

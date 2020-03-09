@@ -41,7 +41,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
         const data = await res.json();
         setTemtem(data);
       }
-    })().catch(console.error);
+    })().catch(e => console.error(e));
   }, []);
   useEffect(() => {
     (async () => {
@@ -52,7 +52,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
         const { data = [] } = await res.json();
         setTamed(t => data.map(({ temtemName: name, _id }) => ({ name, _id })));
       }
-    })().catch(console.error);
+    })().catch(e => console.error(e));
   }, [userId, jwt]);
   async function onClick(name: string) {
     setTaming(t => t.concat(name));
@@ -75,7 +75,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
   async function onDelete({ _id }) {
     try {
       const res = await deleteTamed({}, _id);
-      setTamed(t => t.filter(t => t._id !== _id));
+      setTamed(t => t.filter(f => f._id !== _id));
     } catch (e) {
       console.error(e);
     }

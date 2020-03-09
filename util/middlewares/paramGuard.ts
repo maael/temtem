@@ -14,13 +14,17 @@ const paramGuard = (
   try {
     if (
       !requiredParams.every(
-        r => Object.keys(req.query).includes(r) && req.query[r] !== undefined
+        r =>
+          Object.keys(req.query).includes(r) &&
+          (req.query[r] as string | undefined) !== undefined
       )
     ) {
       console.warn("failed param check", req.query);
-      return res.status(400).json({ error: "missing param" });
+      res.status(400).json({ error: "missing param" });
+      return undefined;
     }
-    return await handler(req, res);
+    await handler(req, res);
+    return undefined;
   } catch (e) {
     console.error(e);
     return res.status(500);

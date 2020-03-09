@@ -4,10 +4,12 @@ import { getUserExchangeListings } from "../../../../../../util/db";
 export default cookies(async function(req, res) {
   const userJWT = await req.getJWT();
   if (!userJWT) {
-    return res.status(400).json({ error: "not authenticated" });
+    res.status(400).json({ error: "not authenticated" });
+    return;
   }
   if (!req.query.userId) {
-    return res.status(400).json({ error: "missing param" });
+    res.status(400).json({ error: "missing param" });
+    return;
   }
   if (req.method === "GET") {
     const listings = await getUserExchangeListings(req.query.userId);

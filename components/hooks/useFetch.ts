@@ -50,7 +50,7 @@ export default function useFetch<T>(
     }
   }
   useEffect(() => {
-    refetch().catch(console.error);
+    refetch().catch(e => console.error(e));
   }, dependencies);
   return [data, loading, error, refetch];
 }

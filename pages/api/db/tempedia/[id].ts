@@ -8,7 +8,8 @@ export default paramGuard(
     jwtGuard(async function(req, res) {
       const userJWT = await req.getJWT();
       if (!userJWT) {
-        return res.status(400).json({ error: "not authenticated" });
+        res.status(400).json({ error: "not authenticated" });
+        return;
       }
       if (req.method === "DELETE") {
         res.json(await deleteTempediaEntry(req.query.id));

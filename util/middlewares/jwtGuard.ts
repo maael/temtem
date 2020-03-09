@@ -7,9 +7,11 @@ const jwtGuard = (
     const userJWT = await req.getJWT();
     if (!userJWT) {
       console.warn("failed jwt guard");
-      return res.status(400).json({ error: "not authenticated" });
+      res.status(400).json({ error: "not authenticated" });
+      return undefined;
     }
-    return await handler(req, res);
+    await handler(req, res);
+    return undefined;
   } catch (e) {
     console.error(e);
     return res.status(500);

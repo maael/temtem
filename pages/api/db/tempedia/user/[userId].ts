@@ -3,7 +3,8 @@ import { getTempediaEntries } from "../../../../../util/db";
 
 export default cookies(async function(req, res) {
   if (!req.query.userId) {
-    return res.status(400).json({ error: "missing param" });
+    res.status(400).json({ error: "missing param" });
+    return;
   }
   if (req.method === "GET") {
     const tempedia = await getTempediaEntries(req.query.userId);

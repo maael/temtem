@@ -2,12 +2,12 @@ import { GraphQLClient } from "graphql-request";
 
 export function getClient() {
   const endpoint = "https://graphql.fauna.com/graphql";
-  const client = new GraphQLClient(endpoint, {
+  const c = new GraphQLClient(endpoint, {
     headers: {
       authorization: `Bearer ${process.env.TEMTEM_FAUNA_SECRET}`
     }
   });
-  return client;
+  return c;
 }
 
 const client = getClient();

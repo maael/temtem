@@ -132,8 +132,8 @@ export default function ListingPage({ listing }: any) {
                 disabled={removeLoading}
                 style={{ margin: 5 }}
                 bgColor={colors.typeFire}
-                onClick={() => {
-                  removeListing({});
+                onClick={async () => {
+                  await removeListing({});
                 }}
               >
                 Remove

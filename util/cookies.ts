@@ -18,14 +18,14 @@ export type NextApiRequestWithJWT = Omit<NextApiRequest, "query"> & {
 const cookie = (
   res: NextApiResponse,
   name: string,
-  value: string,
+  value: string | object,
   options: any = {}
 ) => {
   const stringValue =
     typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
 
   if ("maxAge" in options) {
-    options.expires = new Date(Date.now() + options.maxAge);
+    options.expires = new Date(Date.now() + Number(options.maxAge));
     options.maxAge /= 1000;
   }
 
@@ -44,13 +44,14 @@ const cookies = (
   res.cookie = (name, value, options) => cookie(res, name, value, options);
   req.getJWT = async () => {
     const items = parse(req.headers.cookie || "");
-    if (!items["temtem-jwt"]) return;
+    if (!items["temtem-jwt"]) return undefined;
     const decoded = await jwt.verify(items["temtem-jwt"]);
-    if (decoded && decoded.version !== JWT_VERSION) return;
+    if (decoded && decoded.version !== JWT_VERSION) return undefined;
     return decoded;
   };
   try {
-    return await handler(req, res);
+    await handler(req, res);
+    return;
   } catch (e) {
     console.error(e);
     throw e;
