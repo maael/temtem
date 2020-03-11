@@ -11,8 +11,8 @@ export function embellishCreate<T>(data: T) {
   };
 }
 
-export function embellishUpdate<T extends { _id?: any }>(data: T) {
-  delete data._id;
+export function embellishUpdate<T>(data: T) {
+  delete (data as any)._id;
   return {
     ...data,
     updatedAt: getIsoString()
