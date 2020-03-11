@@ -83,7 +83,7 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
           display: "block",
           width: "100%"
         }}
-        url="/encounter-tracker"
+        url="/encounter-tracker/new"
       >
         Encounter Tracker
       </NavItem>

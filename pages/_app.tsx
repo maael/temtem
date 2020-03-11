@@ -74,7 +74,7 @@ export default function TemtemApp({ Component, pageProps }) {
                 Personal Tempedia
               </NavItem>
               <NavItem url="/quest-tracker">Quest Tracker</NavItem>
-              <NavItem url="/encounter-tracker">Encounter Tracker</NavItem>
+              <NavItem url="/encounter-tracker/new">Encounter Tracker</NavItem>
               <NavItem url="/users">Users</NavItem>
             </>
           </HideOnMobile>
