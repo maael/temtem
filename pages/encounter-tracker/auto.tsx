@@ -46,7 +46,7 @@ export default () => {
                     }
                   );
                 } catch (err) {
-                  console.error("Error: " + err);
+                  console.error(`Error: ${err.message}`);
                 }
               })().catch(e => console.error(e));
             }}
