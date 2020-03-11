@@ -301,7 +301,7 @@ function TemtemItem({
             {`#${num} ${name}`}
           </TemtemText>
         </div>
-        {!userId && jwt ? (
+        {userId && jwt && userId === jwt._id ? (
           tamedInfo ? (
             <div css={{ marginTop: 7, display: "flex", alignItems: "center" }}>
               <TemtemText style={{ fontSize: 20 }} borderWidth={10}>

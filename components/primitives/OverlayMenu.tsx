@@ -3,9 +3,12 @@ import { useRouter } from "next/router";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { colors } from "@maael/temtem-theme";
 import NavItem from "./NavItem";
+import useJWT from "../hooks/useJWT";
+import { getUserProfileLink } from "../../util/user";
 
 export default function OverlayMenu({ onClose }: { onClose: () => void }) {
   const [first, setFirst] = useState<boolean>();
+  const jwt = useJWT();
   const router = useRouter();
   useEffect(() => {
     if (first) {
@@ -60,7 +63,7 @@ export default function OverlayMenu({ onClose }: { onClose: () => void }) {
           display: "block",
           width: "100%"
         }}
-        url="/tempedia"
+        url={jwt ? `${getUserProfileLink(jwt)}/tempedia` : "/tempedia"}
       >
         Personal Tempedia
       </NavItem>
