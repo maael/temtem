@@ -46,7 +46,14 @@ export default function EncounterTracker() {
     );
   }, [selectedTemtem]);
   return (
-    <div css={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
+    <div
+      css={{
+        maxWidth: 800,
+        margin: "0 auto",
+        padding: "0 10px",
+        textAlign: "center"
+      }}
+    >
       <TemtemPortrait
         style={{ display: "inline-block", margin: "20px 0px 5px 0px" }}
         temtem={temtem}
