@@ -80,7 +80,7 @@ export default function TemtemApp({ Component, pageProps }) {
           </HideOnMobile>
           <HideOnDesktop style={{ flex: 1 }}>
             <div onClick={() => setOverlay(true)}>
-              <img height={50} src="/backpack-by-the-backjack.png" />
+              <img height={40} src="/backpack-by-the-backjack.png" />
             </div>
           </HideOnDesktop>
           {overlay ? <OverlayMenu onClose={() => setOverlay(false)} /> : null}
