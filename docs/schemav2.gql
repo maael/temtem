@@ -23,8 +23,9 @@ type User @collection(name: "users") {
   redditName: String @unique(index: "unique_reddit_name")
   redditIcon: String
   redditDarkmode: Boolean
-  discordId: String
+  discordId: String @unique(index: "unique_discord_id")
   discordName: String
+  discordDiscriminator: String
   discordIcon: String
   temtemName: String
   steamId: String
@@ -159,6 +160,7 @@ type Query {
   getUsers: [User!]!
   getUserByRedditName(redditName: String): User
   getUserByDiscordName(discordName: String): User
+  getUserByDiscordId(discordId: String): User
   getUserPreferences(userId: ID!): [UserPreference!]!
   getUserExchangeListings(userId: ID!): [ExchangeListing!]!
   getUserExchangeListingsByType(userId: ID!, type: ExchangeListingType): [ExchangeListing!]!

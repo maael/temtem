@@ -1,5 +1,5 @@
 import client from "./client";
-import { getIsoString } from "./util";
+import { embellishCreate, embellishUpdate } from "./util";
 import {
   User,
   UserInput,
@@ -23,6 +23,7 @@ export async function createUser(
         redditDarkmode
         discordId
         discordName
+        discordDiscriminator
         discordIcon
         goodReviews
         mixedReviews
@@ -33,15 +34,12 @@ export async function createUser(
     }
   `;
 
-  const user: UserInput = {
+  const user: UserInput = embellishCreate({
     ...variables,
     goodReviews: 0,
     badReviews: 0,
-    mixedReviews: 0,
-    isActive: true,
-    createdAt: getIsoString(),
-    updatedAt: getIsoString()
-  };
+    mixedReviews: 0
+  });
 
   return (await client.request(query, { user })).createUser;
 }
@@ -57,6 +55,7 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
         redditDarkmode
         discordId
         discordName
+        discordDiscriminator
         discordIcon
         goodReviews
         mixedReviews
@@ -67,6 +66,30 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
     }
   `;
   return (await client.request(query, { discordName })).getUserByDiscordName;
+}
+
+export async function getUserByDiscordId(discordId: string): Promise<User> {
+  const query = `
+    query UserByDiscordId ($discordId:String!) {
+      getUserByDiscordId(discordId:$discordId){
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        discordId
+        discordName
+        discordDiscriminator
+        discordIcon
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
+    }
+  `;
+  return (await client.request(query, { discordId })).getUserByDiscordId;
 }
 
 export async function getUserByRedditName(redditName: string): Promise<User> {
@@ -80,6 +103,7 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
         redditDarkmode
         discordId
         discordName
+        discordDiscriminator
         discordIcon
         goodReviews
         mixedReviews
@@ -92,15 +116,34 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
   return (await client.request(query, { redditName })).getUserByRedditName;
 }
 
-export async function updateUser(variables: UserPartialInput) {
-  const query = `{
-    update(data:$user){
-      _id
-      redditName
+export async function updateUser(
+  userId: string,
+  rawData: Partial<UserPartialInput>
+) {
+  const query = `
+    mutation UpdateUser ($userId: ID!, $user: UserInput!) {
+      updateUser(id:$userId,data:$user) {
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        discordId
+        discordName
+        discordDiscriminator
+        discordIcon
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
     }
-  }`;
+  `;
 
-  return client.request<User>(query, variables);
+  const user = embellishUpdate(rawData);
+
+  return (await client.request(query, { userId, user })).updateUser;
 }
 
 export async function getUsers() {
@@ -115,6 +158,7 @@ export async function getUsers() {
         redditDarkmode
         discordId
         discordName
+        discordDiscriminator
         discordIcon
         goodReviews
         mixedReviews

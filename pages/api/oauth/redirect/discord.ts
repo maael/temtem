@@ -3,10 +3,11 @@ import url from "url";
 import got from "got";
 import * as jwt from "../../../../util/jwt";
 import cookies, { NextApiResponseWithCookie } from "../../../../util/cookies";
-import { getUserByDiscordName, createUser } from "../../../../util/db";
+import { getUserByDiscordId, createUser } from "../../../../util/db";
 import { JWT_VERSION } from "../../../../util/constants";
 import { User } from "../../../../types/db";
 import { JWT } from "../../../../types";
+import { updateUser } from "../../../../util/db/user";
 
 export default cookies(async function(req, res) {
   const { code, _state } = req.query;
@@ -21,7 +22,7 @@ export default cookies(async function(req, res) {
 interface DiscordUser {
   id: string;
   username: string;
-  discriminator: number;
+  discriminator: string;
   avatar?: string;
 }
 
@@ -84,29 +85,49 @@ async function getTokenFromCode(
 
 async function getOrCreateUser(
   identity: DiscordUser
-): Promise<Pick<User, "_id" | "discordIcon" | "discordName" | "discordId">> {
-  const result = await getUserByDiscordName(identity.username);
+): Promise<
+  Pick<
+    User,
+    "_id" | "discordIcon" | "discordName" | "discordId" | "discordDiscriminator"
+  >
+> {
+  const result = await getUserByDiscordId(identity.id);
   if (result) {
-    return {
+    const info = {
       _id: result._id,
-      discordName: result.discordName,
-      discordId: result.discordId,
-      discordIcon: result.discordIcon
+      discordName: identity.username,
+      discordId: identity.id,
+      discordDiscriminator: identity.discriminator,
+      discordIcon: identity.avatar
+        ? `https://cdn.discordapp.com/avatars/${identity.id}/${identity.avatar}.png`
+        : `https://cdn.discordapp.com/embed/avatars/${Number(
+            identity.discriminator
+          ) % 5}.png`
     };
+    await updateUser(result._id, { ...result, ...info });
+    return info;
   }
-  const parsedIconUrl = url.parse(identity.avatar || "");
-  const { _id, discordIcon, discordName, discordId } = await createUser({
+  const {
+    _id,
+    discordIcon,
+    discordName,
+    discordId,
+    discordDiscriminator
+  } = await createUser({
     discordIcon: identity.avatar
       ? `https://cdn.discordapp.com/avatars/${identity.id}/${identity.avatar}.png`
-      : `https://cdn.discordapp.com/embed/avatars/${identity.discriminator %
-          5}.png`,
+      : `https://cdn.discordapp.com/embed/avatars/${Number(
+          identity.discriminator
+        ) % 5}.png`,
     discordName: identity.username,
-    discordId: identity.id
+    discordId: identity.id,
+    discordDiscriminator: identity.discriminator
   });
   return {
     _id,
     discordIcon,
     discordName,
-    discordId
+    discordId,
+    discordDiscriminator
   };
 }

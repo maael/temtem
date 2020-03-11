@@ -11,9 +11,12 @@ import AuthBlock from "../components/primitives/AuthBlock";
 import HideOnMobile from "../components/primitives/HideOnMobile";
 import HideOnDesktop from "../components/primitives/HideOnDesktop";
 import OverlayMenu from "../components/primitives/OverlayMenu";
+import useJWT from "../components/hooks/useJWT";
+import { getUserProfileLink } from "../util/user";
 
 export default function TemtemApp({ Component, pageProps }) {
   const [overlay, setOverlay] = useState(false);
+  const jwt = useJWT();
   return (
     <div css={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Head>
@@ -65,10 +68,13 @@ export default function TemtemApp({ Component, pageProps }) {
                 <TiHomeOutline />
               </NavItem>
               <NavItem url="/exchange">Temtem Exchange</NavItem>
-              <NavItem url="/tempedia">Personal Tempedia</NavItem>
+              <NavItem
+                url={jwt ? `${getUserProfileLink(jwt)}/tempedia` : "/tempedia"}
+              >
+                Personal Tempedia
+              </NavItem>
               <NavItem url="/quest-tracker">Quest Tracker</NavItem>
               <NavItem url="/encounter-tracker">Encounter Tracker</NavItem>
-              {/* <NavItem url="/battle-tools">Battle Tools</NavItem> */}
               <NavItem url="/users">Users</NavItem>
             </>
           </HideOnMobile>
