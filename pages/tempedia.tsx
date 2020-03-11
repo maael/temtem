@@ -114,9 +114,9 @@ export default function Tempedia({ userId }: { userId?: string }) {
                 containerStyle={{ margin: 10 }}
                 style={{ fontSize: 20 }}
                 borderWidth={10}
-              >{`${((tamed.length / temtem.length || 0) * 100).toFixed(
-                1
-              )}%`}</TemtemText>
+              >{`${(
+                (temtem.length ? tamed.length / temtem.length : 0) * 100
+              ).toFixed(1)}%`}</TemtemText>
             </HideOnMobile>
           ) : null}
         </div>
