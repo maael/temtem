@@ -181,3 +181,15 @@ export type TrackedQuestInput = Omit<
 export type TrackedQuestPartialInput = Partial<
   Omit<TrackedQuest, "_id" | "_ts" | "user">
 >;
+
+export interface Encounter {
+  userId: string;
+  user?: User;
+  temtemName: string;
+  isLuma: boolean;
+  wasCaught: boolean;
+  location: string;
+  trait: string;
+  createdAt: string;
+  updatedAt?: string;
+}

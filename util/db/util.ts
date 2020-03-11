@@ -2,7 +2,7 @@ export function getIsoString() {
   return new Date().toISOString();
 }
 
-export function embellishCreate(data: any) {
+export function embellishCreate<T>(data: T) {
   return {
     ...data,
     isActive: true,
@@ -11,7 +11,7 @@ export function embellishCreate(data: any) {
   };
 }
 
-export function embellishUpdate(data: any) {
+export function embellishUpdate<T extends { _id?: any }>(data: T) {
   delete data._id;
   return {
     ...data,
@@ -19,7 +19,7 @@ export function embellishUpdate(data: any) {
   };
 }
 
-export function embellishDelete(data: any) {
+export function embellishDelete<T>(data: T) {
   return {
     ...data,
     isActive: false,

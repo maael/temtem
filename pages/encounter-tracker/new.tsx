@@ -7,14 +7,17 @@ import TemtemSelect from "@maael/temtem-select-component";
 import { colors } from "@maael/temtem-theme";
 import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
+import useCallableFetch from "../../components/hooks/useCallableFetch";
+import useJWT from "../../components/hooks/useJWT";
 import RequireAuth from "../../components/primitives/RequireAuth";
 
 export default function EncounterTracker() {
-  const [temtem, setTemtem] = useState("");
+  const jwt = useJWT();
+  const [temtemName, setTemtemName] = useState("");
   const [location, setLocation] = useState("");
   const [trait, setTrait] = useState("");
   const [isLuma, setIsLuma] = useState(false);
-  const [isCaught, setIsCaught] = useState(false);
+  const [wasCaught, setWasCaught] = useState(false);
   const [tempOption, setTempOption] = useState<any>();
   const [locationOptions, setLocationOptions] = useState<any[]>([]);
   const [availableTemtem, loadingAvailableTemtem] = useFetch<any>(
@@ -22,13 +25,16 @@ export default function EncounterTracker() {
     {},
     { source: "temtem-api", defaultValue: [] }
   );
+  const [createEncounter] = useCallableFetch("/db/encounters", {
+    method: "POST"
+  });
   const temtemOptions = useMemo(
     () => availableTemtem.map(({ name }) => ({ label: name, value: name })),
     [availableTemtem]
   );
   const selectedTemtem = useMemo(
-    () => availableTemtem.find(({ name }) => name === temtem),
-    [availableTemtem, temtem]
+    () => availableTemtem.find(({ name }) => name === temtemName),
+    [availableTemtem, temtemName]
   );
   const availableTraits = useMemo(
     () =>
@@ -59,7 +65,7 @@ export default function EncounterTracker() {
       >
         <TemtemPortrait
           style={{ display: "inline-block", margin: "20px 0px 5px 0px" }}
-          temtem={temtem}
+          temtem={temtemName}
           shape="hexagon"
         />
         <div css={{ margin: "5px 0px" }}>
@@ -67,9 +73,9 @@ export default function EncounterTracker() {
             placeholder="Temtem..."
             isLoading={loadingAvailableTemtem}
             options={temtemOptions}
-            value={temtemOptions.find(({ value }) => value === temtem)}
+            value={temtemOptions.find(({ value }) => value === temtemName)}
             onChange={option => {
-              setTemtem(option ? option.value : option);
+              setTemtemName(option ? option.value : option);
             }}
             isClearable
           />
@@ -123,10 +129,10 @@ export default function EncounterTracker() {
             {isLuma ? "Luma  ✔" : "Is Luma?"}
           </TemtemButton>
           <TemtemButton
-            bgColor={isCaught ? colors.uiBlue : undefined}
-            onClick={() => setIsCaught(c => !c)}
+            bgColor={wasCaught ? colors.uiBlue : undefined}
+            onClick={() => setWasCaught(c => !c)}
           >
-            {isCaught ? "Caught  ✔" : "Caught?"}
+            {wasCaught ? "Caught  ✔" : "Caught?"}
           </TemtemButton>
         </div>
         <div css={{ margin: "5px 0px" }}>
@@ -138,8 +144,8 @@ export default function EncounterTracker() {
             onChange={option => setTrait(option ? option.value : option)}
             isClearable
             noOptionsMessage={() =>
-              temtem
-                ? `Don\'t know traits for ${temtem}`
+              temtemName
+                ? `Don\'t know traits for ${temtemName}`
                 : "Please choose a Temtem"
             }
           />
@@ -147,17 +153,21 @@ export default function EncounterTracker() {
         <RequireAuth>
           <div css={{ margin: "5px 0px" }}>
             <TemtemButton
-              onClick={() => {
-                console.info(
-                  "saving",
-                  temtem,
-                  location,
-                  trait,
-                  isLuma,
-                  isCaught
-                );
+              onClick={async () => {
+                if (!temtemName) return;
+                await createEncounter({
+                  body: JSON.stringify({
+                    userId: jwt && jwt._id,
+                    temtemName,
+                    location: location || null,
+                    trait: trait || null,
+                    isLuma,
+                    wasCaught
+                  })
+                });
                 window.location.reload();
               }}
+              disabled={!temtemName}
             >
               Save
             </TemtemButton>

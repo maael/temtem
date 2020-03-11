@@ -26,3 +26,9 @@ export {
   getUserByDiscordFullName
 } from "./user";
 export { getUserPreferences } from "./userPreferences";
+export {
+  getUserEncounter,
+  createEncounter,
+  updateEncounter,
+  deleteEncounter
+} from "./encounter";

@@ -72,6 +72,8 @@ type Encounter @collection(name: "encounter") {
   user: User! @relation
   temtemName: String!
   isLuma: Boolean!
+  wasCaught: Boolean!
+  trait: String
   location: String
   createdAt: Time!
   updatedAt: Time!
@@ -179,4 +181,5 @@ type Query {
   getActivity: [Activity!]!
   getUserReviewsFor(targetUserId: ID!): [UserReview!]!
   getUserReviews: [UserReview!]!
+  getUserEncounters(userId: ID!): [Encounter!]!
 }

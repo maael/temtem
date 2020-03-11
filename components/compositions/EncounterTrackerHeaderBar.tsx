@@ -17,6 +17,9 @@ export default function EncounterTrackerHeaderBar() {
           <NavItem url="/encounter-tracker/encounters" exact>
             Encounters
           </NavItem>
+          <NavItem url="/encounter-tracker/stats" exact>
+            Stats
+          </NavItem>
           <HideOnMobile>
             <NavItem url="/encounter-tracker/auto">Automatic Tracker</NavItem>
           </HideOnMobile>
