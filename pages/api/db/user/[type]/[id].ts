@@ -1,14 +1,16 @@
 import cookies from "../../../../../util/cookies";
 import {
   getUserByRedditName,
-  getUserByDiscordName
+  getUserByDiscordFullName
 } from "../../../../../util/db";
 
 export default cookies(async function(req, res) {
   const { id, type } = req.query;
-  const method = type === "reddit" ? getUserByRedditName : getUserByDiscordName;
+  const safeId = type === "discord" ? id.replace("-d-", "#") : id;
+  const method =
+    type === "reddit" ? getUserByRedditName : getUserByDiscordFullName;
   if (req.method === "GET") {
-    const user = await method(id);
+    const user = await method(safeId);
     res.json(user || {});
     return;
   } else {

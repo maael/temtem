@@ -147,6 +147,12 @@ export default function UserPage({ user = {} }: any) {
 UserPage.getInitialProps = async ({ req, query }) => {
   try {
     const host = req ? req.headers.host : window.location.host;
+    console.info(
+      "hey",
+      `${host.includes("localhost") ? "http" : "https"}://${host}/api/db/user/${
+        query.type
+      }/${query.name}`
+    );
     const res = await fetch(
       `${host.includes("localhost") ? "http" : "https"}://${host}/api/db/user/${
         query.type

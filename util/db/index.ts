@@ -22,6 +22,7 @@ export {
   getUsers,
   createUser,
   getUserByDiscordId,
-  getUserByDiscordName
+  getUserByDiscordName,
+  getUserByDiscordFullName
 } from "./user";
 export { getUserPreferences } from "./userPreferences";

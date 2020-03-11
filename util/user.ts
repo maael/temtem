@@ -38,5 +38,10 @@ export function getUserProfileLink(u: PossibleUserShape): string {
 }
 
 function formatProfileLinkType(t: UserType, k: keyof PossibleUserShape) {
-  return (u: PossibleUserShape) => `/user/${t}/${u[k]}`;
+  return (u: PossibleUserShape) => {
+    const base = `/user/${t}/${u[k]}`;
+    return t === UserType.DISCORD
+      ? `${base}-d-${u.discordDiscriminator || "???"}`
+      : base;
+  };
 }

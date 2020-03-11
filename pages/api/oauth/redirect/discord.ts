@@ -28,7 +28,15 @@ interface DiscordUser {
 
 async function setUserCookie(
   res: NextApiResponseWithCookie,
-  user: Pick<User, "_id" | "discordIcon" | "discordName" | "discordId">
+  user: Pick<
+    User,
+    | "_id"
+    | "discordIcon"
+    | "discordName"
+    | "discordId"
+    | "discordDiscriminator"
+    | "discordFullName"
+  >
 ) {
   const toEncode: JWT = {
     ...user,
@@ -88,7 +96,12 @@ async function getOrCreateUser(
 ): Promise<
   Pick<
     User,
-    "_id" | "discordIcon" | "discordName" | "discordId" | "discordDiscriminator"
+    | "_id"
+    | "discordIcon"
+    | "discordName"
+    | "discordId"
+    | "discordDiscriminator"
+    | "discordFullName"
   >
 > {
   const result = await getUserByDiscordId(identity.id);
@@ -102,7 +115,8 @@ async function getOrCreateUser(
         ? `https://cdn.discordapp.com/avatars/${identity.id}/${identity.avatar}.png`
         : `https://cdn.discordapp.com/embed/avatars/${Number(
             identity.discriminator
-          ) % 5}.png`
+          ) % 5}.png`,
+      discordFullName: `${identity.username}#${identity.discriminator}`
     };
     await updateUser(result._id, { ...result, ...info });
     return info;
@@ -112,7 +126,8 @@ async function getOrCreateUser(
     discordIcon,
     discordName,
     discordId,
-    discordDiscriminator
+    discordDiscriminator,
+    discordFullName
   } = await createUser({
     discordIcon: identity.avatar
       ? `https://cdn.discordapp.com/avatars/${identity.id}/${identity.avatar}.png`
@@ -121,13 +136,15 @@ async function getOrCreateUser(
         ) % 5}.png`,
     discordName: identity.username,
     discordId: identity.id,
-    discordDiscriminator: identity.discriminator
+    discordDiscriminator: identity.discriminator,
+    discordFullName: `${identity.username}#${identity.discriminator}`
   });
   return {
     _id,
     discordIcon,
     discordName,
     discordId,
-    discordDiscriminator
+    discordDiscriminator,
+    discordFullName
   };
 }

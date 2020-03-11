@@ -24,6 +24,7 @@ export async function createUser(
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews
@@ -56,6 +57,7 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews
@@ -66,6 +68,34 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
     }
   `;
   return (await client.request(query, { discordName })).getUserByDiscordName;
+}
+
+export async function getUserByDiscordFullName(
+  discordFullName: string
+): Promise<User> {
+  const query = `
+    query UserByDiscordFullName ($discordFullName:String!) {
+      getUserByDiscordFullName(discordFullName:$discordFullName){
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        discordId
+        discordName
+        discordDiscriminator
+        discordFullName
+        discordIcon
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
+    }
+  `;
+  return (await client.request(query, { discordFullName }))
+    .getUserByDiscordFullName;
 }
 
 export async function getUserByDiscordId(discordId: string): Promise<User> {
@@ -80,6 +110,7 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews
@@ -104,6 +135,7 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews
@@ -131,6 +163,7 @@ export async function updateUser(
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews
@@ -159,6 +192,7 @@ export async function getUsers() {
         discordId
         discordName
         discordDiscriminator
+        discordFullName
         discordIcon
         goodReviews
         mixedReviews

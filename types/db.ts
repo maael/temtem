@@ -40,6 +40,7 @@ export interface User extends Entity {
   discordId?: string;
   discordName?: string;
   discordDiscriminator?: string;
+  discordFullName?: string;
   discordIcon?: string;
   steamId?: string;
   goodReviews: number;

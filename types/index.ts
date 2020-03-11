@@ -7,6 +7,7 @@ export interface JWT {
   discordId?: string;
   discordName?: string;
   discordDiscriminator?: string;
+  discordFullName?: string;
   discordIcon?: string;
   version: number;
 }
