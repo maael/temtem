@@ -23,18 +23,28 @@ export default function ListingRequestDetails({ user, cost, details }: any) {
           alignItems: "center"
         }}
       >
-        <img
-          css={{
-            border: `2px solid ${colors.uiBlueFaded}`,
-            height: 30,
-            width: 30,
-            borderRadius: "50%",
-            margin: "0px 5px"
-          }}
-          src={userUtils.getUserIcon(user)}
-        />
-        <Link href="/user/[type][name]" as={userUtils.getUserProfileLink(user)}>
-          <a css={{ textDecoration: "none", cursor: "pointer" }}>
+        <Link
+          href="/user/[type]/[name]"
+          as={userUtils.getUserProfileLink(user)}
+        >
+          <a
+            css={{
+              textDecoration: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center"
+            }}
+          >
+            <img
+              css={{
+                border: `2px solid ${colors.uiBlueFaded}`,
+                height: 30,
+                width: 30,
+                borderRadius: "50%",
+                margin: "0px 5px"
+              }}
+              src={userUtils.getUserIcon(user)}
+            />
             <TemtemText containerStyle={{ marginRight: 5 }}>
               {userUtils.getUserName(user)}
             </TemtemText>
