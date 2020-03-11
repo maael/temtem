@@ -6,6 +6,7 @@ export interface JWT {
   redditDarkmode?: boolean;
   discordId?: string;
   discordName?: string;
+  discordDiscriminator?: string;
   discordIcon?: string;
   version: number;
 }
