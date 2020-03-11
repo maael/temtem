@@ -137,9 +137,10 @@ export default function EncounterTracker() {
       <RequireAuth>
         <div css={{ margin: "5px 0px" }}>
           <TemtemButton
-            onClick={() =>
-              console.info("saving", temtem, location, trait, isLuma, isCaught)
-            }
+            onClick={() => {
+              console.info("saving", temtem, location, trait, isLuma, isCaught);
+              window.location.reload();
+            }}
           >
             Save
           </TemtemButton>
