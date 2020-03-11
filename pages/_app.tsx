@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import { Global, jsx } from "@emotion/core";
 import { TiHomeOutline } from "react-icons/ti";
+import { FaReddit, FaDiscord } from "react-icons/fa";
 import { colors, fonts } from "@maael/temtem-theme";
 import NavItem from "../components/primitives/NavItem";
 import HeaderBar from "../components/primitives/HeaderBar";
@@ -94,10 +95,23 @@ export default function TemtemApp({ Component, pageProps }) {
       >
         Made by{" "}
         <a
-          css={{ color: colors.uiBlueFaded, textDecoration: "none" }}
+          css={{
+            color: colors.uiBlueFaded,
+            textDecoration: "none",
+            marginRight: 5,
+            marginLeft: 2
+          }}
           href="https://reddit.com/user/maael"
         >
-          u/maael
+          <FaReddit style={{ marginRight: 2, position: "relative", top: 3 }} />
+          maael
+        </a>
+        <a
+          css={{ color: colors.uiBlueFaded, textDecoration: "none" }}
+          href="https://discordapp.com/"
+        >
+          <FaDiscord style={{ marginRight: 2, position: "relative", top: 3 }} />
+          maael#2482
         </a>
         <div css={{ fontSize: 10 }}>
           Temtem Tools is not endorsed by Crema and does not reflect the views
