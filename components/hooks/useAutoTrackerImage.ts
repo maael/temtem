@@ -1,5 +1,6 @@
 import { useCallback, MutableRefObject } from "react";
 import Jimp from "jimp";
+import { createScheduler, createWorker } from "tesseract.js";
 
 declare const ImageCapture: any;
 
@@ -16,8 +17,10 @@ export default function useAutoTrackerImage(
   imageCapture: MutableRefObject<typeof ImageCapture | null>,
   bitmapCanvas: MutableRefObject<HTMLCanvasElement | undefined>,
   previewRef: MutableRefObject<HTMLImageElement | null>,
+  previewRef2: MutableRefObject<HTMLImageElement | null>,
   rafRef: MutableRefObject<number | undefined>,
-  defBb1: MutableRefObject<BoundingBox>
+  defBb1: MutableRefObject<BoundingBox>,
+  defBb2: MutableRefObject<BoundingBox>
 ) {
   const fn = useCallback(async () => {
     try {
@@ -46,7 +49,14 @@ export default function useAutoTrackerImage(
         const img = await Jimp.read(dataUrl);
         const modifier =
           bitmapCanvas.current.height / videoRef.current.clientHeight;
+        const scheduler = createScheduler();
+        const worker = createWorker();
+        await worker.load();
+        await worker.loadLanguage("eng");
+        await worker.initialize("eng");
+        scheduler.addWorker(worker);
         const image64 = await img
+          .clone()
           .crop(
             defBb1.current.x * modifier,
             defBb1.current.y * modifier,
@@ -55,7 +65,34 @@ export default function useAutoTrackerImage(
           )
           .invert()
           .getBase64Async(Jimp.MIME_PNG);
-        if (previewRef.current) previewRef.current.src = image64;
+        const image642 = await img
+          .clone()
+          .crop(
+            defBb2.current.x * modifier,
+            defBb2.current.y * modifier,
+            defBb2.current.width * modifier,
+            defBb2.current.height * modifier
+          )
+          .invert()
+          .getBase64Async(Jimp.MIME_PNG);
+        if (previewRef.current) {
+          previewRef.current.src = image64;
+        }
+        if (previewRef2.current) {
+          previewRef2.current.src = image642;
+        }
+        const {
+          data: { text }
+        } = await scheduler.addJob("recognize", image64);
+        console.info(
+          "data",
+          text
+            .split("")
+            .filter(i => `${i}`.match(/[a-zA-Z\s]/))
+            .join("")
+            .trim()
+        );
+        await scheduler.terminate();
         rafRef.current = requestAnimationFrame(fn);
       }
     } catch (e) {

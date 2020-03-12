@@ -10,6 +10,7 @@ export default () => {
   const videoRef = createRef<HTMLVideoElement>();
   const videoOverlayRef = createRef<HTMLCanvasElement>();
   const previewRef = createRef<HTMLImageElement>();
+  const previewRef2 = createRef<HTMLImageElement>();
   const rafRef = useRef<number>();
   const imageCapture = useRef<typeof ImageCapture>();
   const bitmapCanvas = useRef<HTMLCanvasElement>();
@@ -33,8 +34,10 @@ export default () => {
     imageCapture,
     bitmapCanvas,
     previewRef,
+    previewRef2,
     rafRef,
-    defBb1
+    defBb1,
+    defBb2
   );
   useAutoTrackerFabric(videoRef, videoOverlayRef, defBb1, defBb2);
   return (
@@ -72,6 +75,7 @@ export default () => {
           </div>
         </div>
         <img ref={previewRef} />
+        <img ref={previewRef2} />
         <div
           style={{
             display: "flex",
