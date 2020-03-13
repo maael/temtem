@@ -22,6 +22,18 @@ export default function useAutoTrackerImage(
   defBb1: MutableRefObject<BoundingBox>,
   defBb2: MutableRefObject<BoundingBox>
 ) {
+  let schedulerCache;
+  async function prepareScheduler() {
+    if (schedulerCache) return schedulerCache;
+    const scheduler = createScheduler();
+    const worker = createWorker();
+    await worker.load();
+    await worker.loadLanguage("eng");
+    await worker.initialize("eng");
+    scheduler.addWorker(worker);
+    schedulerCache = scheduler;
+    return scheduler;
+  }
   const fn = useCallback(async () => {
     try {
       if (videoRef.current && videoOverlayRef.current && imageCapture.current) {
@@ -49,12 +61,6 @@ export default function useAutoTrackerImage(
         const img = await Jimp.read(dataUrl);
         const modifier =
           bitmapCanvas.current.height / videoRef.current.clientHeight;
-        const scheduler = createScheduler();
-        const worker = createWorker();
-        await worker.load();
-        await worker.loadLanguage("eng");
-        await worker.initialize("eng");
-        scheduler.addWorker(worker);
         const image64 = await img
           .clone()
           .crop(
@@ -81,6 +87,7 @@ export default function useAutoTrackerImage(
         if (previewRef2.current) {
           previewRef2.current.src = image642;
         }
+        const scheduler = await prepareScheduler();
         const {
           data: { text }
         } = await scheduler.addJob("recognize", image64);
@@ -92,7 +99,6 @@ export default function useAutoTrackerImage(
             .join("")
             .trim()
         );
-        await scheduler.terminate();
         rafRef.current = requestAnimationFrame(fn);
       }
     } catch (e) {
