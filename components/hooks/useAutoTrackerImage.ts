@@ -1,6 +1,7 @@
-import { useCallback, MutableRefObject } from "react";
+import { useCallback, MutableRefObject, RefObject } from "react";
 import Jimp from "jimp";
 import { createScheduler, createWorker } from "tesseract.js";
+import { EventEmitter } from "events";
 
 declare const ImageCapture: any;
 
@@ -12,16 +13,16 @@ export interface BoundingBox {
 }
 
 export default function useAutoTrackerImage(
-  videoRef: MutableRefObject<HTMLVideoElement | null>,
-  videoOverlayRef: MutableRefObject<HTMLCanvasElement | null>,
-  imageCapture: MutableRefObject<typeof ImageCapture | null>,
+  videoRef: RefObject<HTMLVideoElement>,
+  videoOverlayRef: RefObject<HTMLCanvasElement>,
+  imageCapture: RefObject<typeof ImageCapture>,
   bitmapCanvas: MutableRefObject<HTMLCanvasElement | undefined>,
-  previewRef: MutableRefObject<HTMLImageElement | null>,
-  previewRef2: MutableRefObject<HTMLImageElement | null>,
+  previewRef: RefObject<HTMLImageElement | null>,
+  previewRef2: RefObject<HTMLImageElement | null>,
   rafRef: MutableRefObject<number | undefined>,
   defBb1: MutableRefObject<BoundingBox>,
   defBb2: MutableRefObject<BoundingBox>
-) {
+): [EventEmitter, () => Promise<void>] {
   let schedulerCache;
   async function prepareScheduler() {
     if (schedulerCache) return schedulerCache;
@@ -34,6 +35,7 @@ export default function useAutoTrackerImage(
     schedulerCache = scheduler;
     return scheduler;
   }
+  const emitter = new EventEmitter();
   const fn = useCallback(async () => {
     try {
       if (videoRef.current && videoOverlayRef.current && imageCapture.current) {
@@ -88,17 +90,22 @@ export default function useAutoTrackerImage(
           previewRef2.current.src = image642;
         }
         const scheduler = await prepareScheduler();
-        const {
-          data: { text }
-        } = await scheduler.addJob("recognize", image64);
-        console.info(
-          "data",
-          text
+        const [text1, text2] = await Promise.all([
+          scheduler.addJob("recognize", image64),
+          scheduler.addJob("recognize", image642)
+        ]);
+        emitter.emit("text", {
+          defBb1: text1.data.text
+            .split("")
+            .filter(i => `${i}`.match(/[a-zA-Z\s]/))
+            .join("")
+            .trim(),
+          defBb2: text2.data.text
             .split("")
             .filter(i => `${i}`.match(/[a-zA-Z\s]/))
             .join("")
             .trim()
-        );
+        });
         rafRef.current = requestAnimationFrame(fn);
       }
     } catch (e) {
@@ -113,5 +120,5 @@ export default function useAutoTrackerImage(
     rafRef,
     defBb1
   ]);
-  return fn;
+  return [emitter, fn];
 }
