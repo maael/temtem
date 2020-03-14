@@ -34,7 +34,10 @@ export default memo(
       }
     };
     try {
-      storage = JSON.parse(localStorage.getItem(OverlayStorageKey) || "{}");
+      storage = Object.assign(
+        storage,
+        JSON.parse(localStorage.getItem(OverlayStorageKey) || "{}")
+      );
     } catch (e) {
       console.error("[error]", e.message);
     }
