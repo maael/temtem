@@ -8,6 +8,7 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
     defBb1: "",
     defBb2: ""
   });
+  const [encounters] = useState([]);
   const [temtemNames] = useFetch<string[]>(
     "/temtems",
     {},
@@ -46,7 +47,8 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       if (
         levenData.defBb1.length > 0 &&
         update.defBb1 !== levenData.defBb1[0].name &&
-        levenData.defBb1[0].leven < 10
+        levenData.defBb1[0].leven <
+          Math.ceil(levenData.defBb1[0].name.length / 2)
       ) {
         update.defBb1 = levenData.defBb1[0].name;
       }
@@ -54,11 +56,17 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       if (
         levenData.defBb2.length > 0 &&
         update.defBb2 !== levenData.defBb2[0].name &&
-        levenData.defBb2[0].leven < 10
+        levenData.defBb2[0].leven <
+          Math.ceil(levenData.defBb2[0].name.length / 2)
       ) {
         update.defBb2 = levenData.defBb2[0].name;
       }
-
+      console.info("---------");
+      console.info("raw", data);
+      console.info("current", matchData);
+      console.info("update", update);
+      console.info("closest matches", levenData.defBb1[0], levenData.defBb2[0]);
+      console.info("---------");
       if (
         update.defBb1 !== matchData.defBb1 ||
         update.defBb2 !== matchData.defBb2
@@ -74,7 +82,8 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
     };
   }, [temtemNames, matchData]);
   return (
-    <div>
+    <div css={{ textAlign: "center" }}>
+      <div>Encounters: {encounters.length}</div>
       <div>Defending #1: {matchData.defBb1 || "Unknown"}</div>
       <div>Defending #2: {matchData.defBb2 || "Unknown"}</div>
     </div>

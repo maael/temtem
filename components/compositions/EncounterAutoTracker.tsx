@@ -1,7 +1,10 @@
 import { createRef, useRef, memo } from "react";
 import { colors } from "@maael/temtem-theme";
+import TemtemButton from "@maael/temtem-button-component";
 import useAutoTrackerImage from "../hooks/useAutoTrackerImage";
-import useAutoTrackerFabric from "../hooks/useAutoTrackerFabric";
+import useAutoTrackerFabric, {
+  OverlayStorageKey
+} from "../hooks/useAutoTrackerFabric";
 
 declare const ImageCapture: any;
 
@@ -14,20 +17,29 @@ export default memo(
     const rafRef = useRef<number>();
     const imageCapture = useRef<typeof ImageCapture>();
     const bitmapCanvas = useRef<HTMLCanvasElement>();
-    const defBb1 = useRef({
-      name: "Defending Temtem 1",
-      y: 50,
-      x: 100,
-      width: 50,
-      height: 50
-    });
-    const defBb2 = useRef({
-      name: "Defending Temtem 2",
-      y: 50,
-      x: 200,
-      width: 50,
-      height: 50
-    });
+    let storage = {
+      "Defending Temtem 1": {
+        name: "Defending Temtem 1",
+        y: 50,
+        x: 100,
+        width: 50,
+        height: 50
+      },
+      "Defending Temtem 2": {
+        name: "Defending Temtem 2",
+        y: 50,
+        x: 200,
+        width: 50,
+        height: 50
+      }
+    };
+    try {
+      storage = JSON.parse(localStorage.getItem(OverlayStorageKey) || "{}");
+    } catch (e) {
+      console.error("[error]", e.message);
+    }
+    const defBb1 = useRef(storage["Defending Temtem 1"]);
+    const defBb2 = useRef(storage["Defending Temtem 2"]);
     const [emitter, autoTrackerImageFn] = useAutoTrackerImage(
       videoRef,
       videoOverlayRef,
@@ -42,7 +54,46 @@ export default memo(
     emitter.on("text", onData);
     useAutoTrackerFabric(videoRef, videoOverlayRef, defBb1, defBb2);
     return (
-      <div style={{ padding: 10 }}>
+      <div css={{ padding: 10 }}>
+        <div css={{ textAlign: "center", marginBottom: 5 }}>
+          <TemtemButton
+            style={{ marginRight: 10 }}
+            onClick={() => {
+              (async () => {
+                if (!videoRef.current) return;
+                try {
+                  const stream = await (navigator.mediaDevices as any).getDisplayMedia(
+                    {
+                      video: {
+                        cursor: "never"
+                      },
+                      audio: false
+                    }
+                  );
+                  videoRef.current.srcObject = stream;
+                  const track = stream.getVideoTracks()[0];
+                  imageCapture.current = new ImageCapture(track);
+                  rafRef.current = requestAnimationFrame(autoTrackerImageFn);
+                } catch (err) {
+                  console.error(`Error: ${err.message}`);
+                }
+              })().catch(e => console.error(e));
+            }}
+          >
+            Start
+          </TemtemButton>
+          <TemtemButton
+            onClick={() => {
+              if (rafRef.current) cancelAnimationFrame(rafRef.current);
+              if (videoRef.current && videoRef.current.srcObject) {
+                (videoRef.current.srcObject as any).getTracks()[0].stop();
+                videoRef.current.srcObject = null;
+              }
+            }}
+          >
+            Stop
+          </TemtemButton>
+        </div>
         <div
           style={{
             display: "flex",
@@ -73,51 +124,15 @@ export default memo(
             />
           </div>
         </div>
-        <img ref={previewRef} />
-        <img ref={previewRef2} />
         <div
-          style={{
+          css={{
             display: "flex",
-            flexDirection: "row",
+            alignItems: "center",
             justifyContent: "center"
           }}
         >
-          <button
-            onClick={() => {
-              (async () => {
-                if (!videoRef.current) return;
-                try {
-                  const stream = await (navigator.mediaDevices as any).getDisplayMedia(
-                    {
-                      video: {
-                        cursor: "never"
-                      },
-                      audio: false
-                    }
-                  );
-                  videoRef.current.srcObject = stream;
-                  const track = stream.getVideoTracks()[0];
-                  imageCapture.current = new ImageCapture(track);
-                  rafRef.current = requestAnimationFrame(autoTrackerImageFn);
-                } catch (err) {
-                  console.error(`Error: ${err.message}`);
-                }
-              })().catch(e => console.error(e));
-            }}
-          >
-            Start
-          </button>
-          <button
-            onClick={() => {
-              if (rafRef.current) cancelAnimationFrame(rafRef.current);
-              if (videoRef.current && videoRef.current.srcObject) {
-                (videoRef.current.srcObject as any).getTracks()[0].stop();
-                videoRef.current.srcObject = null;
-              }
-            }}
-          >
-            Stop
-          </button>
+          <img ref={previewRef} style={{ marginRight: 10 }} />
+          <img ref={previewRef2} />
         </div>
       </div>
     );

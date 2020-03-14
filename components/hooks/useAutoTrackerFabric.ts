@@ -12,6 +12,8 @@ function mapFabricObjectToDetail(ob: fabric.Object) {
   };
 }
 
+export const OverlayStorageKey = "temtools:autoTracker:v1:overlay";
+
 export default function useAutoTrackerFabric(
   videoRef: MutableRefObject<HTMLVideoElement | null>,
   videoOverlayRef: MutableRefObject<HTMLCanvasElement | null>,
@@ -72,6 +74,13 @@ export default function useAutoTrackerFabric(
         const detail = mapFabricObjectToDetail(e.target);
         if (detail.name && nameToRefMap[detail.name]) {
           nameToRefMap[detail.name].current = detail;
+          localStorage.setItem(
+            OverlayStorageKey,
+            JSON.stringify({
+              "Defending Temtem 1": defBb1.current,
+              "Defending Temtem 2": defBb2.current
+            })
+          );
         }
       });
       canvas.on("object:modified", e => {
@@ -79,6 +88,13 @@ export default function useAutoTrackerFabric(
         const detail = mapFabricObjectToDetail(e.target);
         if (detail.name && nameToRefMap[detail.name]) {
           nameToRefMap[detail.name].current = detail;
+          localStorage.setItem(
+            OverlayStorageKey,
+            JSON.stringify({
+              "Defending Temtem 1": defBb1.current,
+              "Defending Temtem 2": defBb2.current
+            })
+          );
         }
       });
     }
