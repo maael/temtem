@@ -86,6 +86,7 @@ export default memo(
             Start
           </TemtemButton>
           <TemtemButton
+            style={{ marginRight: 10 }}
             onClick={() => {
               if (rafRef.current) cancelAnimationFrame(rafRef.current);
               if (videoRef.current && videoRef.current.srcObject) {
@@ -95,6 +96,17 @@ export default memo(
             }}
           >
             Stop
+          </TemtemButton>
+          <TemtemButton
+            onClick={() => {
+              if (videoRef.current) {
+                videoRef.current.parentElement!.parentElement!.classList.toggle(
+                  "auto-tracker-hide-video"
+                );
+              }
+            }}
+          >
+            Toggle Video
           </TemtemButton>
         </div>
         <div

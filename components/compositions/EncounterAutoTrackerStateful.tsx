@@ -51,6 +51,12 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
           Math.ceil(levenData.defBb1[0].name.length / 2)
       ) {
         update.defBb1 = levenData.defBb1[0].name;
+      } else if (
+        levenData.defBb1.length > 0 &&
+        update.defBb1 !== levenData.defBb1[0].name &&
+        levenData.defBb1[0].leven > 9
+      ) {
+        update.defBb1 = "";
       }
 
       if (
@@ -60,6 +66,12 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
           Math.ceil(levenData.defBb2[0].name.length / 2)
       ) {
         update.defBb2 = levenData.defBb2[0].name;
+      } else if (
+        levenData.defBb2.length > 0 &&
+        update.defBb2 !== levenData.defBb2[0].name &&
+        levenData.defBb2[0].leven > 9
+      ) {
+        update.defBb2 = "";
       }
       console.info("---------");
       console.info("raw", data);
