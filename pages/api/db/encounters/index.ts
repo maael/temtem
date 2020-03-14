@@ -6,7 +6,6 @@ export default cookies(
   jwtGuard(async function(req, res) {
     if (req.method === "POST") {
       const userJWT = await req.getJWT();
-      console.info("saving", req.body);
       res.json(
         await createEncounter({
           userId: userJWT._id,

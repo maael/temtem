@@ -28,7 +28,6 @@ export default memo(
       width: 50,
       height: 50
     });
-    console.info("mount", videoRef.current);
     const [emitter, autoTrackerImageFn] = useAutoTrackerImage(
       videoRef,
       videoOverlayRef,
