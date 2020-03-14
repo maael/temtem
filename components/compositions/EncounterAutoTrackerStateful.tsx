@@ -54,7 +54,7 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       } else if (
         levenData.defBb1.length > 0 &&
         update.defBb1 !== levenData.defBb1[0].name &&
-        levenData.defBb1[0].leven > 9
+        (levenData.defBb1[0].leven > 9 || matchData.defBb1 === "")
       ) {
         update.defBb1 = "";
       }
@@ -69,7 +69,7 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       } else if (
         levenData.defBb2.length > 0 &&
         update.defBb2 !== levenData.defBb2[0].name &&
-        levenData.defBb2[0].leven > 9
+        (levenData.defBb2[0].leven > 9 || matchData.defBb2 === "")
       ) {
         update.defBb2 = "";
       }
