@@ -1,6 +1,10 @@
 import { useEffect, MutableRefObject } from "react";
 import { fabric } from "fabric";
 import { BoundingBox } from "./useAutoTrackerImage";
+import {
+  OverlayStorageKey,
+  VideoToggleStorageKey
+} from "../../util/localstorage";
 
 function mapFabricObjectToDetail(ob: fabric.Object) {
   return {
@@ -11,8 +15,6 @@ function mapFabricObjectToDetail(ob: fabric.Object) {
     height: ob.aCoords!.br.y - ob.aCoords!.tr.y - 3
   };
 }
-
-export const OverlayStorageKey = "temtools:autoTracker:v1:overlay";
 
 export default function useAutoTrackerFabric(
   videoRef: MutableRefObject<HTMLVideoElement | null>,
@@ -97,6 +99,26 @@ export default function useAutoTrackerFabric(
           );
         }
       });
+      canvas.on("after:render", () => {
+        try {
+          document
+            .querySelector("video")!
+            .parentElement!.parentElement!.classList.toggle(
+              "auto-tracker-hide-video",
+              isVideoHidden()
+            );
+        } catch (e) {
+          console.error("[error]", e.message);
+        }
+      });
     }
   }, [videoOverlayRef.current, videoRef.current]);
+}
+
+function isVideoHidden() {
+  try {
+    return JSON.parse(localStorage.getItem(VideoToggleStorageKey) || "false");
+  } catch {
+    return false;
+  }
 }

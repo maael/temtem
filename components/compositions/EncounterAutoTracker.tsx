@@ -1,10 +1,12 @@
-import { createRef, useRef, memo, useEffect } from "react";
+import { createRef, useRef, memo, useEffect, useMemo } from "react";
 import { colors } from "@maael/temtem-theme";
 import TemtemButton from "@maael/temtem-button-component";
 import useAutoTrackerImage from "../hooks/useAutoTrackerImage";
-import useAutoTrackerFabric, {
-  OverlayStorageKey
-} from "../hooks/useAutoTrackerFabric";
+import useAutoTrackerFabric from "../hooks/useAutoTrackerFabric";
+import {
+  OverlayStorageKey,
+  VideoToggleStorageKey
+} from "../../util/localstorage";
 
 declare const ImageCapture: any;
 
@@ -117,8 +119,12 @@ export default memo(
           <TemtemButton
             onClick={() => {
               if (videoRef.current) {
-                videoRef.current.parentElement!.parentElement!.classList.toggle(
+                const hidden = videoRef.current.parentElement!.parentElement!.classList.toggle(
                   "auto-tracker-hide-video"
+                );
+                localStorage.setItem(
+                  VideoToggleStorageKey,
+                  JSON.stringify(hidden)
                 );
               }
             }}

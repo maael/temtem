@@ -40,8 +40,8 @@ export default function TemtemApp({ Component, pageProps }) {
             minHeight: "100vh"
           },
           ".auto-tracker-hide-video": {
-            height: 0,
-            overflow: "hidden"
+            position: "absolute",
+            top: -3000
           }
         }}
       />
