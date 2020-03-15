@@ -57,7 +57,14 @@ export default memo(
     emitter.on("text", onData);
     useAutoTrackerFabric(videoRef, videoOverlayRef, defBb1, defBb2);
     return (
-      <div css={{ marginTop: 10, paddingRight: 10, paddingLeft: 10 }}>
+      <div
+        css={{
+          marginTop: 10,
+          paddingRight: 10,
+          paddingLeft: 10,
+          marginBottom: 5
+        }}
+      >
         <div css={{ textAlign: "center", marginBottom: 5 }}>
           <TemtemButton
             style={{ marginRight: 10 }}
