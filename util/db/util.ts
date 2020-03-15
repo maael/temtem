@@ -4,10 +4,10 @@ export function getIsoString() {
 
 export function embellishCreate<T>(data: T) {
   return {
-    ...data,
-    isActive: true,
     createdAt: getIsoString(),
-    updatedAt: getIsoString()
+    updatedAt: getIsoString(),
+    ...data,
+    isActive: true
   };
 }
 

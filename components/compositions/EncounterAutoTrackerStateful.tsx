@@ -4,7 +4,10 @@ import leven from "leven";
 import isAfter from "date-fns/isAfter";
 import add from "date-fns/add";
 import TemtemText from "@maael/temtem-text-component";
+import TemtemButton from "@maael/temtem-button-component";
 import useFetch from "../hooks/useFetch";
+import useJWT from "../hooks/useJWT";
+import useCallableFetch from "../hooks/useCallableFetch";
 import EncounterItem from "./EncounterItem";
 
 export default ({ emitter }: { emitter: EventEmitter }) => {
@@ -120,11 +123,50 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       emitter.removeAllListeners();
     };
   }, [temtemNames, matchData, encounters]);
+  const jwt = useJWT();
+  const [createEncounter] = useCallableFetch("/db/encounters", {
+    method: "POST"
+  });
   return (
     <div css={{ maxWidth: 500, margin: "0px auto", textAlign: "center" }}>
       <TemtemText style={{ fontSize: 20 }}>{`Current: ${matchData.defBb1 ||
         "Unknown"}, ${matchData.defBb2 || "Unknown"}`}</TemtemText>
       <TemtemText>{`Encounters: ${encounters.length}`}</TemtemText>
+      {encounters.length > 0 && jwt && jwt._id ? (
+        <TemtemButton
+          onClick={async () => {
+            await Promise.all(
+              encounters
+                .reduce(
+                  (acc, { temtem, startTime }) => [
+                    ...acc,
+                    ...temtem.map(t => ({
+                      temtemName: t,
+                      createdAt: startTime
+                    }))
+                  ],
+                  []
+                )
+                .map(t =>
+                  createEncounter({
+                    body: JSON.stringify({
+                      userId: jwt && jwt._id,
+                      temtemName: t.temtemName,
+                      location: null,
+                      trait: null,
+                      isLuma: false,
+                      wasCaught: false,
+                      createdAt: t.createdAt
+                    })
+                  })
+                )
+            );
+            setEncounters([]);
+          }}
+        >
+          Save
+        </TemtemButton>
+      ) : null}
       <div>
         {encounters
           .reduce(
