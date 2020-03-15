@@ -1,5 +1,7 @@
 import cookie from "cookie";
 import jwt from "jsonwebtoken";
+import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
+import { colors } from "@maael/temtem-theme";
 import Loading from "../../components/primitives/Loading";
 import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import EncounterStatItem from "../../components/compositions/EncounterStatItem";
@@ -25,6 +27,15 @@ export default function EncounterStatsPage({ user }) {
   return (
     <>
       <EncounterTrackerHeaderBar />
+      <div css={{ textAlign: "center", marginTop: 20 }}>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: "20px 35px", fontSize: 28 }}
+          textProps={{ borderWidth: 10 }}
+          chipColor={colors.uiBlue}
+        >
+          {"Number of Encounters by Temtem"}
+        </TemtemDynamicChip>
+      </div>
       <Loading loading={loadingEncounters} />
       <div css={{ textAlign: "center", maxWidth: 1000, margin: "0px auto" }}>
         {Object.entries(encounters).map(([temtemName, count]) => (
