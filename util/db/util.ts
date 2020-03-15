@@ -2,7 +2,9 @@ export function getIsoString() {
   return new Date().toISOString();
 }
 
-export function embellishCreate<T>(data: T) {
+export function embellishCreate<T>(
+  data: T
+): T & { createdAt: string; updatedAt: string; isActive: boolean } {
   return {
     createdAt: getIsoString(),
     updatedAt: getIsoString(),
