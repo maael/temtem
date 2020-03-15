@@ -1,4 +1,4 @@
-import { createRef, useRef, memo } from "react";
+import { createRef, useRef, memo, useEffect } from "react";
 import { colors } from "@maael/temtem-theme";
 import TemtemButton from "@maael/temtem-button-component";
 import useAutoTrackerImage from "../hooks/useAutoTrackerImage";
@@ -56,6 +56,16 @@ export default memo(
     );
     emitter.on("text", onData);
     useAutoTrackerFabric(videoRef, videoOverlayRef, defBb1, defBb2);
+    useEffect(
+      () => () => {
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        if (videoRef.current && videoRef.current.srcObject) {
+          (videoRef.current.srcObject as any).getTracks()[0].stop();
+          videoRef.current.srcObject = null;
+        }
+      },
+      []
+    );
     return (
       <div
         css={{
