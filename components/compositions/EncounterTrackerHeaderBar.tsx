@@ -20,7 +20,7 @@ export default function EncounterTrackerHeaderBar() {
           <NavItem url="/encounter-tracker/stats" exact>
             Stats
           </NavItem>
-          <HideOnMobile style={{ position: "relative", top: -3 }}>
+          <HideOnMobile style={{ position: "relative", top: -2 }}>
             <NavItem url="/encounter-tracker/auto">Automatic Tracker</NavItem>
           </HideOnMobile>
         </React.Fragment>
