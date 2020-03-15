@@ -9,7 +9,7 @@ export default function EncounterStatItem({
   count: number;
 }) {
   return (
-    <div css={{ display: "inline-block", margin: 20 }}>
+    <div css={{ display: "inline-block", margin: "10px 20px" }}>
       <div
         css={{
           display: "flex",
