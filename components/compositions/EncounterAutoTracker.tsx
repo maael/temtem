@@ -59,7 +59,7 @@ export default memo(
     return (
       <div
         css={{
-          marginTop: 10,
+          marginTop: 15,
           paddingRight: 10,
           paddingLeft: 10,
           marginBottom: 5
@@ -120,7 +120,7 @@ export default memo(
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: 10
+            marginTop: 15
           }}
         >
           <div css={{ position: "relative" }}>
