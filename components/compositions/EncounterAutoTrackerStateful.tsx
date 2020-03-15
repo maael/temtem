@@ -1,14 +1,18 @@
 import { EventEmitter } from "events";
 import { useEffect, useState } from "react";
 import leven from "leven";
+import isAfter from "date-fns/isAfter";
+import add from "date-fns/add";
+import TemtemText from "@maael/temtem-text-component";
 import useFetch from "../hooks/useFetch";
+import EncounterItem from "./EncounterItem";
 
 export default ({ emitter }: { emitter: EventEmitter }) => {
   const [matchData, setMatchData] = useState({
     defBb1: "",
     defBb2: ""
   });
-  const [encounters] = useState([]);
+  const [encounters, setEncounters] = useState<any[]>([]);
   const [temtemNames] = useFetch<string[]>(
     "/temtems",
     {},
@@ -54,7 +58,7 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       } else if (
         levenData.defBb1.length > 0 &&
         update.defBb1 !== levenData.defBb1[0].name &&
-        (levenData.defBb1[0].leven > 9 || matchData.defBb1 === "")
+        (levenData.defBb1[0].leven > 9 || data.defBb1 === "")
       ) {
         update.defBb1 = "";
       }
@@ -69,35 +73,93 @@ export default ({ emitter }: { emitter: EventEmitter }) => {
       } else if (
         levenData.defBb2.length > 0 &&
         update.defBb2 !== levenData.defBb2[0].name &&
-        (levenData.defBb2[0].leven > 9 || matchData.defBb2 === "")
+        (levenData.defBb2[0].leven > 9 || data.defBb2 === "")
       ) {
         update.defBb2 = "";
       }
-      console.info("---------");
-      console.info("raw", data);
-      console.info("current", matchData);
-      console.info("update", update);
-      console.info("closest matches", levenData.defBb1[0], levenData.defBb2[0]);
-      console.info("---------");
       if (
         update.defBb1 !== matchData.defBb1 ||
         update.defBb2 !== matchData.defBb2
       ) {
+        const lastUpdateTime = new Date().toISOString();
         setMatchData({
           defBb1: update.defBb1,
           defBb2: update.defBb2
+        });
+        if (
+          encounters.length < 1 ||
+          encounters[encounters.length - 1].finished
+        ) {
+          setEncounters(e =>
+            e.concat({
+              temtem: [update.defBb1, update.defBb2].filter(Boolean),
+              startTime: new Date().toISOString(),
+              lastUpdateTime,
+              finished: false
+            })
+          );
+        } else {
+          setEncounters(e => {
+            e[e.length - 1].lastUpdateTime = lastUpdateTime;
+            return e;
+          });
+        }
+      }
+      if (
+        encounters.length > 0 &&
+        !encounters[encounters.length - 1].finished &&
+        isFinishedEncounter(update, encounters)
+      ) {
+        setEncounters(e => {
+          e[e.length - 1].finished = true;
+          return e;
         });
       }
     });
     return () => {
       emitter.removeAllListeners();
     };
-  }, [temtemNames, matchData]);
+  }, [temtemNames, matchData, encounters]);
   return (
-    <div css={{ textAlign: "center" }}>
-      <div>Encounters: {encounters.length}</div>
-      <div>Defending #1: {matchData.defBb1 || "Unknown"}</div>
-      <div>Defending #2: {matchData.defBb2 || "Unknown"}</div>
+    <div css={{ maxWidth: 500, margin: "0px auto", textAlign: "center" }}>
+      <TemtemText style={{ fontSize: 20 }}>{`Current: ${matchData.defBb1 ||
+        "Unknown"}, ${matchData.defBb2 || "Unknown"}`}</TemtemText>
+      <TemtemText>{`Encounters: ${encounters.length}`}</TemtemText>
+      <div>
+        {encounters
+          .reduce(
+            (acc, { temtem, startTime }) => [
+              ...acc,
+              ...temtem.map(t => ({ temtemName: t, createdAt: startTime }))
+            ],
+            []
+          )
+          .sort(
+            (a, b) =>
+              Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
+          )
+          .map((t, i) => (
+            <EncounterItem key={`${i}-${t.temtemName}`} {...t} />
+          ))}
+      </div>
     </div>
   );
 };
+
+function isFinishedEncounter(
+  update: { defBb1: string; defBb2: string },
+  encounters: { lastUpdateTime: string }[]
+) {
+  const lastEncounter = encounters.slice(-1)[0];
+  if (
+    lastEncounter &&
+    isAfter(
+      new Date(),
+      add(new Date(lastEncounter.lastUpdateTime), { seconds: 30 })
+    )
+  ) {
+    return update.defBb1 === "" && update.defBb2 === "";
+  } else {
+    return false;
+  }
+}

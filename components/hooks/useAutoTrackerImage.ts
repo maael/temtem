@@ -63,7 +63,7 @@ export default function useAutoTrackerImage(
         const img = await Jimp.read(dataUrl);
         const modifier =
           bitmapCanvas.current.height / videoRef.current.clientHeight;
-        const image64 = await img
+        const defBb1Img = await img
           .clone()
           .crop(
             defBb1.current.x * modifier,
@@ -73,7 +73,7 @@ export default function useAutoTrackerImage(
           )
           .invert()
           .getBase64Async(Jimp.MIME_PNG);
-        const image642 = await img
+        const defBb2Img = await img
           .clone()
           .crop(
             defBb2.current.x * modifier,
@@ -84,27 +84,19 @@ export default function useAutoTrackerImage(
           .invert()
           .getBase64Async(Jimp.MIME_PNG);
         if (previewRef.current) {
-          previewRef.current.src = image64;
+          previewRef.current.src = defBb1Img;
         }
         if (previewRef2.current) {
-          previewRef2.current.src = image642;
+          previewRef2.current.src = defBb2Img;
         }
         const scheduler = await prepareScheduler();
         const [text1, text2] = await Promise.all([
-          scheduler.addJob("recognize", image64),
-          scheduler.addJob("recognize", image642)
+          scheduler.addJob("recognize", defBb1Img),
+          scheduler.addJob("recognize", defBb2Img)
         ]);
         emitter.emit("text", {
-          defBb1: text1.data.text
-            .split("")
-            .filter(i => `${i}`.match(/[a-zA-Z\s]/))
-            .join("")
-            .trim(),
-          defBb2: text2.data.text
-            .split("")
-            .filter(i => `${i}`.match(/[a-zA-Z\s]/))
-            .join("")
-            .trim()
+          defBb1: cleanText(text1.data.text),
+          defBb2: cleanText(text2.data.text)
         });
         rafRef.current = requestAnimationFrame(fn);
       }
@@ -121,4 +113,13 @@ export default function useAutoTrackerImage(
     defBb1
   ]);
   return [emitter, fn];
+}
+
+function cleanText(inp: string) {
+  const cleaned = inp
+    .split("")
+    .filter(i => `${i}`.match(/[a-zA-Z\s]/))
+    .join("")
+    .trim();
+  return cleaned.length < 3 ? "" : cleaned;
 }
