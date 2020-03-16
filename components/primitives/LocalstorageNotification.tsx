@@ -20,6 +20,7 @@ export default function LocalstorageNotification({
       // Do nothing
     }
   }, []);
+  // tslint:disable-next-line:strict-type-predicates
   if (typeof window === "undefined") return null;
   return visible ? (
     <div
