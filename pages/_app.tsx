@@ -28,6 +28,11 @@ export default function TemtemApp({ Component, pageProps }) {
       </Head>
       <Global
         styles={{
+          "*": {
+            MozOsxFontSmoothing: "grayscale",
+            WebkitFontSmoothing: "antialiased",
+            fontSmoothing: "antialiased"
+          },
           html: {
             minHeight: "100vh"
           },
