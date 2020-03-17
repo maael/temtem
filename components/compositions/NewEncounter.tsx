@@ -5,19 +5,23 @@ import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemSelect from "@maael/temtem-select-component";
 import { colors } from "@maael/temtem-theme";
-import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import useFetch from "../../components/hooks/useFetch";
 import useCallableFetch from "../../components/hooks/useCallableFetch";
 import useJWT from "../../components/hooks/useJWT";
 import RequireAuth from "../../components/primitives/RequireAuth";
 
-export default function EncounterTracker() {
+export default function NewEncounter({ existing }: { existing?: any }) {
   const jwt = useJWT();
-  const [temtemName, setTemtemName] = useState("");
-  const [location, setLocation] = useState("");
-  const [trait, setTrait] = useState("");
-  const [isLuma, setIsLuma] = useState(false);
-  const [wasCaught, setWasCaught] = useState(false);
+  console.info(existing);
+  const [temtemName, setTemtemName] = useState(
+    existing ? existing.temtemName : ""
+  );
+  const [location, setLocation] = useState(existing ? existing.location : "");
+  const [trait, setTrait] = useState(existing ? existing.trait : "");
+  const [isLuma, setIsLuma] = useState(existing ? existing.isLuma : false);
+  const [wasCaught, setWasCaught] = useState(
+    existing ? existing.wasCaught : false
+  );
   const [tempOption, setTempOption] = useState<any>();
   const [locationOptions, setLocationOptions] = useState<any[]>([]);
   const [availableTemtem, loadingAvailableTemtem] = useFetch<any>(
@@ -25,9 +29,12 @@ export default function EncounterTracker() {
     {},
     { source: "temtem-api", defaultValue: [] }
   );
-  const [createEncounter] = useCallableFetch("/db/encounters", {
-    method: "POST"
-  });
+  const [createEncounter] = useCallableFetch(
+    `/db/encounters${existing ? `/${existing._id}` : ""}`,
+    {
+      method: existing ? "PUT" : "POST"
+    }
+  );
   const temtemOptions = useMemo(
     () => availableTemtem.map(({ name }) => ({ label: name, value: name })),
     [availableTemtem]
@@ -54,7 +61,6 @@ export default function EncounterTracker() {
   }, [selectedTemtem]);
   return (
     <>
-      <EncounterTrackerHeaderBar />
       <div
         css={{
           maxWidth: 800,
@@ -162,7 +168,8 @@ export default function EncounterTracker() {
                     location: location || null,
                     trait: trait || null,
                     isLuma,
-                    wasCaught
+                    wasCaught,
+                    createdAt: existing ? existing.createdAt : undefined
                   })
                 });
                 window.location.reload();

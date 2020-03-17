@@ -11,9 +11,6 @@ export default function EncounterTrackerHeaderBar() {
         style={{ alignItems: "flex-end !important", padding: 5, fontSize: 18 }}
       >
         <React.Fragment>
-          <NavItem url="/encounter-tracker/new" exact>
-            New Encounter
-          </NavItem>
           <NavItem url="/encounter-tracker/encounters" exact>
             Encounters
           </NavItem>
