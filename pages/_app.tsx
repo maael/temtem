@@ -24,6 +24,25 @@ export default function TemtemApp({ Component, pageProps }) {
         <meta httpEquiv="content-language" content="en-gb" />
         <meta name="theme-color" content={colors.uiBgGradientStart} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="Matthew Elphick" />
+        <meta
+          name="description"
+          content="A website to manage your tempedia, quests, encounters, and more!"
+        />
+        <meta property="og:site_name" content="Temtools" />
+        <meta property="og:title" content="Temtools" />
+        <meta
+          property="og:description"
+          content="A website to manage your tempedia, quests, encounters, and more!"
+        />
+        <meta
+          property="og:image"
+          content="https://tem.tools/social-preview.png"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://tem.tools/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:alt" content="Temtools" />
         <title>Temtools</title>
       </Head>
       <Global
