@@ -5,6 +5,7 @@ import TemtemButton from "@maael/temtem-button-component";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import TemtemStatsTable from "../../../components/compositions/StatsTable";
 import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
+import ListingItem from "../../../components/compositions/ListingItem";
 import ExchangeHeaderBar from "../../../components/compositions/ExchangeHeaderBar";
 import ExchangeForm from "../../../components/compositions/ExchangeForm";
 import useJWT from "../../../components/hooks/useJWT";
@@ -59,66 +60,21 @@ export default function ListingPage({ listing }: any) {
       {stateListing && stateListing.isActive ? (
         <div css={{ textAlign: "center" }}>
           <div css={{ maxWidth: 1000, margin: "0 auto", position: "relative" }}>
-            <TemtemStatsTable
+            <ListingItem
               key={stateListing._id}
-              temtem={{
-                name: stateListing.temtemName,
-                types: []
-              }}
-              svs={{
-                hp: stateListing.svHp,
-                sta: stateListing.svSta,
-                spd: stateListing.svSpd,
-                atk: stateListing.svAtk,
-                def: stateListing.svDef,
-                spatk: stateListing.svSpatk,
-                spdef: stateListing.svSpdef
-              }}
-              trait={stateListing.temtemTrait}
-              gender={stateListing.temtemGender}
-              breedTechniques={stateListing.temtemBredTechniques.map(n => ({
-                name: n,
-                type: "Toxic"
-              }))}
-              fertility={stateListing.temtemFertility}
-              isLuma={stateListing.temtemIsLuma}
-            />
-            <ListingRequestDetails
-              user={stateListing.user}
-              cost={stateListing.requestCost}
-              details={stateListing.requestDetails}
-            />
-            {jwt && stateListing.user._id === jwt._id ? null : saved.some(
+              listing={stateListing}
+              isSaved={saved.some(
                 s => s.exchangeListing._id === stateListing._id
-              ) ? (
-              <FaStar
-                size={40}
-                style={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: -20,
-                  right: -20
-                }}
-                onClick={async () => {
-                  await unsaveListing();
-                  await refetchSaved();
-                }}
-              />
-            ) : (
-              <FaRegStar
-                size={40}
-                style={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: -20,
-                  right: -20
-                }}
-                onClick={async () => {
-                  await saveListing();
-                  await refetchSaved();
-                }}
-              />
-            )}
+              )}
+              onUnsave={async () => {
+                await unsaveListing();
+                await refetchSaved();
+              }}
+              onSave={async () => {
+                await saveListing();
+                await refetchSaved();
+              }}
+            />
           </div>
           {jwt && stateListing.user._id === jwt._id ? (
             <div>

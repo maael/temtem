@@ -18,6 +18,9 @@ export async function getExchangeSaved(
             _id
             redditName
             redditIcon
+            discordName
+            discordDiscriminator
+            discordIcon
           }
           exchangeListing {
             _id
@@ -25,6 +28,9 @@ export async function getExchangeSaved(
               _id
               redditName
               redditIcon
+              discordName
+              discordDiscriminator
+              discordIcon
             }
             type
             temtemName
@@ -66,6 +72,9 @@ export async function createExchangeSaved(
           _id
           redditName
           redditIcon
+          discordName
+          discordDiscriminator
+          discordIcon
         }
         exchangeListing {
           _id

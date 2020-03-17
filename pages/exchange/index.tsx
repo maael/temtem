@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
 import { jsx } from "@emotion/core";
 import Fuse from "fuse.js";
-import TemtemStatsTable from "../../components/compositions/StatsTable";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
-import ListingRequestDetails from "../../components/compositions/ListingRequestDetails";
+import ListingItem from "../../components/compositions/ListingItem";
 import useFetch from "../../components/hooks/useFetch";
 
 export default function Trades() {
@@ -59,40 +57,13 @@ export default function Trades() {
           onChange={e => setSearch((e.target as any).value)}
         />
         {results.map(l => (
-          <div key={l._id}>
-            <Link href={`/exchange/listings/${l._id}`}>
-              <a style={{ textDecoration: "none" }}>
-                <TemtemStatsTable
-                  temtem={{
-                    name: l.temtemName,
-                    types: []
-                  }}
-                  svs={{
-                    hp: l.svHp,
-                    sta: l.svSta,
-                    spd: l.svSpd,
-                    atk: l.svAtk,
-                    def: l.svDef,
-                    spatk: l.svSpatk,
-                    spdef: l.svSpdef
-                  }}
-                  trait={l.temtemTrait}
-                  gender={l.temtemGender}
-                  breedTechniques={l.temtemBredTechniques.map(n => ({
-                    name: n,
-                    type: "Toxic"
-                  }))}
-                  fertility={l.temtemFertility}
-                  isLuma={l.temtemIsLuma}
-                />
-              </a>
-            </Link>
-            <ListingRequestDetails
-              user={l.user}
-              cost={l.requestCost}
-              details={l.requestDetails}
-            />
-          </div>
+          <ListingItem
+            key={l._id}
+            listing={l}
+            onSave={() => undefined}
+            onUnsave={() => undefined}
+            isSaved={false}
+          />
         ))}
       </div>
     </React.Fragment>

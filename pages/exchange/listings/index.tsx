@@ -4,6 +4,7 @@ import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemStatsTable from "../../../components/compositions/StatsTable";
 import { colors } from "@maael/temtem-theme";
+import ListingItem from "../../../components/compositions/ListingItem";
 import ListingRequestDetails from "../../../components/compositions/ListingRequestDetails";
 import ExchangeForm from "../../../components/compositions/ExchangeForm";
 import ExchangeHeaderBar from "../../../components/compositions/ExchangeHeaderBar";
@@ -42,40 +43,12 @@ export default function UserExchangeListings() {
       </TemtemText>
       <div css={{ maxWidth: 1000, margin: "0 auto" }}>
         {ads.map(l => (
-          <div key={l._id}>
-            <Link href={`/exchange/listings/${l._id}`}>
-              <a style={{ textDecoration: "none" }}>
-                <TemtemStatsTable
-                  temtem={{
-                    name: l.temtemName,
-                    types: []
-                  }}
-                  svs={{
-                    hp: l.svHp,
-                    sta: l.svSta,
-                    spd: l.svSpd,
-                    atk: l.svAtk,
-                    def: l.svDef,
-                    spatk: l.svSpatk,
-                    spdef: l.svSpdef
-                  }}
-                  trait={l.temtemTrait}
-                  gender={l.temtemGender}
-                  breedTechniques={l.temtemBredTechniques.map(n => ({
-                    name: n,
-                    type: "Toxic"
-                  }))}
-                  fertility={l.temtemFertility}
-                  isLuma={l.temtemIsLuma}
-                />
-              </a>
-            </Link>
-            <ListingRequestDetails
-              user={l.user}
-              cost={l.requestCost}
-              details={l.requestDetails}
-            />
-          </div>
+          <ListingItem
+            listing={l}
+            isSaved={false}
+            onUnsave={() => undefined}
+            onSave={() => undefined}
+          />
         ))}
       </div>
     </div>

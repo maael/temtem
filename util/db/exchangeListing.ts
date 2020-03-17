@@ -18,6 +18,9 @@ export async function getExchangeListings(): Promise<{
             _id
             redditName
             redditIcon
+            discordName
+            discordDiscriminator
+            discordIcon
           }
           type
           temtemName
@@ -56,6 +59,9 @@ export async function getUserExchangeListings(
             _id
             redditName
             redditIcon
+            discordName
+            discordDiscriminator
+            discordIcon
           }
           type
           temtemName
