@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const { STEAM_KEY } = process.env;
+const STEAM_KEY = process.env.STEAM_KEY;
 
 export default async function steamUser(
   req: NextApiRequest,
