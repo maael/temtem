@@ -7,7 +7,7 @@ export interface Options<T> {
   source: FetchSource;
   defaultValue?: T;
   mapper?: (v: any) => T;
-  suffix?: string;
+  suffix?: (() => string) | string;
 }
 
 const sourcePrefixMap: Record<FetchSource, string> = {
@@ -71,9 +71,11 @@ export default function useFetch<T>(
     }
     try {
       const res = await fetch(
-        `${
-          sourcePrefixMap[customOptions.source]
-        }${path}${customOptions.suffix || ""}`,
+        `${sourcePrefixMap[customOptions.source]}${path}${
+          typeof customOptions.suffix === "function"
+            ? customOptions.suffix()
+            : customOptions.suffix || ""
+        }`,
         {
           credentials:
             customOptions.source === "local" ? "include" : options.credentials,

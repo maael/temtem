@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { jsx } from "@emotion/core";
 import ReactModal from "react-modal";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -22,59 +22,51 @@ export default function Tempedia({ userId }: { userId?: string }) {
   const [taming, setTaming] = useState<string[]>([]);
   const [tamed, setTamed] = useState<{ _id: string; name: string }[]>([]);
   const [modalTemtem, setModalTemtem] = useState<string | undefined>();
-  const [deleteTamed] = useCallableFetch(
-    "/db/tempedia",
-    { method: "DELETE" },
-    { source: "local" }
-  );
+  const [deleteTamed] = useCallableFetch("/db/tempedia", { method: "DELETE" });
+  const [createTamed] = useCallableFetch<{ _id: string }>("/db/tempedia", {
+    method: "POST"
+  });
   const [temtems] = useFetch<any[]>(
     `/temtems?expand=techniques,traits,type`,
     {},
-    { source: "temtem-api", defaultValue: [] }
+    {
+      source: "temtem-api",
+      defaultValue: [],
+      mapper: d => {
+        setTemtem(d);
+        return d;
+      }
+    }
   );
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        "https://temtem-api.mael.tech/api/temtems?fields=number,name,types"
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setTemtem(data);
+  useFetch(
+    `/db/tempedia/user`,
+    {},
+    {
+      suffix: () => `/${userId || (jwt && jwt._id) || ""}`,
+      source: "local",
+      mapper: d => {
+        setTamed(
+          (d.data || []).map(({ temtemName: name, _id }) => ({ name, _id }))
+        );
+        return d.data;
       }
-    })().catch(e => console.error(e));
-  }, []);
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `/api/db/tempedia/user/${userId || (jwt && jwt._id)}`
-      );
-      if (res.ok) {
-        const { data = [] } = await res.json();
-        setTamed(t => data.map(({ temtemName: name, _id }) => ({ name, _id })));
-      }
-    })().catch(e => console.error(e));
-  }, [userId, jwt]);
+    },
+    [userId, jwt]
+  );
   async function onClick(name: string) {
     setTaming(t => t.concat(name));
     try {
-      const res = await fetch("/api/db/tempedia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+      const result = await createTamed({
         body: JSON.stringify({ temtemName: name })
       });
-      if (res.ok) {
-        const json = await res.json();
-        setTamed(t => t.concat({ name, _id: json._id }));
-      }
+      setTamed(t => t.concat({ name, _id: result._id }));
     } finally {
       setTaming(t => t.filter(i => i !== name));
     }
   }
   async function onDelete({ _id }) {
     try {
-      const res = await deleteTamed({}, _id);
+      await deleteTamed({}, _id);
       setTamed(t => t.filter(f => f._id !== _id));
     } catch (e) {
       console.error(e);
