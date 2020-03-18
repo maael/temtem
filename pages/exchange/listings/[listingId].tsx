@@ -35,7 +35,14 @@ export default function ListingPage({ listing }: any) {
       <ExchangeHeaderBar />
       {stateListing && stateListing.isActive ? (
         <div css={{ textAlign: "center" }}>
-          <div css={{ maxWidth: 1000, margin: "0 auto", position: "relative" }}>
+          <div
+            css={{
+              maxWidth: 1000,
+              margin: "0 auto",
+              position: "relative",
+              padding: "0px 30px"
+            }}
+          >
             <ListingItem
               key={stateListing._id}
               listing={stateListing}

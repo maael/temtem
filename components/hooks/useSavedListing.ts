@@ -2,7 +2,7 @@ import useFetch from "./useFetch";
 import useCallableFetch from "./useCallableFetch";
 
 export default function useSavedListing() {
-  const [saved, _savedLoading, _savedError, refetchSaved] = useFetch(
+  const [saved, savedLoading, _savedError, refetchSaved] = useFetch(
     "/db/exchange/saved",
     {},
     {
@@ -26,5 +26,12 @@ export default function useSavedListing() {
       source: "local"
     }
   );
-  return { saved, isListingSaved, refetchSaved, saveListing, unsaveListing };
+  return {
+    saved,
+    savedLoading,
+    isListingSaved,
+    refetchSaved,
+    saveListing,
+    unsaveListing
+  };
 }

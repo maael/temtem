@@ -5,11 +5,19 @@ import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
 import useFetch from "../../../../components/hooks/useFetch";
-import TemtemStatsTable from "../../../../components/compositions/StatsTable";
-import ListingRequestDetails from "../../../../components/compositions/ListingRequestDetails";
+import useSavedListing from "../../../../components/hooks/useSavedListing";
+import useJWT from "../../../../components/hooks/useJWT";
+import ListingItem from "../../../../components/compositions/ListingItem";
 import { getUserName, getUserProfileLink } from "../../../../util/user";
 
 export default function UserPage({ user = {} }: any) {
+  const jwt = useJWT();
+  const {
+    isListingSaved,
+    refetchSaved,
+    saveListing,
+    unsaveListing
+  } = useSavedListing();
   const [listingsResult] = useFetch<any>(
     `/db/exchange/listings/user/${user._id}`,
     {},
@@ -105,42 +113,28 @@ export default function UserPage({ user = {} }: any) {
           Listings
         </TemtemText>
       ) : null}
-      <div css={{ maxWidth: 1000, margin: "0 auto" }}>
+      <div css={{ maxWidth: 1000, margin: "0 auto", padding: "0px 30px" }}>
         {listingsResult.data
           .filter(i => i.isActive)
           .map(l => (
-            <Link href={`/exchange/listings/${l._id}`} key={l._id}>
-              <a style={{ textDecoration: "none" }}>
-                <TemtemStatsTable
-                  temtem={{
-                    name: l.temtemName,
-                    types: []
-                  }}
-                  svs={{
-                    hp: l.svHp,
-                    sta: l.svSta,
-                    spd: l.svSpd,
-                    atk: l.svAtk,
-                    def: l.svDef,
-                    spatk: l.svSpatk,
-                    spdef: l.svSpdef
-                  }}
-                  trait={l.temtemTrait}
-                  gender={l.temtemGender}
-                  breedTechniques={l.temtemBredTechniques.map(n => ({
-                    name: n,
-                    type: "Toxic"
-                  }))}
-                  fertility={l.temtemFertility}
-                  isLuma={l.temtemIsLuma}
-                />
-                <ListingRequestDetails
-                  user={l.user}
-                  cost={l.requestCost}
-                  details={l.requestDetails}
-                />
-              </a>
-            </Link>
+            <ListingItem
+              key={l._id}
+              listing={l}
+              isSaved={isListingSaved(l)}
+              onSave={async () => {
+                await saveListing({
+                  body: JSON.stringify({
+                    userId: jwt && jwt._id,
+                    exchangeListingId: l._id
+                  })
+                });
+                await refetchSaved();
+              }}
+              onUnsave={async () => {
+                await unsaveListing({}, l._id);
+                await refetchSaved();
+              }}
+            />
           ))}
       </div>
     </div>

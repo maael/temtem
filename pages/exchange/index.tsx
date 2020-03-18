@@ -7,6 +7,8 @@ import TemtemInput from "@maael/temtem-input-component";
 import ExchangeHeaderBar from "../../components/compositions/ExchangeHeaderBar";
 import ListingItem from "../../components/compositions/ListingItem";
 import useFetch from "../../components/hooks/useFetch";
+import useSavedListing from "../../components/hooks/useSavedListing";
+import useJWT from "../../components/hooks/useJWT";
 
 export default function Trades() {
   const [listings, loadingListings] = useFetch(
@@ -18,6 +20,13 @@ export default function Trades() {
       mapper: d => d.data
     }
   );
+  const {
+    isListingSaved,
+    refetchSaved,
+    saveListing,
+    unsaveListing
+  } = useSavedListing();
+  const jwt = useJWT();
   const [search, setSearch] = useState("");
   const fuse = useMemo(
     () =>
@@ -30,9 +39,11 @@ export default function Trades() {
         keys: [
           "temtemName",
           "user.redditName",
+          "user.discordName",
           "temtemTrait",
           "temtemGender",
-          "temtemBredTechniques"
+          "temtemBredTechniques",
+          "requestDetails"
         ]
       }),
     [listings]
@@ -41,7 +52,14 @@ export default function Trades() {
   return (
     <React.Fragment>
       <ExchangeHeaderBar />
-      <div css={{ maxWidth: 1000, margin: "10px auto", textAlign: "center" }}>
+      <div
+        css={{
+          maxWidth: 1000,
+          margin: "10px auto",
+          textAlign: "center",
+          padding: "0px 30px"
+        }}
+      >
         <TemtemText>
           Find Temtem here, and DM their tamers on Reddit to organise an
           exchange!
@@ -60,9 +78,23 @@ export default function Trades() {
           <ListingItem
             key={l._id}
             listing={l}
-            onSave={() => undefined}
-            onUnsave={() => undefined}
-            isSaved={false}
+            onSave={async () => {
+              await saveListing({
+                body: JSON.stringify({
+                  userId: jwt && jwt._id,
+                  exchangeListingId: l._id
+                })
+              });
+              await refetchSaved();
+            }}
+            onUnsave={async () => {
+              const saved = isListingSaved(l);
+              if (saved) {
+                await unsaveListing({}, saved._id);
+                await refetchSaved();
+              }
+            }}
+            isSaved={isListingSaved(l)}
           />
         ))}
       </div>
