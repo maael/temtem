@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import differenceInHours from "date-fns/differenceInHours";
 
 export type FetchSource = "temtem-api" | "local" | "custom";
 
@@ -15,6 +16,37 @@ const sourcePrefixMap: Record<FetchSource, string> = {
   custom: ""
 };
 
+function getLocal(path: string) {
+  try {
+    const local = JSON.parse(localStorage.getItem(path) || "{}");
+    if (
+      local &&
+      local.timestamp &&
+      differenceInHours(new Date(), new Date(local.timestamp)) > 4
+    ) {
+      return local.data;
+    }
+    return undefined;
+  } catch (e) {
+    console.error("[error]", e);
+    return undefined;
+  }
+}
+
+function setLocal(path: string, body: any) {
+  try {
+    localStorage.setItem(
+      path,
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        data: body
+      })
+    );
+  } catch (e) {
+    console.error("[error]", e);
+  }
+}
+
 export default function useFetch<T>(
   path: string,
   options: RequestInit = {},
@@ -27,6 +59,16 @@ export default function useFetch<T>(
   async function refetch() {
     setLoading(true);
     setError(undefined);
+    if (customOptions.source === "temtem-api") {
+      const existing = getLocal(path);
+      if (existing) {
+        setLoading(false);
+        setData(
+          customOptions.mapper ? customOptions.mapper(existing) : existing
+        );
+        return;
+      }
+    }
     try {
       const res = await fetch(
         `${
@@ -44,6 +86,9 @@ export default function useFetch<T>(
       );
       if (res.ok) {
         const json = await res.json();
+        if (customOptions.source === "temtem-api") {
+          setLocal(path, json);
+        }
         setData(customOptions.mapper ? customOptions.mapper(json) : json);
       }
     } catch (e) {

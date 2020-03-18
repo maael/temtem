@@ -12,7 +12,6 @@ import RequireAuth from "../../components/primitives/RequireAuth";
 
 export default function NewEncounter({ existing }: { existing?: any }) {
   const jwt = useJWT();
-  console.info(existing);
   const [temtemName, setTemtemName] = useState(
     existing ? existing.temtemName : ""
   );
