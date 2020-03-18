@@ -4,7 +4,8 @@ export function getClient() {
   const endpoint = "https://graphql.fauna.com/graphql";
   const c = new GraphQLClient(endpoint, {
     headers: {
-      authorization: `Bearer ${process.env.TEMTEM_FAUNA_SECRET}`
+      authorization: `Bearer ${process.env.TEMTEM_FAUNA_SECRET}`,
+      "X-Schema-Preview": "partial-update-mutation"
     }
   });
   return c;

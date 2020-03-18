@@ -26,6 +26,7 @@ export async function createUser(
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -59,6 +60,7 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -86,6 +88,7 @@ export async function getUserByDiscordFullName(
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -112,6 +115,7 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -121,6 +125,32 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
     }
   `;
   return (await client.request(query, { discordId })).getUserByDiscordId;
+}
+
+export async function getUser(userId: string): Promise<User> {
+  const query = `
+    query GetUser ($userId:ID!) {
+      findUserByID(id:$userId){
+        _id
+        redditId
+        redditName
+        redditIcon
+        redditDarkmode
+        discordId
+        discordName
+        discordDiscriminator
+        discordFullName
+        discordIcon
+        temtemName
+        goodReviews
+        mixedReviews
+        badReviews
+        isActive
+        createdAt
+      }
+    }
+  `;
+  return (await client.request(query, { userId })).findUserByID;
 }
 
 export async function getUserByRedditName(redditName: string): Promise<User> {
@@ -137,6 +167,7 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -165,6 +196,7 @@ export async function updateUser(
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews
@@ -174,7 +206,13 @@ export async function updateUser(
     }
   `;
 
-  const user = embellishUpdate(rawData);
+  const user = embellishUpdate({
+    goodReviews: 0,
+    badReviews: 0,
+    mixedReviews: 0,
+    isActive: true,
+    ...rawData
+  });
 
   return (await client.request(query, { userId, user })).updateUser;
 }
@@ -194,6 +232,7 @@ export async function getUsers() {
         discordDiscriminator
         discordFullName
         discordIcon
+        temtemName
         goodReviews
         mixedReviews
         badReviews

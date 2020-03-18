@@ -18,7 +18,7 @@ export default function AuthBlock() {
         flexDirection: "row",
         alignItems: "center",
         position: "relative",
-        top: -5
+        top: -2
       }}
     >
       <Link href="/user/[type]/[name]" as={userUtil.getUserProfileLink(jwt)}>
@@ -54,7 +54,7 @@ export default function AuthBlock() {
       </a>
     </div>
   ) : (
-    <div css={{ marginLeft: 10, position: "relative", top: -5 }}>
+    <div css={{ marginLeft: 10, position: "relative", top: -2 }}>
       <a href={`/api/login/reddit?v${JWT_VERSION}&cb=${Math.random()}`}>
         <TemtemButton
           type={"Neutral" as any}

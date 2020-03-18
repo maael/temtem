@@ -42,6 +42,7 @@ export interface User extends Entity {
   discordDiscriminator?: string;
   discordFullName?: string;
   discordIcon?: string;
+  temtemName?: string;
   steamId?: string;
   goodReviews: number;
   mixedReviews: number;

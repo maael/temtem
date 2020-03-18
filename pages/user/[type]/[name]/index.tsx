@@ -9,6 +9,7 @@ import useFetch from "../../../../components/hooks/useFetch";
 import useSavedListing from "../../../../components/hooks/useSavedListing";
 import useJWT from "../../../../components/hooks/useJWT";
 import ListingItem from "../../../../components/compositions/ListingItem";
+import EditUserDetails from "../../../../components/compositions/EditUserDetails";
 import {
   getUserName,
   getUserProfileLink,
@@ -102,6 +103,20 @@ export default function UserPage({ user = {} as any }: { user: User }) {
           </TemtemButton>
         </a>
       ) : null}
+      {user.temtemName ? (
+        <a href={"https://store.steampowered.com/app/745920/Temtem/"}>
+          <TemtemButton
+            size="small"
+            style={{
+              margin: "0px 5px 10px",
+              position: "relative"
+            }}
+            bgColor={colors.uiBlue}
+          >
+            <>"{user.temtemName}" in game</>
+          </TemtemButton>
+        </a>
+      ) : null}
       <Link
         as={`${getUserProfileLink(user)}/tempedia`}
         href={"/user/[type]/[name]/tempedia"}
@@ -116,6 +131,7 @@ export default function UserPage({ user = {} as any }: { user: User }) {
           </TemtemButton>
         </a>
       </Link>
+      {jwt && jwt._id === user._id ? <EditUserDetails user={user} /> : null}
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         {`${listingsResult.data.length} Total Listings`}
       </TemtemText>
