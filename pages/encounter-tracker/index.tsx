@@ -1,20 +1,25 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import cookie from "cookie";
-import jwt from "jsonwebtoken";
+import { decode } from "jsonwebtoken";
+import Link from "next/link";
 import TemtemButton from "@maael/temtem-button-component";
+import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
+import TemtemText from "@maael/temtem-text-component";
 import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import EncounterItem from "../../components/compositions/EncounterItem";
 import NewEncounter from "../../components/compositions/NewEncounter";
 import Loading from "../../components/primitives/Loading";
 import useFetch from "../../components/hooks/useFetch";
+import useJWT from "../../components/hooks/useJWT";
 import { useMemo, useState } from "react";
 
-export default function EncounterPage({ user }) {
+export default function EncounterPage({ user }: { user: any }) {
   const [showingNew, setShowingNew] = useState(false);
+  const jwt = useJWT();
   const [selected, setSelected] = useState();
   const [encounters, loadingEncounters] = useFetch(
-    `/db/encounters/user/${user._id}`,
+    `/db/encounters/user/${user ? user._id : ""}`,
     {},
     { source: "local", defaultValue: [], mapper: ({ data }) => data }
   );
@@ -38,7 +43,7 @@ export default function EncounterPage({ user }) {
         ),
     [encounters, selected]
   );
-  return (
+  return jwt && jwt._id ? (
     <>
       <EncounterTrackerHeaderBar />
       <div css={{ textAlign: "center" }}>
@@ -63,6 +68,33 @@ export default function EncounterPage({ user }) {
         {encounterComponents}
       </div>
     </>
+  ) : (
+    <>
+      <EncounterTrackerHeaderBar />
+      <div css={{ textAlign: "center", marginTop: 10 }}>
+        <Link href="/encounter-tracker">
+          <a>
+            <TemtemDynamicChip
+              style={{
+                textAlign: "center",
+                padding: "10px 30px",
+                fontSize: 30
+              }}
+              textProps={{ borderWidth: 10 }}
+            >
+              {`Encounter Tracker`}
+            </TemtemDynamicChip>
+          </a>
+        </Link>
+        <TemtemText
+          containerStyle={{ marginBottom: 30 }}
+          style={{ fontSize: 26 }}
+          borderWidth={10}
+        >
+          Track your temtem encounters here, and any Lumas you find.
+        </TemtemText>
+      </div>
+    </>
   );
 }
 
@@ -70,7 +102,7 @@ EncounterPage.getInitialProps = async ({ req }) => {
   try {
     const cookieString = req ? req.headers.cookie : document.cookie;
     const parsed = cookie.parse(cookieString)["temtem-jwt"];
-    const decoded = jwt.decode(parsed, { json: true });
+    const decoded = decode(parsed, { json: true });
     return { user: decoded };
   } catch (e) {
     return { user: {} };
