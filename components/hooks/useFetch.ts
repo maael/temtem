@@ -22,7 +22,7 @@ function getLocal(path: string) {
     if (
       local &&
       local.timestamp &&
-      differenceInHours(new Date(), new Date(local.timestamp)) > 4
+      differenceInHours(new Date(), new Date(local.timestamp)) < 4
     ) {
       return local.data;
     }
