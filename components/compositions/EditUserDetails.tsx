@@ -14,6 +14,7 @@ export default function EditUserDetails({ user }: Props) {
     user.discordFullName || ""
   );
   const [redditName, setRedditName] = useState(user.redditName || "");
+  const [steamId, setSteamId] = useState(user.steamId || "");
   const [updateUser, _data, savingUpdate] = useCallableFetch(
     "/db/user",
     { method: "PUT" },
@@ -47,6 +48,14 @@ export default function EditUserDetails({ user }: Props) {
         value={redditName}
         onChange={({ target }) => setRedditName((target as any).value)}
       />
+      <Input
+        containerStyle={{ margin: "5px 0px" }}
+        prefixStyle={{ width: 150, backgroundColor: "#000000" }}
+        prefix="Steam ID"
+        placeholder="https://steamcommunity.com/profiles/<id>..."
+        value={steamId}
+        onChange={({ target }) => setSteamId((target as any).value)}
+      />
       <Button
         onClick={async () => {
           await updateUser({
@@ -55,7 +64,8 @@ export default function EditUserDetails({ user }: Props) {
               discordFullName: discordFullName || null,
               discordName: discordFullName.split("#")[0],
               discordDiscriminator: discordFullName.split("#")[1],
-              redditName: redditName || null
+              redditName: redditName || null,
+              steamId: steamId || null
             })
           });
         }}

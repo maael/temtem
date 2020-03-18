@@ -16,6 +16,7 @@ module.exports = {
     TEMTEM_FAUNA_SECRET: process.env.TEMTEM_FAUNA_SECRET,
     MOCK_USER_ID: process.env.MOCK_USER_ID,
     OAUTH_STATE: process.env.OAUTH_STATE,
+    STEAM_KEY: process.env.STEAM_KEY,
     ROOT: __dirname
   }
 };

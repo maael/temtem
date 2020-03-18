@@ -27,6 +27,7 @@ export async function createUser(
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -61,6 +62,7 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -89,6 +91,7 @@ export async function getUserByDiscordFullName(
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -116,6 +119,7 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -142,6 +146,7 @@ export async function getUser(userId: string): Promise<User> {
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -168,6 +173,7 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -197,6 +203,7 @@ export async function updateUser(
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews
@@ -233,6 +240,7 @@ export async function getUsers() {
         discordFullName
         discordIcon
         temtemName
+        steamId
         goodReviews
         mixedReviews
         badReviews

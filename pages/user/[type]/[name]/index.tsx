@@ -9,6 +9,7 @@ import useFetch from "../../../../components/hooks/useFetch";
 import useSavedListing from "../../../../components/hooks/useSavedListing";
 import useJWT from "../../../../components/hooks/useJWT";
 import ListingItem from "../../../../components/compositions/ListingItem";
+import SteamProfile from "../../../../components/compositions/SteamProfile";
 import EditUserDetails from "../../../../components/compositions/EditUserDetails";
 import {
   getUserName,
@@ -131,6 +132,7 @@ export default function UserPage({ user = {} as any }: { user: User }) {
           </TemtemButton>
         </a>
       </Link>
+      <SteamProfile steamId={user.steamId} />
       {jwt && jwt._id === user._id ? <EditUserDetails user={user} /> : null}
       <TemtemText style={{ fontSize: 20 }} borderWidth={10}>
         {`${listingsResult.data.length} Total Listings`}
