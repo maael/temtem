@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FaDiscord, FaRedditAlien } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import TemtemButton from "@maael/temtem-button-component";
-import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
 import useJWT from "../hooks/useJWT";
 import { JWT_VERSION } from "../../util/constants";
@@ -17,7 +16,9 @@ export default function AuthBlock() {
       css={{
         display: "flex",
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        position: "relative",
+        top: -5
       }}
     >
       <Link href="/user/[type]/[name]" as={userUtil.getUserProfileLink(jwt)}>
@@ -53,7 +54,7 @@ export default function AuthBlock() {
       </a>
     </div>
   ) : (
-    <div css={{ marginLeft: 10 }}>
+    <div css={{ marginLeft: 10, position: "relative", top: -5 }}>
       <a href={`/api/login/reddit?v${JWT_VERSION}&cb=${Math.random()}`}>
         <TemtemButton
           type={"Neutral" as any}

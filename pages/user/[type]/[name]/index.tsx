@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import Link from "next/link";
+import { FaDiscord, FaRedditAlien } from "react-icons/fa";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
@@ -8,9 +9,14 @@ import useFetch from "../../../../components/hooks/useFetch";
 import useSavedListing from "../../../../components/hooks/useSavedListing";
 import useJWT from "../../../../components/hooks/useJWT";
 import ListingItem from "../../../../components/compositions/ListingItem";
-import { getUserName, getUserProfileLink } from "../../../../util/user";
+import {
+  getUserName,
+  getUserProfileLink,
+  getUserIcon
+} from "../../../../util/user";
+import { User } from "../../../../types/db";
 
-export default function UserPage({ user = {} }: any) {
+export default function UserPage({ user = {} as any }: { user: User }) {
   const jwt = useJWT();
   const {
     isListingSaved,
@@ -51,7 +57,7 @@ export default function UserPage({ user = {} }: any) {
           borderRadius: "50%",
           margin: "0px 5px"
         }}
-        src={user.redditIcon || user.discordIcon}
+        src={getUserIcon(user)}
       />
       <TemtemText style={{ fontSize: 40 }} borderWidth={10}>
         {getUserName(user)}
@@ -60,10 +66,39 @@ export default function UserPage({ user = {} }: any) {
         <a href={`https://reddit.com/user/${user.redditName}`}>
           <TemtemButton
             size="small"
-            style={{ marginBottom: 10 }}
+            style={{
+              margin: "0px 5px 10px",
+              position: "relative",
+              paddingLeft: 30
+            }}
             bgColor="#FF5700"
           >
-            Open on Reddit
+            <>
+              <FaRedditAlien
+                style={{ fontSize: 18, position: "absolute", left: 8, top: 9 }}
+              />
+              {user.redditName}
+            </>
+          </TemtemButton>
+        </a>
+      ) : null}
+      {user.discordFullName ? (
+        <a href={"https://discordapp.com/"}>
+          <TemtemButton
+            size="small"
+            style={{
+              margin: "0px 5px 10px",
+              position: "relative",
+              paddingLeft: 30
+            }}
+            bgColor="#7289DA"
+          >
+            <>
+              <FaDiscord
+                style={{ fontSize: 18, position: "absolute", left: 8, top: 9 }}
+              />
+              {user.discordFullName}
+            </>
           </TemtemButton>
         </a>
       ) : null}
@@ -74,7 +109,7 @@ export default function UserPage({ user = {} }: any) {
         <a style={{ textDecoration: "none" }}>
           <TemtemButton
             size="small"
-            style={{ marginBottom: 10 }}
+            style={{ margin: "0px 5px 10px" }}
             bgColor={colors.uiBlueFaded}
           >
             User Tempedia
