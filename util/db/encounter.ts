@@ -5,6 +5,7 @@ const encounterFields = `
   _id
   userId
   user {
+    redditId
     redditName
     redditIcon
     discordName

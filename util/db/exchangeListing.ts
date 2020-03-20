@@ -16,6 +16,7 @@ export async function getExchangeListings(): Promise<{
           _id
           user {
             _id
+            redditId
             redditName
             redditIcon
             discordName
@@ -57,6 +58,7 @@ export async function getUserExchangeListings(
           _id
           user {
             _id
+            redditId
             redditName
             redditIcon
             discordName
@@ -98,6 +100,7 @@ export async function createExchangeListing(
         _id
         user {
           _id
+          redditId
           redditName
           redditIcon
         }
@@ -141,6 +144,7 @@ export async function getExchangeListing(listingId: string) {
       _id
       user {
         _id
+        redditId
         redditName
         redditIcon
       }
@@ -178,6 +182,7 @@ export async function updateExchangeListing(
         _id
         user {
           _id
+          redditId
           redditName
           redditIcon
         }

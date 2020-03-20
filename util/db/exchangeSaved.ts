@@ -16,6 +16,7 @@ export async function getExchangeSaved(
           _id
           user {
             _id
+            redditId
             redditName
             redditIcon
             discordName
@@ -26,6 +27,7 @@ export async function getExchangeSaved(
             _id
             user {
               _id
+              redditId
               redditName
               redditIcon
               discordName
@@ -70,6 +72,7 @@ export async function createExchangeSaved(
         _id
         user {
           _id
+          redditId
           redditName
           redditIcon
           discordName
