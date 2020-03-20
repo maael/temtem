@@ -61,8 +61,8 @@ export default function Trades() {
         }}
       >
         <TemtemText>
-          Find Temtem here, and DM their tamers on Reddit to organise an
-          exchange!
+          Find Temtem here, and DM their tamers on (Reddit, Discord, or Steam)
+          to organise an exchange!
         </TemtemText>
         <TemtemText style={{ fontSize: 30 }} borderWidth={10}>
           {loadingListings
