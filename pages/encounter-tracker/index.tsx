@@ -39,6 +39,10 @@ export default function EncounterPage({ user }: { user: any }) {
                   setSelected(undefined);
                   await refetchEncounters();
                 }}
+                onDelete={async () => {
+                  setSelected(undefined);
+                  await refetchEncounters();
+                }}
               />
             </div>
           ) : (

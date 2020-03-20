@@ -53,8 +53,8 @@ export async function updateEncounter(encounterId: string, rawData) {
 
 export async function deleteEncounter(encounterId: string) {
   const query = `
-    mutation DeleteEncounter ($data: ) {
-      deleteEncounter (data: $data) {
+    mutation DeleteEncounter ($encounterId: ID!) {
+      deleteEncounter (id: $encounterId) {
         ${encounterFields}
       }
     }

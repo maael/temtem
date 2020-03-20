@@ -12,10 +12,12 @@ import RequireAuth from "../../components/primitives/RequireAuth";
 
 export default function NewEncounter({
   existing,
-  onSave
+  onSave,
+  onDelete
 }: {
   existing?: any;
   onSave?: (data: any) => void;
+  onDelete?: (id: string) => void;
 }) {
   const jwt = useJWT();
   const [temtemName, setTemtemName] = useState(
@@ -40,6 +42,9 @@ export default function NewEncounter({
       method: existing ? "PUT" : "POST"
     }
   );
+  const [deleteEncounter] = useCallableFetch(`/db/encounters`, {
+    method: "DELETE"
+  });
   const temtemOptions = useMemo(
     () => availableTemtem.map(({ name }) => ({ label: name, value: name })),
     [availableTemtem]
@@ -184,6 +189,17 @@ export default function NewEncounter({
             >
               Save
             </TemtemButton>
+            {existing && existing._id ? (
+              <TemtemButton
+                style={{ marginLeft: 10 }}
+                onClick={async () => {
+                  await deleteEncounter({}, existing._id);
+                  onDelete && onDelete(existing._id);
+                }}
+              >
+                Delete
+              </TemtemButton>
+            ) : null}
           </div>
         </RequireAuth>
       </div>
