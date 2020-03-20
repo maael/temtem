@@ -3,6 +3,8 @@ import { UserType, JWT } from "../types";
 
 type PossibleUserShape = User | JWT;
 
+export { UserType };
+
 const nameMap: Record<UserType, keyof PossibleUserShape> = {
   [UserType.REDDIT]: "redditName",
   [UserType.DISCORD]: "discordName"
@@ -19,7 +21,7 @@ const profileLink: Record<UserType, (u: PossibleUserShape) => string> = {
 };
 
 export function getUserType(u: PossibleUserShape) {
-  return u.redditName ? UserType.REDDIT : UserType.DISCORD;
+  return u.redditId ? UserType.REDDIT : UserType.DISCORD;
 }
 
 export function getUserName(u: PossibleUserShape): string {

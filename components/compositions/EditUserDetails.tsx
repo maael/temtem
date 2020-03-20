@@ -3,6 +3,7 @@ import Input from "@maael/temtem-input-component";
 import Button from "@maael/temtem-button-component";
 import useCallableFetch from "../hooks/useCallableFetch";
 import { User } from "../../types/db";
+import { getUserType, UserType } from "../../util/user";
 
 interface Props {
   user: User;
@@ -20,6 +21,7 @@ export default function EditUserDetails({ user }: Props) {
     { method: "PUT" },
     { source: "local" }
   );
+  const userType = getUserType(user);
   return (
     <div
       css={{ maxWidth: 500, margin: "5px auto 15px auto", padding: "0px 10px" }}
@@ -33,20 +35,34 @@ export default function EditUserDetails({ user }: Props) {
         onChange={({ target }) => setTemtemName((target as any).value)}
       />
       <Input
-        containerStyle={{ margin: "5px 0px" }}
+        containerStyle={{
+          margin: "5px 0px",
+          cursor: userType === UserType.DISCORD ? "not-allowed" : "inherit"
+        }}
         prefixStyle={{ width: 150, backgroundColor: "#7289DA" }}
+        style={{
+          cursor: userType === UserType.REDDIT ? "not-allowed" : "inherit"
+        }}
         prefix="Discord Name"
         placeholder="Discord Name..."
         value={discordFullName}
         onChange={({ target }) => setDiscordFullName((target as any).value)}
+        disabled={userType === UserType.DISCORD}
       />
       <Input
-        containerStyle={{ margin: "5px 0px" }}
+        containerStyle={{
+          margin: "5px 0px",
+          cursor: userType === UserType.REDDIT ? "not-allowed" : "inherit"
+        }}
         prefixStyle={{ width: 150, backgroundColor: "#FF5700" }}
+        style={{
+          cursor: userType === UserType.REDDIT ? "not-allowed" : "inherit"
+        }}
         prefix="Reddit Name"
         placeholder="Reddit Name..."
         value={redditName}
         onChange={({ target }) => setRedditName((target as any).value)}
+        disabled={userType === UserType.REDDIT}
       />
       <Input
         containerStyle={{ margin: "5px 0px" }}
