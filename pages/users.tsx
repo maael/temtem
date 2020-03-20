@@ -2,13 +2,14 @@ import { useState } from "react";
 import Link from "next/link";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemText from "@maael/temtem-text-component";
+import Loading from "../components/primitives/Loading";
 import useFetch from "../components/hooks/useFetch";
 import { colors } from "@maael/temtem-theme";
 import * as userUtil from "../util/user";
 
 export default function UsersSearch() {
   const [search, setSearch] = useState("");
-  const [users] = useFetch<any[]>(
+  const [users, loadingUsers] = useFetch<any[]>(
     "/db/user",
     {},
     {
@@ -35,6 +36,7 @@ export default function UsersSearch() {
           maxWidth: 600
         }}
       >
+        <Loading loading={loadingUsers} />
         {users
           .filter(u =>
             userUtil

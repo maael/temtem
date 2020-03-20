@@ -9,6 +9,7 @@ import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
 import { colors } from "@maael/temtem-theme";
 import HideOnMobile from "../components/primitives/HideOnMobile";
+import Loading from "../components/primitives/Loading";
 import useJWT from "../components/hooks/useJWT";
 import useFetch from "../components/hooks/useFetch";
 import useCallableFetch from "../components/hooks/useCallableFetch";
@@ -26,7 +27,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
   const [createTamed] = useCallableFetch<{ _id: string }>("/db/tempedia", {
     method: "POST"
   });
-  const [temtems] = useFetch<any[]>(
+  const [temtems, loadingTemtems] = useFetch<any[]>(
     `/temtems?expand=techniques,traits,type`,
     {},
     {
@@ -38,7 +39,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
       }
     }
   );
-  useFetch(
+  const [_dbEntries, loadingDbEntries] = useFetch(
     `/db/tempedia/user`,
     {},
     {
@@ -112,6 +113,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
             </HideOnMobile>
           ) : null}
         </div>
+        <Loading loading={loadingTemtems || loadingDbEntries} />
         {temtem
           .filter(({ name }) =>
             search.trim()

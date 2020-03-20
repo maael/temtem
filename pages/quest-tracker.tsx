@@ -6,6 +6,7 @@ import { MdLocationOn } from "react-icons/md";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemInput from "@maael/temtem-input-component";
+import Loading from "../components/primitives/Loading";
 import RequireAuth from "../components/primitives/RequireAuth";
 import useFetch from "../components/hooks/useFetch";
 import useCallableFetch from "../components/hooks/useCallableFetch";
@@ -66,6 +67,7 @@ export default function QuestTracker() {
         >
           Main Quests
         </TemtemText>
+        <Loading loading={loadingUserQuests} />
         {filteredMain.map((q, i) => (
           <MainQuestItem
             key={`${q.name}${i}`}
@@ -84,6 +86,7 @@ export default function QuestTracker() {
         >
           Side Quests
         </TemtemText>
+        <Loading loading={loadingUserQuests} />
         {quests
           .filter(
             q =>
