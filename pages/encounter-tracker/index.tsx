@@ -18,7 +18,7 @@ export default function EncounterPage({ user }: { user: any }) {
   const [showingNew, setShowingNew] = useState(false);
   const jwt = useJWT();
   const [selected, setSelected] = useState();
-  const [encounters, loadingEncounters] = useFetch(
+  const [encounters, loadingEncounters, _errors, refetchEncounters] = useFetch(
     `/db/encounters/user/${user ? user._id : ""}`,
     {},
     { source: "local", defaultValue: [], mapper: ({ data }) => data }
@@ -33,7 +33,13 @@ export default function EncounterPage({ user }: { user: any }) {
         .map(e =>
           selected === e._id ? (
             <div key={e._id}>
-              <NewEncounter existing={e} />
+              <NewEncounter
+                existing={e}
+                onSave={async () => {
+                  setSelected(undefined);
+                  await refetchEncounters();
+                }}
+              />
             </div>
           ) : (
             <div key={e._id} onClick={() => setSelected(e._id)}>
@@ -49,7 +55,11 @@ export default function EncounterPage({ user }: { user: any }) {
       <div css={{ textAlign: "center" }}>
         {showingNew ? (
           <>
-            <NewEncounter />
+            <NewEncounter
+              onSave={() => {
+                window.location.reload();
+              }}
+            />
             <TemtemButton onClick={() => setShowingNew(false)}>
               Hide
             </TemtemButton>

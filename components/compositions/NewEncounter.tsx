@@ -10,7 +10,13 @@ import useCallableFetch from "../../components/hooks/useCallableFetch";
 import useJWT from "../../components/hooks/useJWT";
 import RequireAuth from "../../components/primitives/RequireAuth";
 
-export default function NewEncounter({ existing }: { existing?: any }) {
+export default function NewEncounter({
+  existing,
+  onSave
+}: {
+  existing?: any;
+  onSave?: (data: any) => void;
+}) {
   const jwt = useJWT();
   const [temtemName, setTemtemName] = useState(
     existing ? existing.temtemName : ""
@@ -160,18 +166,19 @@ export default function NewEncounter({ existing }: { existing?: any }) {
             <TemtemButton
               onClick={async () => {
                 if (!temtemName) return;
+                const data = {
+                  userId: jwt && jwt._id,
+                  temtemName,
+                  location: location || null,
+                  trait: trait || null,
+                  isLuma,
+                  wasCaught,
+                  createdAt: existing ? existing.createdAt : undefined
+                };
                 await createEncounter({
-                  body: JSON.stringify({
-                    userId: jwt && jwt._id,
-                    temtemName,
-                    location: location || null,
-                    trait: trait || null,
-                    isLuma,
-                    wasCaught,
-                    createdAt: existing ? existing.createdAt : undefined
-                  })
+                  body: JSON.stringify(data)
                 });
-                window.location.reload();
+                onSave && onSave(data);
               }}
               disabled={!temtemName}
             >
