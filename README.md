@@ -9,6 +9,14 @@
   - https://github.com/maael/temtem-api
   - https://temtem-api.mael.tech
 
+## Features
+
+- List Temtem for sale
+- Save Temtem listing
+- Track your own tempedia of tamed Temtem, and share your progress with others
+- Track your quests in Temtem, including what ones you've picked up and what step you're on
+- Track your encounters in Temtem, including an automatic tracker that uses screen capture and OCR
+
 ## Docs
 
 - [Auth](./docs/AUTH.md)
