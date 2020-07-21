@@ -17,6 +17,7 @@ module.exports = {
     MOCK_USER_ID: process.env.MOCK_USER_ID,
     OAUTH_STATE: process.env.OAUTH_STATE,
     STEAM_KEY: process.env.STEAM_KEY,
+    FATHOM_SITE_ID: process.env.FATHOM_SITE_ID,
     ROOT: __dirname
   }
 };

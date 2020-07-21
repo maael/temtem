@@ -1,7 +1,9 @@
 /** @jsx jsx */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Global, jsx } from "@emotion/core";
+import * as Fathom from "fathom-client";
 import { TiHomeOutline } from "react-icons/ti";
 import { FaReddit, FaDiscord } from "react-icons/fa";
 import { colors, fonts } from "@maael/temtem-theme";
@@ -17,6 +19,25 @@ import { getUserProfileLink } from "../util/user";
 export default function TemtemApp({ Component, pageProps }) {
   const [overlay, setOverlay] = useState(false);
   const jwt = useJWT();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Initialize Fathom when the app loads
+    Fathom.load(process.env.FATHOM_SITE_ID!, {
+      excludedDomains: ["localhost"]
+    });
+
+    function onRouteChangeComplete() {
+      Fathom.trackPageview();
+    }
+    // Record a pageview when route changes
+    router.events.on("routeChangeComplete", onRouteChangeComplete);
+
+    // Unassign event listener
+    return () => {
+      router.events.off("routeChangeComplete", onRouteChangeComplete);
+    };
+  }, []);
   return (
     <div css={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Head>

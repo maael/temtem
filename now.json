@@ -10,7 +10,8 @@
       "OAUTH_STATE": "@temtem-oauth-state",
       "DISCORD_OAUTH_ID": "@temtem-discord-oauth-id",
       "DISCORD_OAUTH_SECRET": "@temtem-discord-oauth-secret",
-      "STEAM_KEY": "@temtools-steam-key"
+      "STEAM_KEY": "@temtools-steam-key",
+      "FATHOM_SITE_ID": "@temtools-fathom-site-id"
     }
   }
 }
