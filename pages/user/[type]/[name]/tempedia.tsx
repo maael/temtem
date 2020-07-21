@@ -2,6 +2,7 @@ import Link from "next/link";
 import fetch from "isomorphic-fetch";
 import TemtemText from "@maael/temtem-text-component";
 import { colors } from "@maael/temtem-theme";
+import SafeImage from "../../../../components/primitives/SafeImage";
 import Tempedia from "../../../tempedia";
 import {
   getUserProfileLink,
@@ -15,7 +16,7 @@ export default function UserTempedia({ user = {} }: any) {
       <div css={{ textAlign: "center", marginTop: 10 }}>
         <Link href={getUserProfileLink(user)}>
           <a style={{ textDecoration: "none" }}>
-            <img
+            <SafeImage
               css={{
                 border: `2px solid ${colors.uiBlueFaded}`,
                 height: 50,

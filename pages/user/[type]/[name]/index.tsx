@@ -8,6 +8,7 @@ import { colors } from "@maael/temtem-theme";
 import useFetch from "../../../../components/hooks/useFetch";
 import useSavedListing from "../../../../components/hooks/useSavedListing";
 import useJWT from "../../../../components/hooks/useJWT";
+import SafeImage from "../../../../components/primitives/SafeImage";
 import ListingItem from "../../../../components/compositions/ListingItem";
 import SteamProfile from "../../../../components/compositions/SteamProfile";
 import EditUserDetails from "../../../../components/compositions/EditUserDetails";
@@ -51,7 +52,7 @@ export default function UserPage({ user = {} as any }: { user: User }) {
     )[0].temtemName;
   return (
     <div css={{ textAlign: "center", marginTop: 10 }}>
-      <img
+      <SafeImage
         css={{
           border: `2px solid ${colors.uiBlueFaded}`,
           height: 50,

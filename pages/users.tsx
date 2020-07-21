@@ -3,6 +3,7 @@ import Link from "next/link";
 import TemtemInput from "@maael/temtem-input-component";
 import TemtemText from "@maael/temtem-text-component";
 import Loading from "../components/primitives/Loading";
+import SafeImage from "../components/primitives/SafeImage";
 import useFetch from "../components/hooks/useFetch";
 import { colors } from "@maael/temtem-theme";
 import * as userUtil from "../util/user";
@@ -54,7 +55,7 @@ export default function UsersSearch() {
                 margin: "5px 10px"
               }}
             >
-              <img
+              <SafeImage
                 css={{
                   border: `2px solid ${colors.uiBlueFaded}`,
                   height: 30,
