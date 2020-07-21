@@ -9,6 +9,7 @@ export default function(_req, res) {
     scope: "identify",
     prompt: "none"
   })}`;
+  console.info("REDIRECTING TO", redirectUri);
   res.writeHead(301, { Location: redirectUri });
   res.end();
 }
