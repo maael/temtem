@@ -14,22 +14,23 @@ export default function UserTempedia({ user = {} }: any) {
   return (
     <>
       <div css={{ textAlign: "center", marginTop: 10 }}>
-        <Link href={getUserProfileLink(user)}>
-          <a style={{ textDecoration: "none" }}>
-            <SafeImage
-              css={{
-                border: `2px solid ${colors.uiBlueFaded}`,
-                height: 50,
-                width: 50,
-                borderRadius: "50%",
-                margin: "0px 5px"
-              }}
-              src={getUserIcon(user)}
-            />
-            <TemtemText style={{ fontSize: 40 }} borderWidth={10}>
-              {`${getUserName(user)}'s Tempedia`}
-            </TemtemText>
-          </a>
+        <Link
+          href={getUserProfileLink(user)}
+          style={{ textDecoration: "none" }}
+        >
+          <SafeImage
+            css={{
+              border: `2px solid ${colors.uiBlueFaded}`,
+              height: 50,
+              width: 50,
+              borderRadius: "50%",
+              margin: "0px 5px"
+            }}
+            src={getUserIcon(user)}
+          />
+          <TemtemText style={{ fontSize: 40 }} borderWidth={10}>
+            {`${getUserName(user)}'s Tempedia`}
+          </TemtemText>
         </Link>
       </div>
       <Tempedia userId={user._id} />

@@ -1,5 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
+import React from "react";
 import cookie from "cookie";
 import { decode } from "jsonwebtoken";
 import Link from "next/link";
@@ -87,18 +88,16 @@ export default function EncounterPage({ user }: { user: any }) {
       <EncounterTrackerHeaderBar />
       <div css={{ textAlign: "center", marginTop: 10 }}>
         <Link href="/encounter-tracker">
-          <a>
-            <TemtemDynamicChip
-              style={{
-                textAlign: "center",
-                padding: "10px 30px",
-                fontSize: 30
-              }}
-              textProps={{ borderWidth: 10 }}
-            >
-              {`Encounter Tracker`}
-            </TemtemDynamicChip>
-          </a>
+          <TemtemDynamicChip
+            style={{
+              textAlign: "center",
+              padding: "10px 30px",
+              fontSize: 30
+            }}
+            textProps={{ borderWidth: 10 }}
+          >
+            {`Encounter Tracker`}
+          </TemtemDynamicChip>
         </Link>
         <TemtemText
           containerStyle={{ marginBottom: 30 }}

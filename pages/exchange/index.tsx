@@ -1,6 +1,6 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import React, { useState, useMemo } from "react";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import Fuse from "fuse.js";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemInput from "@maael/temtem-input-component";

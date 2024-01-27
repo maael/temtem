@@ -1,7 +1,8 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
+import React from "react";
 import { colors } from "@maael/temtem-theme";
 
 export default function NavItem({
@@ -20,9 +21,10 @@ export default function NavItem({
     setPathname(window.location.pathname);
   });
   return (
-    <Link href={url}>
-      <a
-        css={{
+    <Link
+      href={url}
+      css={
+        {
           borderBottom: `2px solid ${
             (exact
             ? pathname === url
@@ -37,11 +39,13 @@ export default function NavItem({
             borderColor: colors.uiBlue
           },
           textAlign: "center",
+          color: "white",
+          textDecoration: "none",
           ...style
-        }}
-      >
-        {children}
-      </a>
+        } as any
+      }
+    >
+      {children}
     </Link>
   );
 }

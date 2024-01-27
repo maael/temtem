@@ -1,5 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
+import React from "react";
 import Link from "next/link";
 import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
@@ -34,14 +35,12 @@ export default function Home() {
         </>
       </TemtemText>
       <Link href="/exchange">
-        <a>
-          <TemtemDynamicChip
-            style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
-            textProps={{ borderWidth: 10 }}
-          >
-            {`Temtem Exchange`}
-          </TemtemDynamicChip>
-        </a>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
+          textProps={{ borderWidth: 10 }}
+        >
+          {`Temtem Exchange`}
+        </TemtemDynamicChip>
       </Link>
       <TemtemText
         containerStyle={{ marginBottom: 30 }}
@@ -51,14 +50,12 @@ export default function Home() {
         Advertise and search for Temtem you want to trade here.
       </TemtemText>
       <Link href="/tempedia">
-        <a>
-          <TemtemDynamicChip
-            style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
-            textProps={{ borderWidth: 10 }}
-          >
-            {`Personal Tempedia`}
-          </TemtemDynamicChip>
-        </a>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
+          textProps={{ borderWidth: 10 }}
+        >
+          {`Personal Tempedia`}
+        </TemtemDynamicChip>
       </Link>
       <TemtemText
         containerStyle={{ marginBottom: 30 }}
@@ -69,14 +66,12 @@ export default function Home() {
         you can share your Tempedia progress with other people!
       </TemtemText>
       <Link href="/quest-tracker">
-        <a>
-          <TemtemDynamicChip
-            style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
-            textProps={{ borderWidth: 10 }}
-          >
-            {`Quest Tracker`}
-          </TemtemDynamicChip>
-        </a>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
+          textProps={{ borderWidth: 10 }}
+        >
+          {`Quest Tracker`}
+        </TemtemDynamicChip>
       </Link>
       <TemtemText
         containerStyle={{ marginBottom: 30 }}
@@ -86,14 +81,12 @@ export default function Home() {
         Track what quests you've picked up and your progress in them here.
       </TemtemText>
       <Link href="/encounter-tracker">
-        <a>
-          <TemtemDynamicChip
-            style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
-            textProps={{ borderWidth: 10 }}
-          >
-            {`Encounter Tracker`}
-          </TemtemDynamicChip>
-        </a>
+        <TemtemDynamicChip
+          style={{ textAlign: "center", padding: "10px 30px", fontSize: 30 }}
+          textProps={{ borderWidth: 10 }}
+        >
+          {`Encounter Tracker`}
+        </TemtemDynamicChip>
       </Link>
       <TemtemText
         containerStyle={{ marginBottom: 30 }}
