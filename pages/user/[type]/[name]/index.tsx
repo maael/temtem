@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import Link from "next/link";
+import React from "react";
 import { FaDiscord, FaRedditAlien } from "react-icons/fa";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
