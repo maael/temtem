@@ -18,6 +18,9 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
+  "engines": {
+    "node": "18.x"
+  },
   "resolutions": {
     "react": "^18.2.0",
     "@types/react": "18.2.48"
