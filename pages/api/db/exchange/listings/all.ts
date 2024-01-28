@@ -1,5 +1,5 @@
 import cookies from "../../../../../util/cookies";
-import { getExchangeListings } from "../../../../../util/db";
+import { getExchangeListings } from "../../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   if (req.method === "GET") {

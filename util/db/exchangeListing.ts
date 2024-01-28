@@ -6,92 +6,6 @@ import {
   RawCreateInput
 } from "../../types/db";
 
-export async function getExchangeListings(): Promise<{
-  data: ExchangeListing[];
-}> {
-  const query = `
-    query ExchangeListings {
-      getExchangeListingsByTypeAndActive(type: LISTING, isActive: true, _size: 10000) {
-        data {
-          _id
-          user {
-            _id
-            redditId
-            redditName
-            redditIcon
-            discordName
-            discordDiscriminator
-            discordIcon
-          }
-          type
-          temtemName
-          temtemGender
-          temtemFertility
-          temtemTrait
-          temtemBredTechniques
-          temtemIsLuma
-          svHp
-          svSta
-          svSpd
-          svAtk
-          svDef
-          svSpatk
-          svSpdef
-          requestCost
-          requestDetails
-          isActive
-          createdAt
-        }
-      }
-    }
-  `;
-  return ((await client.request(query)) as any)
-    .getExchangeListingsByTypeAndActive;
-}
-
-export async function getUserExchangeListings(
-  userId: string
-): Promise<{ data: ExchangeListing[] }> {
-  const query = `
-    query UserExchangeListings ($userId: ID!) {
-      getUserExchangeListingsByType (userId: $userId, type: LISTING, _size: 10000) {
-        data {
-          _id
-          user {
-            _id
-            redditId
-            redditName
-            redditIcon
-            discordName
-            discordDiscriminator
-            discordIcon
-          }
-          type
-          temtemName
-          temtemGender
-          temtemFertility
-          temtemTrait
-          temtemBredTechniques
-          temtemIsLuma
-          svHp
-          svSta
-          svSpd
-          svAtk
-          svDef
-          svSpatk
-          svSpdef
-          requestCost
-          requestDetails
-          isActive
-          createdAt
-        }
-      }
-    }
-  `;
-  return ((await client.request(query, { userId })) as any)
-    .getUserExchangeListingsByType;
-}
-
 export async function createExchangeListing(
   rawData: RawCreateInput<ExchangeListingInput>
 ): Promise<ExchangeListing> {
@@ -136,42 +50,6 @@ export async function createExchangeListing(
     }
   });
   return ((await client.request(query, { data })) as any).createExchangeListing;
-}
-
-export async function getExchangeListing(listingId: string) {
-  const query = `
-  query UserExchangeListings ($listingId: ID!) {
-    findExchangeListingByID (id: $listingId) {
-      _id
-      user {
-        _id
-        redditId
-        redditName
-        redditIcon
-      }
-      type
-      temtemName
-      temtemGender
-      temtemFertility
-      temtemTrait
-      temtemBredTechniques
-      temtemIsLuma
-      svHp
-      svSta
-      svSpd
-      svAtk
-      svDef
-      svSpatk
-      svSpdef
-      requestCost
-      requestDetails
-      isActive
-      createdAt
-    }
-  }
-`;
-  return ((await client.request(query, { listingId })) as any)
-    .findExchangeListingByID;
 }
 
 export async function updateExchangeListing(

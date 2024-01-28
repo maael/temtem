@@ -64,16 +64,3 @@ export async function deleteEncounter(encounterId: string) {
   return ((await client.request(query, { encounterId })) as any)
     .deleteEncounter;
 }
-
-export async function getUserEncounter(userId: string) {
-  const query = `
-    query GetUserEncounters ($userId: ID!) {
-      getUserEncounters (_size: 10000, userId: $userId) {
-        data {
-          ${encounterFields}
-        }
-      }
-    }
-  `;
-  return ((await client.request(query, { userId })) as any).getUserEncounters;
-}

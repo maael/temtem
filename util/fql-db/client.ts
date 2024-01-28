@@ -8,7 +8,7 @@ export const faunaClient = new Client({
 
 export async function query(fqlFragment: Query) {
   const result = await faunaClient.query<any>(fqlFragment);
-  return result.data.data.map(mapId);
+  return result.data.data.map(mapSafe);
 }
 
 export async function getList(collection: string) {
@@ -17,9 +17,11 @@ export async function getList(collection: string) {
   };
 }
 
-function mapId(u) {
+export function mapSafe(u) {
   return {
     ...u,
+    createdAt: u.createdAt ? u.createdAt.isoString : undefined,
+    updatedAt: u.updatedAt ? u.updatedAt.isoString : undefined,
     _id: u.id
   };
 }

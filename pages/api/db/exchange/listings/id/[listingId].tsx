@@ -1,11 +1,10 @@
 import cookies from "../../../../../../util/cookies";
-import jwtGuard from "../../../../../../util/middlewares/jwtGuard";
 import paramGuard from "../../../../../../util/middlewares/paramGuard";
 import {
-  getExchangeListing,
   updateExchangeListing,
   setExchangeInactive
 } from "../../../../../../util/db";
+import { getExchangeListing } from "../../../../../../util/fql-db";
 
 export default paramGuard(
   cookies(async function(req, res) {
