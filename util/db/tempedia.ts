@@ -6,24 +6,6 @@ import {
   RawCreateInput
 } from "../../types/db";
 
-export async function getTempediaEntries(
-  user: string
-): Promise<{ data: TempediaEntry[] }> {
-  const query = `
-    query UserTempediaEntries ($user:ID!){
-      getUserTempediaEntries(userId:$user) {
-        data {
-          _id
-          temtemName
-          createdAt
-        }
-      }
-    }
-  `;
-  return ((await client.request(query, { user })) as any)
-    .getUserTempediaEntries;
-}
-
 export async function createTempediaEntry({
   userId,
   temtemName

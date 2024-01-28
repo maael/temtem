@@ -1,7 +1,8 @@
 import got from "got";
 import * as jwt from "../../../../util/jwt";
 import cookies, { NextApiResponseWithCookie } from "../../../../util/cookies";
-import { getUserByDiscordId, createUser } from "../../../../util/db";
+import { createUser } from "../../../../util/db";
+import { getUserByDiscordId } from "../../../../util/fql-db";
 import { JWT_VERSION } from "../../../../util/constants";
 import { User } from "../../../../types/db";
 import { JWT } from "../../../../types";

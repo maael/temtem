@@ -1,5 +1,6 @@
 import cookies from "../../../../util/cookies";
-import { getTempediaEntries, createTempediaEntry } from "../../../../util/db";
+import { createTempediaEntry } from "../../../../util/db";
+import { getTempediaEntries } from "../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   const userJWT = await req.getJWT();

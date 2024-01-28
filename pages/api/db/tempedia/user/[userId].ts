@@ -1,5 +1,5 @@
 import cookies from "../../../../../util/cookies";
-import { getTempediaEntries } from "../../../../../util/db";
+import { getTempediaEntries } from "../../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   if (!req.query.userId) {

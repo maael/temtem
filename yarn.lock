@@ -1764,6 +1764,11 @@ fathom-client@^3.0.0:
   resolved "https://registry.yarnpkg.com/fathom-client/-/fathom-client-3.0.0.tgz#409c047cf1e2fea45b148e28d50fcd635e992893"
   integrity sha512-d0oH2SHWCMIVLbbegB7nBIjSvbqbHrZBZxIOWSVAxlJL/roL0Ah9NNb6rTIcKMlA4gov9AjWQGEcZRzlnGc3XQ==
 
+fauna@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/fauna/-/fauna-1.3.1.tgz#9421feab3e0c137fe6ab96d8976df4b4b7151c65"
+  integrity sha512-A4JEj5v2KyOfjlze1Wb/fAWRxDfoGr61PhMvjV5jcfkLJ2ouzchsCXbzqzANetj8g/O/jth3wO2s02d6+ePuyQ==
+
 file-type@^12.4.1:
   version "12.4.2"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-12.4.2.tgz#a344ea5664a1d01447ee7fb1b635f72feb6169d9"
