@@ -36,7 +36,7 @@ export async function createEncounter(rawData) {
       }
     }
   `;
-  return (await client.request(query, { data })).createEncounter;
+  return ((await client.request(query, { data })) as any).createEncounter;
 }
 
 export async function updateEncounter(encounterId: string, rawData) {
@@ -49,7 +49,8 @@ export async function updateEncounter(encounterId: string, rawData) {
       }
     }
   `;
-  return (await client.request(query, { encounterId, data })).updateEncounter;
+  return ((await client.request(query, { encounterId, data })) as any)
+    .updateEncounter;
 }
 
 export async function deleteEncounter(encounterId: string) {
@@ -60,7 +61,8 @@ export async function deleteEncounter(encounterId: string) {
       }
     }
   `;
-  return (await client.request(query, { encounterId })).deleteEncounter;
+  return ((await client.request(query, { encounterId })) as any)
+    .deleteEncounter;
 }
 
 export async function getUserEncounter(userId: string) {
@@ -73,5 +75,5 @@ export async function getUserEncounter(userId: string) {
       }
     }
   `;
-  return (await client.request(query, { userId })).getUserEncounters;
+  return ((await client.request(query, { userId })) as any).getUserEncounters;
 }

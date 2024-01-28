@@ -44,7 +44,7 @@ export async function createUser(
     mixedReviews: 0
   });
 
-  return (await client.request(query, { user })).createUser;
+  return ((await client.request(query, { user })) as any).createUser;
 }
 
 export async function getUserByDiscordName(discordName: string): Promise<User> {
@@ -71,7 +71,8 @@ export async function getUserByDiscordName(discordName: string): Promise<User> {
       }
     }
   `;
-  return (await client.request(query, { discordName })).getUserByDiscordName;
+  return ((await client.request(query, { discordName })) as any)
+    .getUserByDiscordName;
 }
 
 export async function getUserByDiscordFullName(
@@ -100,7 +101,7 @@ export async function getUserByDiscordFullName(
       }
     }
   `;
-  return (await client.request(query, { discordFullName }))
+  return ((await client.request(query, { discordFullName })) as any)
     .getUserByDiscordFullName;
 }
 
@@ -128,7 +129,8 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
       }
     }
   `;
-  return (await client.request(query, { discordId })).getUserByDiscordId;
+  return ((await client.request(query, { discordId })) as any)
+    .getUserByDiscordId;
 }
 
 export async function getUser(userId: string): Promise<User> {
@@ -155,7 +157,7 @@ export async function getUser(userId: string): Promise<User> {
       }
     }
   `;
-  return (await client.request(query, { userId })).findUserByID;
+  return ((await client.request(query, { userId })) as any).findUserByID;
 }
 
 export async function getUserByRedditName(redditName: string): Promise<User> {
@@ -182,7 +184,8 @@ export async function getUserByRedditName(redditName: string): Promise<User> {
       }
     }
   `;
-  return (await client.request(query, { redditName })).getUserByRedditName;
+  return ((await client.request(query, { redditName })) as any)
+    .getUserByRedditName;
 }
 
 export async function updateUser(
@@ -221,7 +224,7 @@ export async function updateUser(
     ...rawData
   });
 
-  return (await client.request(query, { userId, user })).updateUser;
+  return ((await client.request(query, { userId, user })) as any).updateUser;
 }
 
 export async function getUsers() {
@@ -250,5 +253,5 @@ export async function getUsers() {
     }
   }
 `;
-  return (await client.request(query)).getUsers;
+  return ((await client.request(query)) as any).getUsers;
 }

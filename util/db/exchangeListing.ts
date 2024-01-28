@@ -45,7 +45,8 @@ export async function getExchangeListings(): Promise<{
       }
     }
   `;
-  return (await client.request(query)).getExchangeListingsByTypeAndActive;
+  return ((await client.request(query)) as any)
+    .getExchangeListingsByTypeAndActive;
 }
 
 export async function getUserExchangeListings(
@@ -87,7 +88,7 @@ export async function getUserExchangeListings(
       }
     }
   `;
-  return (await client.request(query, { userId }))
+  return ((await client.request(query, { userId })) as any)
     .getUserExchangeListingsByType;
 }
 
@@ -134,7 +135,7 @@ export async function createExchangeListing(
       connect: rawData.userId
     }
   });
-  return (await client.request(query, { data })).createExchangeListing;
+  return ((await client.request(query, { data })) as any).createExchangeListing;
 }
 
 export async function getExchangeListing(listingId: string) {
@@ -169,7 +170,8 @@ export async function getExchangeListing(listingId: string) {
     }
   }
 `;
-  return (await client.request(query, { listingId })).findExchangeListingByID;
+  return ((await client.request(query, { listingId })) as any)
+    .findExchangeListingByID;
 }
 
 export async function updateExchangeListing(
@@ -215,7 +217,7 @@ export async function updateExchangeListing(
       temtemBredTechniques: rawData.temtemBredTechniques || []
     })
   );
-  return (await client.request(query, { id: listingId, data }))
+  return ((await client.request(query, { id: listingId, data })) as any)
     .updateExchangeListing;
 }
 
@@ -238,6 +240,6 @@ export async function setExchangeInactive(
       temtemBredTechniques: rawData.temtemBredTechniques || []
     })
   );
-  return (await client.request(query, { id: listingId, data }))
+  return ((await client.request(query, { id: listingId, data })) as any)
     .updateExchangeListing;
 }

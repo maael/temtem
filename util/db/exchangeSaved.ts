@@ -60,7 +60,8 @@ export async function getExchangeSaved(
       }
     }
   `;
-  return (await client.request(query, { userId })).getUserExchangeSaved;
+  return ((await client.request(query, { userId })) as any)
+    .getUserExchangeSaved;
 }
 
 export async function createExchangeSaved(
@@ -97,7 +98,7 @@ export async function createExchangeSaved(
       connect: rawData.exchangeListingId
     }
   });
-  return (await client.request(query, { data })).createExchangeSaved;
+  return ((await client.request(query, { data })) as any).createExchangeSaved;
 }
 
 export async function deleteExchangeSaved(id: string) {
@@ -109,7 +110,7 @@ export async function deleteExchangeSaved(id: string) {
     }
   `;
   try {
-    return (await client.request(query, { id })).deleteExchangeSaved;
+    return ((await client.request(query, { id })) as any).deleteExchangeSaved;
   } catch (e) {
     console.error(e);
     return { error: e.message } as any;
