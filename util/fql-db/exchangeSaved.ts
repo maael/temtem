@@ -14,13 +14,14 @@ export async function getExchangeSaved(
         .all()
         .where((s) => s.userId == ${userId})
         .map((saved) => Object.assign({ user: {}, exchangeListing: {}, temtemBredTechniques: [] }, saved))
-        .map((saved) => Object.assign(saved, { exchangeListing: Object.assign(saved.exchangeListing, { user: users.byId(exchange_listings.byId(saved.exchangeListing.id)!.user.id) }) }))
+        .map((saved) => Object.assign(saved, { exchangeListing: Object.assign(exchange_listings.byId(saved.exchangeListing.id)!, { user: users.byId(exchange_listings.byId(saved.exchangeListing.id)!.user.id) }) }))
         .paginate(5000)
     `
   );
   return {
     data: result.map(r => ({
       ...r,
+      temtemBredTechniques: r.temtemBredTechniques || [],
       exchangeListing: mapSafe(r.exchangeListing)
     }))
   };
