@@ -7,7 +7,7 @@ import { embellishCreate, embellishUpdate, f, query } from "./client";
 
 export async function getUserQuests(userId: string) {
   const result = await query(
-    f`Collection('tracked_quests').where(.userId == ${userId}).populate(500)`
+    f`Collection('tracked_quests').where(.userId == ${userId}).paginate(500)`
   );
   return { data: result };
 }
