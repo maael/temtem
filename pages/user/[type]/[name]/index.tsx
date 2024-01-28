@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import Link from "next/link";
+import React from "react";
 import { FaDiscord, FaRedditAlien } from "react-icons/fa";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemPortrait from "@maael/temtem-portrait-component";
@@ -122,16 +123,15 @@ export default function UserPage({ user = {} as any }: { user: User }) {
       <Link
         as={`${getUserProfileLink(user)}/tempedia`}
         href={"/user/[type]/[name]/tempedia"}
+        style={{ textDecoration: "none" }}
       >
-        <a style={{ textDecoration: "none" }}>
-          <TemtemButton
-            size="small"
-            style={{ margin: "0px 5px 10px" }}
-            bgColor={colors.uiBlueFaded}
-          >
-            User Tempedia
-          </TemtemButton>
-        </a>
+        <TemtemButton
+          size="small"
+          style={{ margin: "0px 5px 10px" }}
+          bgColor={colors.uiBlueFaded}
+        >
+          User Tempedia
+        </TemtemButton>
       </Link>
       <SteamProfile steamId={user.steamId} />
       {jwt && jwt._id === user._id ? <EditUserDetails user={user} /> : null}

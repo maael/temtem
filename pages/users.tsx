@@ -68,12 +68,11 @@ export default function UsersSearch() {
               <Link
                 href="/user/[type]/[name]"
                 as={userUtil.getUserProfileLink(user)}
+                css={{ textDecoration: "none", cursor: "pointer" }}
               >
-                <a css={{ textDecoration: "none", cursor: "pointer" }}>
-                  <TemtemText containerStyle={{ marginRight: 5 }}>
-                    {userUtil.getUserName(user)}
-                  </TemtemText>
-                </a>
+                <TemtemText containerStyle={{ marginRight: 5 }}>
+                  {userUtil.getUserName(user)}
+                </TemtemText>
               </Link>
             </div>
           ))}

@@ -1,5 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
+import React from "react";
 import Link from "next/link";
 import { FaDiscord, FaRedditAlien } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
@@ -21,27 +22,27 @@ export default function AuthBlock() {
         top: -2
       }}
     >
-      <Link href="/user/[type]/[name]" as={userUtil.getUserProfileLink(jwt)}>
-        <a
+      <Link
+        href="/user/[type]/[name]"
+        as={userUtil.getUserProfileLink(jwt)}
+        css={{
+          textDecoration: "none",
+          cursor: "pointer",
+          flexDirection: "row",
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
+        <img
           css={{
-            textDecoration: "none",
-            cursor: "pointer",
-            flexDirection: "row",
-            display: "flex",
-            alignItems: "center"
+            border: `2px solid ${colors.uiBlueFaded}`,
+            height: 30,
+            width: 30,
+            borderRadius: "50%",
+            margin: "0px 5px"
           }}
-        >
-          <img
-            css={{
-              border: `2px solid ${colors.uiBlueFaded}`,
-              height: 30,
-              width: 30,
-              borderRadius: "50%",
-              margin: "0px 5px"
-            }}
-            src={userUtil.getUserIcon(jwt)}
-          />
-        </a>
+          src={userUtil.getUserIcon(jwt)}
+        />
       </Link>
       <a href={`/api/logout?v${JWT_VERSION}&cb=${Math.random()}`}>
         <TemtemButton

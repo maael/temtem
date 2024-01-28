@@ -1,6 +1,7 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { useState, useMemo, useEffect } from "react";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
+import React from "react";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemButton from "@maael/temtem-button-component";
 import TemtemSelect from "@maael/temtem-select-component";

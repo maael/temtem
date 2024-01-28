@@ -9,7 +9,7 @@ export default async function steamUser(
 ) {
   try {
     const isSteamId =
-      req.query.user.length === 17 && !isNaN(Number(req.query.user));
+      (req.query.user || "").length === 17 && !isNaN(Number(req.query.user));
     let steamId = req.query.user;
     if (!steamId) {
       res.status(400).json({ error: "Missing steam ID" });

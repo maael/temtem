@@ -1,6 +1,6 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
 import ReactModal from "react-modal";
 import { IoIosCloseCircle } from "react-icons/io";
 import TemtemText from "@maael/temtem-text-component";
@@ -14,7 +14,9 @@ import useJWT from "../components/hooks/useJWT";
 import useFetch from "../components/hooks/useFetch";
 import useCallableFetch from "../components/hooks/useCallableFetch";
 
-ReactModal.setAppElement("#__next");
+const SafeReactModal = ReactModal as any;
+
+SafeReactModal.setAppElement("#__next");
 
 export default function Tempedia({ userId }: { userId?: string }) {
   const jwt = useJWT();
@@ -147,7 +149,7 @@ export default function Tempedia({ userId }: { userId?: string }) {
 
 function TemtemModal({ temtem, data, onClose }: any) {
   return (
-    <ReactModal
+    <SafeReactModal
       isOpen={!!temtem}
       onRequestClose={onClose}
       style={{
@@ -241,7 +243,7 @@ function TemtemModal({ temtem, data, onClose }: any) {
       ) : (
         <TemtemText style={{ textAlign: "center" }}>???</TemtemText>
       )}
-    </ReactModal>
+    </SafeReactModal>
   );
 }
 

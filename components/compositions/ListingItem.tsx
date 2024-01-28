@@ -21,32 +21,33 @@ export default function ListingItem({
   const jwt = useJWT();
   return (
     <div key={l._id} css={{ position: "relative" }}>
-      <Link href={`/exchange/listings/${l._id}`}>
-        <a style={{ textDecoration: "none" }}>
-          <TemtemStatsTable
-            temtem={{
-              name: l.temtemName,
-              types: []
-            }}
-            svs={{
-              hp: l.svHp,
-              sta: l.svSta,
-              spd: l.svSpd,
-              atk: l.svAtk,
-              def: l.svDef,
-              spatk: l.svSpatk,
-              spdef: l.svSpdef
-            }}
-            trait={l.temtemTrait}
-            gender={l.temtemGender}
-            breedTechniques={l.temtemBredTechniques.map(n => ({
-              name: n,
-              type: "Toxic"
-            }))}
-            fertility={l.temtemFertility}
-            isLuma={l.temtemIsLuma}
-          />
-        </a>
+      <Link
+        href={`/exchange/listings/${l._id}`}
+        style={{ textDecoration: "none" }}
+      >
+        <TemtemStatsTable
+          temtem={{
+            name: l.temtemName,
+            types: []
+          }}
+          svs={{
+            hp: l.svHp,
+            sta: l.svSta,
+            spd: l.svSpd,
+            atk: l.svAtk,
+            def: l.svDef,
+            spatk: l.svSpatk,
+            spdef: l.svSpdef
+          }}
+          trait={l.temtemTrait}
+          gender={l.temtemGender}
+          breedTechniques={l.temtemBredTechniques.map(n => ({
+            name: n,
+            type: "Toxic"
+          }))}
+          fertility={l.temtemFertility}
+          isLuma={l.temtemIsLuma}
+        />
       </Link>
       <ListingRequestDetails
         user={l.user}

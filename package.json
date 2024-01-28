@@ -18,8 +18,16 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
+  "engines": {
+    "node": "18.x"
+  },
+  "resolutions": {
+    "react": "^18.2.0",
+    "@types/react": "18.2.48"
+  },
   "dependencies": {
     "@emotion/core": "^10.0.27",
+    "@emotion/react": "^11.11.3",
     "@maael/temtem-button-component": "^1.5.0",
     "@maael/temtem-calculator-component": "^1.0.0",
     "@maael/temtem-input-component": "^1.2.0",
@@ -40,11 +48,11 @@
     "jimp": "^0.9.5",
     "jsonwebtoken": "^8.5.1",
     "leven": "^3.1.0",
-    "next": "^9.3.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.11.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^3.9.0",
-    "react-modal": "^3.11.2",
+    "react-modal": "^3.16.1",
     "tesseract.js": "^2.0.2"
   },
   "devDependencies": {
@@ -53,8 +61,8 @@
     "@types/cookie": "^0.3.3",
     "@types/fabric": "^3.6.2",
     "@types/jsonwebtoken": "^8.3.7",
-    "@types/node": "^12.12.6",
-    "@types/react": "^16.9.11",
+    "@types/node": "^20.11.8",
+    "@types/react": "^18.2.48",
     "@types/react-modal": "^3.10.5",
     "dotenv-extended": "^2.7.1",
     "got": "^10.2.2",
@@ -63,6 +71,6 @@
     "pretty-quick": "^2.0.1",
     "ts-node": "^8.6.2",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^5.3.3"
   }
 }

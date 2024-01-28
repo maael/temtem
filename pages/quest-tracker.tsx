@@ -1,6 +1,7 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { useState } from "react";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
+import React from "react";
 import { IoIosLink } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
 import TemtemText from "@maael/temtem-text-component";

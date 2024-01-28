@@ -26,7 +26,8 @@ export async function getUserQuests(
       }
     }
   `;
-  return (await client.request(query, { userId })).getUserTrackedQuests;
+  return ((await client.request(query, { userId })) as any)
+    .getUserTrackedQuests;
 }
 
 export async function createUserQuests(
@@ -56,7 +57,7 @@ export async function createUserQuests(
       connect: rawData.userId
     }
   });
-  return (await client.request(query, { data })).createTrackedQuest;
+  return ((await client.request(query, { data })) as any).createTrackedQuest;
 }
 
 export async function updateUserQuest(
@@ -81,5 +82,6 @@ export async function updateUserQuest(
   const data = embellishUpdate({
     ...rawData
   });
-  return (await client.request(query, { id, data })).updateTrackedQuest;
+  return ((await client.request(query, { id, data })) as any)
+    .updateTrackedQuest;
 }

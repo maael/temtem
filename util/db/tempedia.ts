@@ -20,7 +20,8 @@ export async function getTempediaEntries(
       }
     }
   `;
-  return (await client.request(query, { user })).getUserTempediaEntries;
+  return ((await client.request(query, { user })) as any)
+    .getUserTempediaEntries;
 }
 
 export async function createTempediaEntry({
@@ -43,7 +44,7 @@ export async function createTempediaEntry({
     }
   });
   try {
-    return (await client.request(query, { data })).createTempediaEntry;
+    return ((await client.request(query, { data })) as any).createTempediaEntry;
   } catch (e) {
     console.error(e);
     return { error: e.message } as any;
@@ -59,7 +60,7 @@ export async function deleteTempediaEntry(id: string) {
     }
   `;
   try {
-    return (await client.request(query, { id })).deleteTempediaEntry;
+    return ((await client.request(query, { id })) as any).deleteTempediaEntry;
   } catch (e) {
     console.error(e);
     return { error: e.message } as any;

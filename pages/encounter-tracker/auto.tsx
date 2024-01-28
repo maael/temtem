@@ -1,3 +1,4 @@
+import React from "react";
 import { EventEmitter } from "events";
 import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import EncounterAutoTracker from "../../components/compositions/EncounterAutoTracker";

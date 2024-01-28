@@ -1,5 +1,6 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
+import React from "react";
 import { MdLocationOn } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";

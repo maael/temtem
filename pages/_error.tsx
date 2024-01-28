@@ -18,7 +18,7 @@ export default function ErrorPage() {
       <TemtemText borderWidth={10} style={{ fontSize: 44 }}>
         Well this isn't right.
       </TemtemText>
-      <Link href="/">
+      <Link href="/" legacyBehavior>
         <TemtemButton
           style={{ marginTop: 20 }}
           size="large"

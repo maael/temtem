@@ -1,5 +1,5 @@
-/** @jsx jsx */
-import { jsx } from "@emotion/core";
+/** @jsxImportSource @emotion/react */
+import { jsx } from "@emotion/react";
 import React from "react";
 import TemtemPortrait from "@maael/temtem-portrait-component";
 import TemtemText from "@maael/temtem-text-component";

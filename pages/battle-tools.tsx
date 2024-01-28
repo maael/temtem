@@ -1,6 +1,7 @@
-/** @jsx jsx */
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState } from "react";
-import { jsx } from "@emotion/core";
+import { jsx } from "@emotion/react";
+import React from "react";
 import { TemtemDynamicChip } from "@maael/temtem-svg-chip-components";
 import TemtemText from "@maael/temtem-text-component";
 import TemtemCalculator from "@maael/temtem-calculator-component";
