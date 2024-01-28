@@ -1,5 +1,10 @@
-import { f, getList, query } from "./client";
-import { User } from "../../types/db";
+import { embellishCreate, embellishUpdate, f, getList, query } from "./client";
+import {
+  RawCreateInput,
+  User,
+  UserInput,
+  UserPartialInput
+} from "../../types/db";
 
 export async function getUsers() {
   return getList("users");
@@ -38,4 +43,30 @@ export async function getUserByDiscordId(discordId: string): Promise<User> {
     f`Collection('users').where(.discordId == ${discordId})`
   );
   return result[0];
+}
+
+export async function updateUser(
+  userId: string,
+  rawData: Partial<UserPartialInput>
+) {
+  const { coll: _coll, data: _data, ...update } = rawData as any;
+  const result = await query(
+    f`Collection('users').byId(${userId}).updateData(${embellishUpdate(
+      update
+    )})`
+  );
+  return result;
+}
+
+export async function createUser(
+  variables: Omit<
+    RawCreateInput<UserInput>,
+    "goodReviews" | "mixedReviews" | "badReviews"
+  >
+): Promise<User> {
+  const { coll: _coll, data: _data, ...data } = variables as any;
+  const result = await query(
+    f`Collection('users').createData(${embellishCreate(data)})`
+  );
+  return result;
 }

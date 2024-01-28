@@ -1,6 +1,6 @@
 import cookies from "../../../../util/cookies";
 import jwtGuard from "../../../../util/middlewares/jwtGuard";
-import { createEncounter } from "../../../../util/db";
+import { createEncounter } from "../../../../util/fql-db";
 
 export default cookies(
   jwtGuard(async function(req, res) {

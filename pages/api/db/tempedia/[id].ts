@@ -1,7 +1,7 @@
 import cookies from "../../../../util/cookies";
 import paramGuard from "../../../../util/middlewares/paramGuard";
 import jwtGuard from "../../../../util/middlewares/jwtGuard";
-import { deleteTempediaEntry } from "../../../../util/db";
+import { deleteTempediaEntry } from "../../../../util/fql-db";
 
 export default paramGuard(
   cookies(

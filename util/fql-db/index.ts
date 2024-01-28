@@ -4,14 +4,32 @@ export {
   getUserByDiscordFullName,
   getUserByDiscordId,
   getUserByDiscordName,
-  getUser
+  getUser,
+  updateUser,
+  createUser
 } from "./user";
-export { getTempediaEntries } from "./tempedia";
-export { getUserQuests } from "./quests";
+export {
+  getTempediaEntries,
+  createTempediaEntry,
+  deleteTempediaEntry
+} from "./tempedia";
+export { getUserQuests, createUserQuests, updateUserQuest } from "./quests";
 export {
   getExchangeListings,
   getUserExchangeListings,
-  getExchangeListing
+  getExchangeListing,
+  createExchangeListing,
+  updateExchangeListing,
+  setExchangeInactive
 } from "./exchangeListing";
-export { getExchangeSaved } from "./exchangeSaved";
-export { getUserEncounter } from "./encounter";
+export {
+  getExchangeSaved,
+  createExchangeSaved,
+  deleteExchangeSaved
+} from "./exchangeSaved";
+export {
+  getUserEncounter,
+  createEncounter,
+  updateEncounter,
+  deleteEncounter
+} from "./encounter";

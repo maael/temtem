@@ -1,6 +1,8 @@
 import cookies from "../../../../../util/cookies";
-import { createExchangeListing } from "../../../../../util/db";
-import { getUserExchangeListings } from "../../../../../util/fql-db";
+import {
+  getUserExchangeListings,
+  createExchangeListing
+} from "../../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   const userJWT = await req.getJWT();
