@@ -1,7 +1,7 @@
 import cookies from "../../../../../util/cookies";
 import jwtGuard from "../../../../../util/middlewares/jwtGuard";
 import paramGuard from "../../../../../util/middlewares/paramGuard";
-import { deleteExchangeSaved } from "../../../../../util/db";
+import { deleteExchangeSaved } from "../../../../../util/fql-db";
 
 export default paramGuard(
   cookies(

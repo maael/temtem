@@ -4,8 +4,7 @@ import { stringify } from "querystring";
 import cookies from "../../../../util/cookies";
 import * as jwt from "../../../../util/jwt";
 import { JWT } from "../../../../types";
-import { createUser } from "../../../../util/db";
-import { getUserByRedditName } from "../../../../util/fql-db";
+import { getUserByRedditName, createUser } from "../../../../util/fql-db";
 import { JWT_VERSION } from "../../../../util/constants";
 
 async function getOrCreateUser(identity: any) {
