@@ -6,30 +6,6 @@ import {
   RawCreateInput
 } from "../../types/db";
 
-export async function getUserQuests(
-  userId: string
-): Promise<{ data: TrackedQuest[] }> {
-  const query = `
-    query UserTrackedQuest ($userId: ID!){
-      getUserTrackedQuests(userId: $userId) {
-        data {
-          _id
-          questName
-          questStarted
-          questStep
-          questFinished
-          questNote
-          isActive
-          createdAt
-          updatedAt
-        }
-      }
-    }
-  `;
-  return ((await client.request(query, { userId })) as any)
-    .getUserTrackedQuests;
-}
-
 export async function createUserQuests(
   rawData: RawCreateInput<TrackedQuestInput>
 ): Promise<{ data: TrackedQuest[] }> {

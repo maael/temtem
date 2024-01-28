@@ -2,7 +2,7 @@ import cookies from "../../../../../util/cookies";
 import {
   getUserByRedditName,
   getUserByDiscordFullName
-} from "../../../../../util/db";
+} from "../../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   const { id, type } = req.query;

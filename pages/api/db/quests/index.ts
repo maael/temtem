@@ -1,6 +1,7 @@
 import cookies from "../../../../util/cookies";
 import jwtGuard from "../../../../util/middlewares/jwtGuard";
-import { getUserQuests, createUserQuests } from "../../../../util/db";
+import { createUserQuests } from "../../../../util/db";
+import { getUserQuests } from "../../../../util/fql-db";
 
 export default cookies(
   jwtGuard(async function(req, res) {

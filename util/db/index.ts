@@ -11,23 +11,9 @@ export {
   createExchangeSaved,
   deleteExchangeSaved
 } from "./exchangeSaved";
-export { getUserQuests, createUserQuests, updateUserQuest } from "./quests";
-export {
-  getTempediaEntries,
-  createTempediaEntry,
-  deleteTempediaEntry
-} from "./tempedia";
-export {
-  getUserByRedditName,
-  getUsers,
-  getUser,
-  createUser,
-  updateUser,
-  getUserByDiscordId,
-  getUserByDiscordName,
-  getUserByDiscordFullName
-} from "./user";
-export { getUserPreferences } from "./userPreferences";
+export { createUserQuests, updateUserQuest } from "./quests";
+export { createTempediaEntry, deleteTempediaEntry } from "./tempedia";
+export { createUser, updateUser } from "./user";
 export {
   getUserEncounter,
   createEncounter,

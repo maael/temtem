@@ -1,5 +1,6 @@
 import cookies from "../../../../util/cookies";
-import { getUsers, updateUser, getUser } from "../../../../util/db";
+import { updateUser } from "../../../../util/db";
+import { getUsers, getUser } from "../../../../util/fql-db";
 
 export default cookies(async function(req, res) {
   if (req.method === "GET") {
