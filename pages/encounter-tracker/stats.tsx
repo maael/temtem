@@ -1,7 +1,7 @@
 import cookie from "cookie";
+import React from "react";
 import jwt from "jsonwebtoken";
 import TemtemText from "@maael/temtem-text-component";
-import { colors } from "@maael/temtem-theme";
 import Loading from "../../components/primitives/Loading";
 import EncounterTrackerHeaderBar from "../../components/compositions/EncounterTrackerHeaderBar";
 import EncounterStatItem from "../../components/compositions/EncounterStatItem";
